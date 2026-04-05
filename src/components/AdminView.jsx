@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 function AdminView({ onBack }) {
   const [search, setSearch] = useState('');
+  const [selectedCourse, setSelectedCourse] = useState(null);
   const [showAddBook, setShowAddBook] = useState(false);
   const [newBook, setNewBook] = useState({ title: '', author: '', description: '', genre: '', minNivel: 5, maxNivel: 12 });
   
@@ -12,12 +13,33 @@ function AdminView({ onBack }) {
   // Here we'll simulate "Active Profiles" by checking if entries exist in localStorage
   // Or just show the full list and allow "Resetting" them.
   
+  // Unique courses sorted (Basic mapping sort logic)
+  const courses = useMemo(() => {
+    const raw = Array.from(new Set(STUDENTS.map(s => s.curso)));
+    // Simple custom sort based on standard Chilean schooling (5 Básico -> 4 Medio)
+    const orderScore = (c) => {
+      let score = parseInt(c.charAt(0)) || 0;
+      if (c.includes('Básico')) score += 0;
+      else if (c.includes('Medio')) score += 10;
+      return score;
+    };
+    return raw.sort((a, b) => orderScore(a) - orderScore(b));
+  }, []);
+
   const filteredStudents = useMemo(() => {
-    return STUDENTS.filter(s => 
-      s.nombre.toLowerCase().includes(search.toLowerCase()) ||
-      s.rut.includes(search)
-    ).slice(0, 50); // Limit for performance
-  }, [search]);
+    let source = STUDENTS;
+    if (selectedCourse) {
+      source = STUDENTS.filter(s => s.curso === selectedCourse);
+    }
+    
+    if (search.trim()) {
+      return STUDENTS.filter(s => 
+        (s.nombre.toLowerCase().includes(search.toLowerCase()) || s.rut.includes(search))
+      ).slice(0, 50);
+    }
+    
+    return source.slice(0, 70); // Performance cap
+  }, [search, selectedCourse]);
 
   const handleResetProfile = (rut) => {
     if (window.confirm(`¿Estás seguro de resetear el perfil de RUT ${rut}? Se borrarán sus gustos y libros favoritos.`)) {
@@ -110,8 +132,39 @@ function AdminView({ onBack }) {
           </button>
         </div>
 
-        <div className="flex-1 overflow-y-auto custom-scrollbar space-y-3 pb-10">
-          {filteredStudents.map(s => (
+        {/* Conditional Breadcrumb inside Content */}
+        {selectedCourse && !search.trim() && (
+          <div className="flex items-center gap-2 mb-4 shrink-0">
+             <button onClick={() => setSelectedCourse(null)} className="px-3 py-1.5 bg-gray-200 text-gray-700 font-bold text-xs rounded-full hover:bg-gray-300">
+               ← Volver a Cursos
+             </button>
+             <h3 className="font-black text-gray-900 tracking-tighter text-lg">{selectedCourse}</h3>
+          </div>
+        )}
+
+        <div className="flex-1 overflow-y-auto custom-scrollbar space-y-3 pb-10 pr-2">
+          
+          {/* View: Course Grid */}
+          {!selectedCourse && !search.trim() && (
+            <div className="grid grid-cols-2 gap-3">
+              {courses.map(curso => {
+                const count = STUDENTS.filter(s => s.curso === curso).length;
+                return (
+                  <button key={curso} onClick={() => setSelectedCourse(curso)}
+                    className="bg-white border border-gray-100 rounded-[22px] p-5 shadow-sm hover:shadow-md hover:border-[#A80A0A]/30 transition-all text-left flex flex-col items-start active:scale-95 group">
+                    <div className="w-10 h-10 bg-blue-50/50 rounded-2xl flex items-center justify-center text-[#A80A0A] mb-3 group-hover:bg-[#A80A0A] group-hover:text-white transition-all">
+                      <Users size={20} />
+                    </div>
+                    <p className="font-black text-gray-900 text-sm">{curso}</p>
+                    <p className="text-[10px] font-bold text-gray-400 mt-1 uppercase tracking-widest">{count} estudiantes</p>
+                  </button>
+                );
+              })}
+            </div>
+          )}
+
+          {/* View: Student List (Search or Selected Course) */}
+          {(selectedCourse || search.trim()) && filteredStudents.map(s => (
             <motion.div 
               initial={{ opacity: 0, y: 5 }}
               animate={{ opacity: 1, y: 0 }}
@@ -151,7 +204,7 @@ function AdminView({ onBack }) {
             </motion.div>
           ))}
           
-          {filteredStudents.length === 0 && (
+          {(selectedCourse || search.trim()) && filteredStudents.length === 0 && (
             <div className="py-20 text-center">
               <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Users size={24} className="text-gray-300" />
