@@ -2,6 +2,8 @@ import React, { useState, useMemo } from 'react';
 import { STUDENTS, ITEMS, GENRES } from '../data/mockData';
 import { Search, Trash2, RotateCcw, Users, BookOpen, ChevronLeft, ShieldCheck, Plus, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { db } from '../lib/firebase';
+import { doc, setDoc } from 'firebase/firestore';
 
 function AdminView({ onBack }) {
   const [search, setSearch] = useState('');
@@ -47,10 +49,11 @@ function AdminView({ onBack }) {
     }
   };
 
-  const handleSaveBook = (e) => {
+  const handleSaveBook = async (e) => {
     e.preventDefault();
+    const newId = 'custom-' + Date.now();
     const bookToSave = {
-      id: 'custom-' + Date.now(),
+      id: newId,
       type: 'libro',
       title: newBook.title,
       author: newBook.author,
@@ -63,17 +66,18 @@ function AdminView({ onBack }) {
       professors: [{ name: 'Docente Válido', dept: 'Colegio' }]
     };
 
-    // Save to local storage for persistence
-    const extraBooks = JSON.parse(localStorage.getItem('bm-extra-books') || '[]');
-    extraBooks.push(bookToSave);
-    localStorage.setItem('bm-extra-books', JSON.stringify(extraBooks));
-    
-    // Live update memory
-    ITEMS.push(bookToSave);
-    
-    setShowAddBook(false);
-    setNewBook({ title: '', author: '', description: '', genre: '', minNivel: 5, maxNivel: 12 });
-    alert('¡Libro añadido al catálogo institucional exitosamente!');
+    // Save to Cloud Firestore
+    try {
+      await setDoc(doc(db, 'catalog', newId), bookToSave);
+      // Live update memory for current session
+      ITEMS.push(bookToSave);
+      
+      setShowAddBook(false);
+      setNewBook({ title: '', author: '', description: '', genre: '', minNivel: 5, maxNivel: 12 });
+      alert('¡Libro subido a la base de datos de BookMatch exitosamente!');
+    } catch(err) {
+      alert('Error en la conexión a la nube.');
+    }
   };
 
   return (

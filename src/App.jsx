@@ -6,8 +6,11 @@ import MatchDeck from './components/MatchDeck';
 import MatchList from './components/MatchList';
 import CommunityView from './components/CommunityView';
 import AdminView from './components/AdminView';
-import { BookOpen, Heart, Users, User, LogOut, GraduationCap, Star } from 'lucide-react';
+import { BookOpen, Heart, Users, User, LogOut, GraduationCap, Star, Loader2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { db } from './lib/firebase';
+import { doc, getDoc, setDoc, updateDoc, collection, getDocs } from 'firebase/firestore';
+import { ITEMS } from './data/mockData';
 
 // ── Bottom nav tabs ───────────────────────────────────────────────────────────
 const NAV = [
@@ -33,38 +36,55 @@ function App() {
 
   // ── Restore session ──────────────────────────────────────────────────────────
   useEffect(() => {
-    try {
-      const saved = localStorage.getItem('bm-user');
-      const savedRut = localStorage.getItem('bm-active-rut');
-      
-      if (saved && savedRut) {
-        // Hydrate from DB
-        const db = JSON.parse(localStorage.getItem('bm-users-db') || '{}');
-        const userState = db[savedRut];
-        
-        setUser(JSON.parse(saved));
-        
-        if (userState) {
-          if (userState.likes) setLikedItems(userState.likes);
-          if (userState.profile && userState.profile.genres) {
-             setUserProfile(userState.profile);
-             setView(userState.role === 'admin' ? 'admin' : 'deck');
-          } else {
-             setView('onboarding');
-          }
-        } else {
-           // Not completed onboarding yet
-           setView('onboarding');
+    const hydrate = async () => {
+      try {
+        // Fetch Live Catalog globally (Fase 1.4)
+        try {
+          const catSnap = await getDocs(collection(db, 'catalog'));
+          catSnap.forEach(docSnap => {
+            const extraBook = docSnap.data();
+            if (!ITEMS.find(i => i.id === extraBook.id)) {
+              ITEMS.push(extraBook);
+            }
+          });
+        } catch(catErr) {
+          console.warn("No extra catalog data", catErr);
         }
+
+        const saved = localStorage.getItem('bm-user');
+        const savedRut = localStorage.getItem('bm-active-rut');
+        
+        if (saved && savedRut) {
+          setUser(JSON.parse(saved));
+          setView('loading');
+          
+          const docRef = doc(db, 'users', savedRut);
+          const snap = await getDoc(docRef);
+          
+          if (snap.exists()) {
+            const userState = snap.data();
+            if (userState.likes) setLikedItems(userState.likes);
+            if (userState.profile && userState.profile.genres && userState.profile.genres.length > 0) {
+              setUserProfile(userState.profile);
+              setView(userState.role === 'admin' || userState.role === 'teacher' ? 'admin' : 'deck');
+            } else {
+              setView('onboarding');
+            }
+          } else {
+            setView('onboarding');
+          }
+        }
+      } catch (e) {
+        console.warn("DB restore error", e);
       }
-    } catch {}
+    };
+    hydrate();
   }, []);
 
   // ── Login ────────────────────────────────────────────────────────────────────
-  const handleLogin = (rut) => {
+  const handleLogin = async (rut) => {
     const clean = s => s.replace(/[^0-9kK]/gi, '').toLowerCase();
     const cleanRut = clean(rut);
-    const db = JSON.parse(localStorage.getItem('bm-users-db') || '{}');
     
     // Admin Backdoor
     if (cleanRut === 'admin' || cleanRut === '123456789') {
@@ -73,9 +93,9 @@ function App() {
       localStorage.setItem('bm-user', JSON.stringify(adminUser));
       localStorage.setItem('bm-active-rut', 'admin');
       
-      db['admin'] = { profile: { emoji: '🛡️', genres: [] }, likes: [], role: 'admin' };
-      localStorage.setItem('bm-users-db', JSON.stringify(db));
-      setUserProfile(db['admin'].profile);
+      const adminData = { profile: { emoji: '🛡️', genres: [] }, likes: [], role: 'admin' };
+      await setDoc(doc(db, 'users', 'admin'), adminData, { merge: true });
+      setUserProfile(adminData.profile);
       
       setView('admin');
       return true;
@@ -89,13 +109,15 @@ function App() {
        localStorage.setItem('bm-user', JSON.stringify(teacherUser));
        localStorage.setItem('bm-active-rut', cleanRut);
        
-       if (!db[cleanRut] || !db[cleanRut].profile?.genres) {
-         db[cleanRut] = { profile: { emoji: '📚', genres: [] }, likes: [], role: 'teacher' };
-         localStorage.setItem('bm-users-db', JSON.stringify(db));
+       const docRef = doc(db, 'users', cleanRut);
+       const snap = await getDoc(docRef);
+       
+       if (!snap.exists() || !snap.data().profile?.genres) {
+         await setDoc(docRef, { profile: { emoji: '📚', genres: [] }, likes: [], role: 'teacher' }, { merge: true });
          setView('onboarding');
        } else {
-         setUserProfile(db[cleanRut].profile);
-         setView('deck'); // Teachers go to the deck initially, can enter admin from profile
+         setUserProfile(snap.data().profile);
+         setView('deck');
        }
        return true;
     }
@@ -106,9 +128,13 @@ function App() {
       localStorage.setItem('bm-user', JSON.stringify(found));
       localStorage.setItem('bm-active-rut', cleanRut);
       
-      if (db[cleanRut] && db[cleanRut].profile) {
-        setUserProfile(db[cleanRut].profile);
-        setLikedItems(db[cleanRut].likes || []);
+      const docRef = doc(db, 'users', cleanRut);
+      const snap = await getDoc(docRef);
+      
+      if (snap.exists() && snap.data().profile) {
+        const udata = snap.data();
+        setUserProfile(udata.profile);
+        setLikedItems(udata.likes || []);
         setView('deck');
       } else {
         setView('onboarding');
@@ -119,15 +145,21 @@ function App() {
   };
 
   // ── Onboarding ───────────────────────────────────────────────────────────────
-  const handleFinishOnboarding = (profile) => {
+  const handleFinishOnboarding = async (profile) => {
     const cleanRut = user.rut.replace(/[^0-9kK]/gi, '').toLowerCase();
-    const db = JSON.parse(localStorage.getItem('bm-users-db') || '{}');
+    const docRef = doc(db, 'users', cleanRut);
     
-    db[cleanRut] = { profile, likes: [], role: 'student' };
-    localStorage.setItem('bm-users-db', JSON.stringify(db));
+    // Retrieve current to maintain role if exists
+    const snap = await getDoc(docRef);
+    let role = 'student';
+    if (snap.exists() && snap.data().role) {
+      role = snap.data().role;
+    }
+    
+    await setDoc(docRef, { profile, likes: snap.exists() ? (snap.data().likes || []) : [], role }, { merge: true });
     
     setUserProfile(profile);
-    setView('deck');
+    setView(role === 'teacher' || role === 'admin' ? 'admin' : 'deck');
   };
 
   // ── Match ────────────────────────────────────────────────────────────────────
@@ -137,11 +169,9 @@ function App() {
     setLikedItems(updated);
     
     const cleanRut = user.rut.replace(/[^0-9kK]/gi, '').toLowerCase();
-    const db = JSON.parse(localStorage.getItem('bm-users-db') || '{}');
-    if (db[cleanRut]) {
-      db[cleanRut].likes = updated;
-      localStorage.setItem('bm-users-db', JSON.stringify(db));
-    }
+    const docRef = doc(db, 'users', cleanRut);
+    // Silent asynchronous update to avoid blocking gestures
+    updateDoc(docRef, { likes: updated }).catch(e => console.warn("Failed to save match to cloud", e));
   };
 
   // ── Logout ───────────────────────────────────────────────────────────────────

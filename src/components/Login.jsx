@@ -23,8 +23,8 @@ function Login({ onLogin }) {
     e.preventDefault();
     if (!rut.trim()) return;
     setLoading(true); setError('');
-    await new Promise(r => setTimeout(r, 600));
-    if (!onLogin(rut)) setError('RUT no encontrado. Verifica los datos.');
+    const success = await onLogin(rut);
+    if (!success) setError('RUT no encontrado. Verifica los datos.');
     setLoading(false);
   };
 
