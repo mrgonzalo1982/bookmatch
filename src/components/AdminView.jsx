@@ -1,9 +1,9 @@
 import React, { useState, useMemo } from 'react';
 import { STUDENTS, ITEMS, GENRES } from '../data/mockData';
-import { Search, Trash2, RotateCcw, Users, BookOpen, ChevronLeft, ShieldCheck, Plus, X } from 'lucide-react';
+import { Search, Trash2, RotateCcw, Users, BookOpen, ChevronLeft, ShieldCheck, Plus, X, Download } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { db } from '../lib/firebase';
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, setDoc, collection, getDocs } from 'firebase/firestore';
 
 function AdminView({ onBack }) {
   const [search, setSearch] = useState('');
@@ -80,6 +80,48 @@ function AdminView({ onBack }) {
     }
   };
 
+  const exportToExcel = async () => {
+    try {
+      const snap = await getDocs(collection(db, 'users'));
+      let csvContent = "RUT Alumno\tNombre\tCurso\tID Libro\tTitulo Libro\tAutor\n";
+      let totalMatches = 0;
+
+      snap.forEach(docSnap => {
+        const u = docSnap.data();
+        if (u.role === 'student' && u.likes && u.likes.length > 0) {
+          // Find student name from global STUDENTS array based on rut
+          const cleanRut = docSnap.id;
+          const studentInfo = STUDENTS.find(s => s.rut.replace(/[^0-9kK]/gi, '').toLowerCase() === cleanRut);
+          const studentName = studentInfo ? studentInfo.nombre : 'Desconocido';
+          const studentCourse = studentInfo ? studentInfo.curso : 'Desconocido';
+
+          u.likes.forEach(book => {
+            csvContent += `${cleanRut}\t${studentName}\t${studentCourse}\t${book.id}\t${book.title}\t${book.author}\n`;
+            totalMatches++;
+          });
+        }
+      });
+
+      if (totalMatches === 0) {
+        alert("Aún no hay matches registrados por los alumnos en la base de datos.");
+        return;
+      }
+
+      // Add UTF-8 BOM for Excel to read accents correctly
+      const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.setAttribute("href", url);
+      link.setAttribute("download", `BookMatch_Curauma_Matches.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+    } catch (e) {
+      alert("Error exportando datos: " + e.message);
+    }
+  };
+
   return (
     <div className="flex-1 flex flex-col bg-white overflow-hidden">
       {/* Header */}
@@ -128,6 +170,13 @@ function AdminView({ onBack }) {
               className="w-full pl-12 pr-4 py-4 bg-white border-2 border-gray-100 focus:border-[#A80A0A] rounded-[22px] outline-none text-sm font-bold shadow-sm transition-all text-gray-800"
             />
           </div>
+          <button 
+            onClick={exportToExcel}
+            className="w-14 h-14 bg-emerald-600 text-white flex flex-col justify-center items-center rounded-[22px] shadow-lg flex-shrink-0 hover:bg-emerald-700 transition-all"
+            title="Exportar a Excel">
+            <Download size={22} className="mb-0.5" />
+            <span className="text-[8px] font-black uppercase tracking-widest leading-none">Datos</span>
+          </button>
           <button 
             onClick={() => setShowAddBook(true)}
             className="w-14 h-14 bg-[#A80A0A] text-white flex justify-center items-center rounded-[22px] shadow-lg flex-shrink-0 hover:bg-[#8B0707] transition-all"
