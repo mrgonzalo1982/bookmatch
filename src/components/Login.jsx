@@ -10,9 +10,9 @@ function formatRut(raw) {
   return `${body.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}-${dv}`;
 }
 
-const RED  = '#D30F15';
-const BLUE = '#003399';
-const GOLD = '#FFCC00';
+const RED  = '#A80A0A';
+const BLUE = '#154996';
+const GOLD = '#FFD700';
 
 function Login({ onLogin }) {
   const [rut, setRut]       = useState('');

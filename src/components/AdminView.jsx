@@ -29,7 +29,7 @@ function AdminView({ onBack }) {
     <div className="flex-1 flex flex-col bg-white overflow-hidden">
       {/* Header */}
       <header className="px-6 py-5 shrink-0 shadow-lg relative overflow-hidden" 
-        style={{ background: `linear-gradient(135deg, #003399 0%, #001A4D 100%)` }}>
+        style={{ background: `linear-gradient(135deg, #154996 0%, #001A4D 100%)` }}>
         
         {/* Decorative elements */}
         <div className="absolute top-[-20px] right-[-20px] w-24 h-24 bg-white/5 rounded-full blur-2xl" />
@@ -42,8 +42,8 @@ function AdminView({ onBack }) {
             <h1 className="text-xl font-black tracking-tighter text-white">Panel de Control</h1>
             <p className="text-[10px] font-black text-blue-200/50 uppercase tracking-[0.2em]">Gestión Institucional</p>
           </div>
-          <div className="ml-auto bg-[#FFCC00] p-2 rounded-xl shadow-lg shadow-yellow-900/20">
-            <ShieldCheck className="text-[#003399]" size={20} />
+          <div className="ml-auto bg-[#FFD700] p-2 rounded-xl shadow-lg shadow-yellow-900/20">
+            <ShieldCheck className="text-[#154996]" size={20} />
           </div>
         </div>
 
@@ -63,13 +63,13 @@ function AdminView({ onBack }) {
       {/* Content */}
       <div className="flex-1 flex flex-col p-6 overflow-hidden bg-[#F7F7F9]">
         <div className="relative mb-6 shrink-0 group">
-          <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#003399] transition-colors" />
+          <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#154996] transition-colors" />
           <input
             type="text"
             value={search}
             onChange={e => setSearch(e.target.value)}
             placeholder="Buscar por nombre o RUT..."
-            className="w-full pl-12 pr-4 py-4 bg-white border-2 border-gray-100 focus:border-[#003399] rounded-[22px] outline-none text-sm font-bold shadow-sm transition-all text-gray-800"
+            className="w-full pl-12 pr-4 py-4 bg-white border-2 border-gray-100 focus:border-[#154996] rounded-[22px] outline-none text-sm font-bold shadow-sm transition-all text-gray-800"
           />
         </div>
 
@@ -89,7 +89,7 @@ function AdminView({ onBack }) {
                   <span className="text-[9px] font-black text-gray-400 bg-gray-50 border border-gray-100 px-2 py-1 rounded-full leading-none tracking-widest uppercase">
                     {s.rut}
                   </span>
-                  <span className="text-[9px] font-black text-[#003399] bg-blue-50/50 border border-blue-100 px-2 py-1 rounded-full leading-none uppercase tracking-widest">
+                  <span className="text-[9px] font-black text-[#154996] bg-blue-50/50 border border-blue-100 px-2 py-1 rounded-full leading-none uppercase tracking-widest">
                     {s.curso}
                   </span>
                 </div>
@@ -105,7 +105,7 @@ function AdminView({ onBack }) {
                 </button>
                 <button 
                   onClick={() => alert('Función de borrado total solo disponible en versión producción.')}
-                  className="w-10 h-10 flex items-center justify-center text-[#D30F15] bg-red-50 hover:bg-red-100 rounded-2xl transition-all border border-red-100 active:scale-90"
+                  className="w-10 h-10 flex items-center justify-center text-[#A80A0A] bg-red-50 hover:bg-red-100 rounded-2xl transition-all border border-red-100 active:scale-90"
                   title="Eliminar Registro"
                 >
                   <Trash2 size={16} strokeWidth={2.5} />
@@ -128,7 +128,7 @@ function AdminView({ onBack }) {
       {/* Bottom hint */}
       <div className="px-6 py-4 bg-white border-t border-gray-100 shrink-0">
         <div className="flex items-start gap-2">
-          <ShieldCheck size={12} className="text-[#003399] mt-0.5" />
+          <ShieldCheck size={12} className="text-[#154996] mt-0.5" />
           <p className="text-[9px] text-gray-400 font-bold leading-relaxed uppercase tracking-widest">
             Acceso administrativo restringido • Datos locales simulados
           </p>

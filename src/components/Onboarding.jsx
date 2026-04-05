@@ -32,7 +32,7 @@ function Onboarding({ user, onFinish }) {
   const handleFinish = () => {
     onFinish({
       genres: selectedGenres,
-      favoriteBook: favoriteBook?.title || customBook || null,
+      favoriteBook: favoriteBook?.title || customBook || search || null,
       favoriteBookObj: favoriteBook || null,
       emoji: selectedEmoji || '👤',
     });
@@ -48,7 +48,7 @@ function Onboarding({ user, onFinish }) {
     true,                            // bienvenida: always
     selectedEmoji !== null,          // emoji: must pick one
     selectedGenres.length >= 1,      // géneros: at least 1
-    favoriteBook || customBook.trim().length > 2, // libro: picked or typed
+    favoriteBook || customBook.trim().length > 2 || search.trim().length > 2, // libro: picked or typed
     true                             // listo: always
   ][step];
 
@@ -68,11 +68,11 @@ function Onboarding({ user, onFinish }) {
             <div
               key={i}
               className={`h-1.5 rounded-full flex-1 transition-all duration-500`}
-              style={{ background: i <= step ? '#D30F15' : '#e5e7eb' }}
+              style={{ background: i <= step ? '#A80A0A' : '#e5e7eb' }}
             />
           ))}
         </div>
-        <p className="text-[10px] font-black uppercase tracking-widest" style={{ color: '#D30F15' }}>
+        <p className="text-[10px] font-black uppercase tracking-widest" style={{ color: '#A80A0A' }}>
           Paso {step + 1} de {STEPS.length}
         </p>
       </div>
@@ -103,7 +103,7 @@ function Onboarding({ user, onFinish }) {
                 ¡Hola,<br />{firstNameShort}! 👋
               </h1>
               <p className="text-gray-500 font-medium text-lg leading-relaxed max-w-xs">
-                Vamos a crear tu <span className="font-bold" style={{ color: '#D30F15' }}>perfil lector</span> para conectarte con libros y personas que comparten tus gustos.
+                Vamos a crear tu <span className="font-bold" style={{ color: '#A80A0A' }}>perfil lector</span> para conectarte con libros y personas que comparten tus gustos.
               </p>
 
               <div className="mt-6 space-y-2.5 w-full text-left">
@@ -237,7 +237,7 @@ function Onboarding({ user, onFinish }) {
                   value={search}
                   onChange={e => { setSearch(e.target.value); setCustomBook(''); }}
                   placeholder="Busca en el catálogo..."
-                  className="w-full pl-10 pr-4 py-3.5 bg-white border-2 border-gray-100 focus:border-[#003399] rounded-2xl outline-none text-sm font-medium text-gray-800 transition-all font-bold"
+                  className="w-full pl-10 pr-4 py-3.5 bg-white border-2 border-gray-100 focus:border-[#154996] rounded-2xl outline-none text-sm font-medium text-gray-800 transition-all font-bold"
                 />
               </div>
 
@@ -251,8 +251,8 @@ function Onboarding({ user, onFinish }) {
                       onClick={() => { setFavoriteBook(book); setCustomBook(''); setSearch(''); }}
                       className={`w-full flex items-center gap-4 p-3.5 rounded-2xl border-2 transition-all text-left group
                         ${selected
-                          ? 'border-[#003399] bg-[#003399] shadow-lg shadow-blue-900/20 scale-[1.02]'
-                          : 'border-transparent bg-white shadow-sm hover:border-[#003399]/20'
+                          ? 'border-[#154996] bg-[#154996] shadow-lg shadow-blue-900/20 scale-[1.02]'
+                          : 'border-transparent bg-white shadow-sm hover:border-[#154996]/20'
                         }`}
                     >
                       <div className="w-12 h-16 rounded-xl overflow-hidden bg-gray-100 shrink-0">
@@ -268,7 +268,7 @@ function Onboarding({ user, onFinish }) {
                         </span>
                       </div>
                       {selected && (
-                        <div className="shrink-0 bg-white text-[#003399] rounded-full w-7 h-7 flex items-center justify-center shadow-sm">
+                        <div className="shrink-0 bg-white text-[#154996] rounded-full w-7 h-7 flex items-center justify-center shadow-sm">
                           <Heart size={14} fill="currentColor" />
                         </div>
                       )}
@@ -285,7 +285,7 @@ function Onboarding({ user, onFinish }) {
                   value={customBook}
                   onChange={e => { setCustomBook(e.target.value); setFavoriteBook(null); setSearch(''); }}
                   placeholder="Nombre del libro o personaje..."
-                  className="w-full px-4 py-3.5 bg-white border-2 border-gray-100 focus:border-[#003399] rounded-2xl outline-none text-sm font-bold text-gray-800 transition-all shadow-sm"
+                  className="w-full px-4 py-3.5 bg-white border-2 border-gray-100 focus:border-[#154996] rounded-2xl outline-none text-sm font-bold text-gray-800 transition-all shadow-sm"
                 />
               </div>
             </motion.div>
@@ -303,7 +303,7 @@ function Onboarding({ user, onFinish }) {
                 initial={{ scale: 0, rotate: -180 }}
                 animate={{ scale: 1, rotate: 0 }}
                 transition={{ type: 'spring', stiffness: 200, damping: 15 }}
-                style={{ background: 'linear-gradient(135deg, #FFCC00, #E0B300)' }}
+                style={{ background: 'linear-gradient(135deg, #FFD700, #E0B300)' }}
               >
                 <Sparkles className="text-white w-14 h-14" />
               </motion.div>
@@ -330,7 +330,7 @@ function Onboarding({ user, onFinish }) {
                     </div>
                   </div>
                 </div>
-                {(favoriteBook || customBook) && (
+                {(favoriteBook || customBook || search) && (
                   <div className="border-t border-gray-50 pt-4">
                     <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Libro favorito</p>
                     {favoriteBook ? (
@@ -344,7 +344,7 @@ function Onboarding({ user, onFinish }) {
                         </div>
                       </div>
                     ) : (
-                      <p className="font-black text-gray-900 text-sm">"{customBook}"</p>
+                      <p className="font-black text-gray-900 text-sm">"{customBook || search}"</p>
                     )}
                   </div>
                 )}
@@ -362,7 +362,7 @@ function Onboarding({ user, onFinish }) {
             onClick={() => setStep(s => s + 1)}
             disabled={!canAdvance}
             className="w-full text-white py-5 rounded-2xl font-black text-lg shadow-lg disabled:opacity-40 active:scale-95 transition-all flex items-center justify-center gap-2 group"
-            style={{ background: canAdvance ? 'linear-gradient(135deg, #003399, #D30F15)' : '#d1d5db', boxShadow: canAdvance ? '0 12px 32px -10px rgba(0,51,153,0.5)' : 'none' }}
+            style={{ background: canAdvance ? 'linear-gradient(135deg, #154996, #A80A0A)' : '#d1d5db', boxShadow: canAdvance ? '0 12px 32px -10px rgba(0,51,153,0.5)' : 'none' }}
           >
             {step === 0 ? 'Empezar' : step === STEPS.length - 2 ? 'Continuar' : 'Siguiente'}
             <ChevronRight size={20} className={canAdvance ? 'group-hover:translate-x-1 transition-transform' : ''} />
