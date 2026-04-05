@@ -14,6 +14,34 @@ function Onboarding({ user, onFinish }) {
   const [customBook, setCustomBook] = useState('');
   const [search, setSearch] = useState('');
   const [selectedEmoji, setSelectedEmoji] = useState(null);
+  const [googleResults, setGoogleResults] = useState([]);
+  const [isSearching, setIsSearching] = useState(false);
+
+  const handleGoogleSearch = async () => {
+    if (search.trim().length < 3) return;
+    setIsSearching(true);
+    try {
+      const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(search)}&maxResults=5`);
+      const data = await res.json();
+      if (data.items) {
+        const results = data.items.map(item => ({
+          id: `google-${item.id}`,
+          title: item.volumeInfo.title,
+          author: item.volumeInfo.authors?.join(', ') || 'Autor desconocido',
+          image: item.volumeInfo.imageLinks?.thumbnail || 'https://images.unsplash.com/photo-1543002588-bfa74002ed7e?auto=format&fit=crop&q=80&w=200',
+          genre: 'Externo',
+          isGoogle: true
+        }));
+        setGoogleResults(results);
+      } else {
+        setGoogleResults([]);
+      }
+    } catch (e) {
+      console.warn("Google Books search failed", e);
+    } finally {
+      setIsSearching(false);
+    }
+  };
 
   const firstName = (() => {
     const parts = user?.nombre?.split(' ') || [];
@@ -230,72 +258,110 @@ function Onboarding({ user, onFinish }) {
               </p>
 
               {/* Search in catalog */}
-              <div className="relative mb-4">
-                <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
-                <input
-                  type="text"
-                  value={search}
-                  onChange={e => { setSearch(e.target.value); setCustomBook(''); }}
-                  placeholder="Busca en el catálogo..."
-                  className="w-full pl-10 pr-4 py-3.5 bg-white border-2 border-gray-100 focus:border-[#A80A0A] rounded-2xl outline-none text-sm font-medium text-gray-800 transition-all font-bold"
-                />
+              <div className="flex gap-2 mb-4">
+                <div className="relative flex-1">
+                  <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+                  <input
+                    type="text"
+                    value={search}
+                    onChange={e => { setSearch(e.target.value); setCustomBook(''); }}
+                    placeholder="Busca tu libro..."
+                    className="w-full pl-10 pr-4 py-3.5 bg-white border-2 border-gray-100 focus:border-[#A80A0A] rounded-2xl outline-none text-sm font-medium text-gray-800 transition-all font-bold"
+                  />
+                </div>
+                <button 
+                  onClick={handleGoogleSearch}
+                  disabled={isSearching || search.trim().length < 3}
+                  className="bg-blue-600 text-white px-4 rounded-2xl font-black text-[10px] uppercase tracking-widest active:scale-95 transition-all disabled:opacity-50 shadow-md"
+                >
+                  {isSearching ? '...' : (
+                    <div className="flex flex-col items-center">
+                      <Sparkles size={14} className="mb-0.5" />
+                      <span>Web</span>
+                    </div>
+                  )}
+                </button>
               </div>
 
               {/* Catalog results — scrollable */}
-              <div className="overflow-y-auto space-y-2 mb-4" style={{ maxHeight: '42vh', minHeight: '120px' }}>
+              <div className="overflow-y-auto space-y-2 mb-4 pr-1 custom-scrollbar" style={{ maxHeight: '42vh', minHeight: '120px' }}>
+                {filteredBooks.length > 0 && <p className="text-[10px] font-black uppercase text-gray-400 tracking-widest mb-2">En el Colegio</p>}
                 {filteredBooks.map(book => {
                   const selected = favoriteBook?.id === book.id;
                   return (
                     <button
                       key={book.id}
-                      onClick={() => { setFavoriteBook(book); setCustomBook(''); setSearch(''); }}
-                      className={`w-full flex items-center gap-4 p-3.5 rounded-2xl border-2 transition-all text-left group
-                        ${selected
-                          ? 'border-[#A80A0A] bg-[#A80A0A] shadow-lg shadow-red-900/20 scale-[1.02]'
-                          : 'border-transparent bg-white shadow-sm hover:border-[#A80A0A]/20'
-                        }`}
+                      onClick={() => setFavoriteBook(book)}
+                      className={`w-full p-3 rounded-2xl border-2 flex items-center gap-3 transition-all
+                        ${selected ? 'border-[#A80A0A] bg-[#FFF5F5] shadow-sm' : 'border-gray-50 bg-white hover:border-gray-200'}`}
                     >
-                      <div className="w-12 h-16 rounded-xl overflow-hidden bg-gray-100 shrink-0">
-                        <img src={book.image} alt={book.title} className="w-full h-full object-cover" />
+                      <div className="w-10 h-14 rounded-lg overflow-hidden shrink-0 bg-gray-100">
+                        <img src={book.image} className="w-full h-full object-cover" />
                       </div>
-                      <div className="flex-1 min-w-0">
-                        <p className={`font-black text-sm leading-tight mb-0.5 ${selected ? 'text-white' : 'text-gray-800'}`}>
-                          {book.title}
-                        </p>
-                        <p className={`text-xs font-bold truncate ${selected ? 'text-white/80' : 'text-gray-400'}`}>{book.author}</p>
-                        <span className={`text-[10px] font-black px-2 py-0.5 rounded-full mt-1.5 inline-block ${selected ? 'bg-white/20 text-white' : 'bg-gray-100 text-gray-500'}`}>
-                          {book.genre}
-                        </span>
+                      <div className="min-w-0 text-left flex-1">
+                        <p className="font-black text-gray-900 text-xs truncate">{book.title}</p>
+                        <p className="text-[10px] font-bold text-gray-400 truncate mt-0.5">{book.author}</p>
                       </div>
-                      {selected && (
-                        <div className="shrink-0 bg-white text-[#A80A0A] rounded-full w-7 h-7 flex items-center justify-center shadow-sm">
-                          <Heart size={14} fill="currentColor" />
-                        </div>
-                      )}
+                      {selected && <Check size={16} className="text-[#A80A0A]" />}
                     </button>
                   );
                 })}
+
+                {googleResults.length > 0 && (
+                  <>
+                    <div className="border-t border-gray-100 mt-4 pt-4" />
+                    <p className="text-[10px] font-black uppercase text-blue-600 tracking-widest mb-2 flex items-center gap-1.5">
+                      <Sparkles size={10} /> Resultados de la Web
+                    </p>
+                    {googleResults.map(book => {
+                      const selected = favoriteBook?.id === book.id;
+                      return (
+                        <button
+                          key={book.id}
+                          onClick={() => setFavoriteBook(book)}
+                          className={`w-full p-3 rounded-2xl border-2 flex items-center gap-3 transition-all
+                            ${selected ? 'border-blue-500 bg-blue-50 shadow-sm' : 'border-gray-50 bg-white hover:border-gray-200'}`}
+                        >
+                          <div className="w-10 h-14 rounded-lg overflow-hidden shrink-0 bg-gray-100 relative">
+                            <img src={book.image} className="w-full h-full object-cover" />
+                            <div className="absolute top-0 right-0 bg-blue-500 text-white p-0.5 rounded-bl-lg">
+                              <Sparkles size={8} />
+                            </div>
+                          </div>
+                          <div className="min-w-0 text-left flex-1">
+                            <p className="font-black text-gray-900 text-xs truncate">{book.title}</p>
+                            <p className="text-[10px] font-bold text-gray-400 truncate mt-0.5">{book.author}</p>
+                          </div>
+                          {selected && <Check size={16} className="text-blue-500" />}
+                        </button>
+                      );
+                    })}
+                  </>
+                )}
+
+                {filteredBooks.length === 0 && googleResults.length === 0 && search.trim().length > 2 && (
+                  <div className="py-6 text-center">
+                    <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest leading-relaxed">
+                      Ese libro no está en el colegio.<br />
+                      <span className="text-[#A80A0A]">Presiona "Web" para buscarlo fuera.</span>
+                    </p>
+                  </div>
+                )}
               </div>
 
-              {/* Manual entry / Direct search option */}
-              <div className="shrink-0 pt-2">
-                {search.trim().length > 2 && filteredBooks.length === 0 && (
-                  <button
-                    onClick={() => { setCustomBook(search); setFavoriteBook(null); }}
-                    className={`w-full p-4 rounded-xl border-2 font-black transition-all text-sm
-                      ${customBook === search 
-                        ? 'border-[#A80A0A] bg-[#A80A0A] text-white shadow-lg shadow-red-900/20' 
-                        : 'border-[#A80A0A]/30 text-[#A80A0A] hover:bg-[#FFF0F0]'}`}
-                  >
-                    Usar "{search}" como mi libro favorito 📖
-                  </button>
-                )}
-                {search.trim().length === 0 && (
-                  <p className="text-xs text-gray-400 font-bold uppercase tracking-widest text-center mt-2">
-                    Si no está en el catálogo, escríbelo en el buscador.
-                  </p>
-                )}
-              </div>
+              {/* Summary of selection */}
+              {favoriteBook && (
+                <div className="mt-auto bg-white p-3 rounded-2xl border-2 border-emerald-100 flex items-center gap-3 shadow-sm animate-pulse">
+                   <div className="w-8 h-12 rounded-lg overflow-hidden shrink-0">
+                      <img src={favoriteBook.image} className="w-full h-full object-cover" />
+                   </div>
+                   <div className="flex-1 min-w-0">
+                      <p className="text-[10px] font-black uppercase text-emerald-600 tracking-widest">Seleccionado</p>
+                      <p className="font-black text-gray-900 text-xs truncate">{favoriteBook.title}</p>
+                   </div>
+                   <Check className="text-emerald-500" size={18} />
+                </div>
+              )}
             </motion.div>
           )}
 
@@ -311,9 +377,10 @@ function Onboarding({ user, onFinish }) {
                 initial={{ scale: 0, rotate: -180 }}
                 animate={{ scale: 1, rotate: 0 }}
                 transition={{ type: 'spring', stiffness: 200, damping: 15 }}
+                className="w-20 h-20 rounded-3xl flex items-center justify-center mb-6 shadow-2xl"
                 style={{ background: 'linear-gradient(135deg, #FFD700, #E0B300)' }}
               >
-                <Sparkles className="text-white w-14 h-14" />
+                <Sparkles className="text-white w-10 h-10" />
               </motion.div>
 
               <h2 className="text-4xl font-black text-gray-900 tracking-tighter mb-3">
@@ -324,7 +391,7 @@ function Onboarding({ user, onFinish }) {
               </p>
 
               {/* Summary card */}
-              <div className="bg-white rounded-3xl p-5 shadow-sm border border-gray-100 w-full text-left space-y-4">
+              <div className="bg-white rounded-3xl p-6 shadow-lg border border-gray-100 w-full text-left space-y-4">
                 <div className="flex gap-4">
                   <div className="w-14 h-14 rounded-2xl bg-gray-50 flex items-center justify-center text-3xl border border-gray-100 shadow-sm">
                     {selectedEmoji}
@@ -352,7 +419,7 @@ function Onboarding({ user, onFinish }) {
                         </div>
                       </div>
                     ) : (
-                      <p className="font-black text-gray-900 text-sm">"{customBook || search}"</p>
+                      <p className="font-black text-gray-900 text-sm italic">"{customBook || search}"</p>
                     )}
                   </div>
                 )}
@@ -364,13 +431,16 @@ function Onboarding({ user, onFinish }) {
       </div>
 
       {/* Bottom CTA */}
-      <div className="px-6 pb-8 shrink-0 bg-gradient-to-t from-[#F8F9FD] to-transparent">
+      <div className="px-6 pb-8 shrink-0">
         {step < STEPS.length - 1 ? (
           <button
             onClick={() => setStep(s => s + 1)}
             disabled={!canAdvance}
             className="w-full text-white py-5 rounded-2xl font-black text-lg shadow-lg disabled:opacity-40 active:scale-95 transition-all flex items-center justify-center gap-2 group"
-            style={{ background: canAdvance ? 'linear-gradient(135deg, #A80A0A, #5e0000)' : '#d1d5db', boxShadow: canAdvance ? '0 12px 32px -10px rgba(168,10,10,0.5)' : 'none' }}
+            style={{ 
+              background: canAdvance ? 'linear-gradient(135deg, #A80A0A, #5e0000)' : '#d1d5db',
+              boxShadow: canAdvance ? '0 12px 32px -10px rgba(168,10,10,0.5)' : 'none' 
+            }}
           >
             {step === 0 ? 'Empezar' : step === STEPS.length - 2 ? 'Continuar' : 'Siguiente'}
             <ChevronRight size={20} className={canAdvance ? 'group-hover:translate-x-1 transition-transform' : ''} />

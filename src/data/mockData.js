@@ -23,8 +23,8 @@ export const ITEMS = [
     author: 'Roald Dahl',
     description: 'Charlie Bucket gana un boleto dorado para visitar la fábrica más misteriosa del mundo, llena de maravillas y peligros.',
     image: 'https://images.unsplash.com/photo-1481391319762-47dff72954d9?auto=format&fit=crop&q=80&w=400',
-    professors: [{ name: 'Miss Danixa', dept: 'Psicopedagogía' }, { name: 'Miss Danixa', dept: 'Biblioteca' }],
-    genre: 'Fantasía', studentsMatched: 88, minNivel: 5, maxNivel: 7
+    
+    genre: 'Fantasía',  minNivel: 5, maxNivel: 7
   },
   {
     id: 3,
@@ -33,8 +33,8 @@ export const ITEMS = [
     author: 'Antoine de Saint-Exupéry',
     description: 'Un pequeño príncipe que viaja de planeta en planeta descubriendo que "lo esencial es invisible a los ojos".',
     image: 'https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&q=80&w=400',
-    professors: [{ name: 'Miss Danixa', dept: 'Psicopedagogía' }, { name: 'Profe Rodrigo', dept: 'Artes' }],
-    genre: 'Fábula', studentsMatched: 95, minNivel: 5, maxNivel: 9
+    
+    genre: 'Fábula',  minNivel: 5, maxNivel: 9
   },
   {
     id: 4,
@@ -43,8 +43,8 @@ export const ITEMS = [
     author: 'Arthur Conan Doyle',
     description: 'El detective más famoso del mundo. Frío, calculador y con una capacidad de deducción que desafía toda lógica.',
     image: 'https://images.unsplash.com/photo-1589998059171-988d887df646?auto=format&fit=crop&q=80&w=400',
-    professors: [{ name: 'Profe Juan Pablo', dept: 'Ciencias' }, { name: 'Miss Danixa', dept: 'Inglés' }],
-    genre: 'Misterio', studentsMatched: 51, minNivel: 5, maxNivel: 12
+    
+    genre: 'Misterio',  minNivel: 5, maxNivel: 12
   },
   {
     id: 5,
@@ -53,8 +53,8 @@ export const ITEMS = [
     author: 'L. Frank Baum',
     description: 'Dorothy y su perro Totó son arrastrados por un tornado a la tierra mágica de Oz, donde buscan el camino a casa.',
     image: 'https://images.unsplash.com/photo-1521587760476-6c12a4b040da?auto=format&fit=crop&q=80&w=400',
-    professors: [{ name: 'Miss Danixa', dept: 'Inglés' }, { name: 'Miss Danixa', dept: 'Biblioteca' }],
-    genre: 'Aventura', studentsMatched: 43, minNivel: 5, maxNivel: 7
+    
+    genre: 'Aventura',  minNivel: 5, maxNivel: 7
   },
   {
     id: 6,
@@ -63,8 +63,8 @@ export const ITEMS = [
     author: 'C.S. Lewis',
     description: 'Cuatro hermanos descubren un mundo mágico a través de un armario ropero y deben luchar contra la Bruja Blanca.',
     image: 'https://images.unsplash.com/photo-1535666669445-e8c15cd2e7d9?auto=format&fit=crop&q=80&w=400',
-    professors: [{ name: 'Profe Gonzalo', dept: 'Lenguaje' }, { name: 'Miss Danixa', dept: 'Inglés' }],
-    genre: 'Fantasía', studentsMatched: 67, minNivel: 5, maxNivel: 8
+    
+    genre: 'Fantasía',  minNivel: 5, maxNivel: 8
   },
 
   // ── 6°, 7° y 8° Básico ──────────────────────────────────────────────────────
@@ -75,8 +75,8 @@ export const ITEMS = [
     author: 'J.K. Rowling',
     description: 'Un niño huérfano descubre que es un mago y comienza su educación en Hogwarts, la escuela de magia más famosa del mundo.',
     image: 'https://images.unsplash.com/photo-1618519764620-7403abdbdfe9?auto=format&fit=crop&q=80&w=400',
-    professors: [{ name: 'Miss Danixa', dept: 'Inglés' }, { name: 'Miss Danixa', dept: 'Biblioteca' }],
-    genre: 'Fantasía', studentsMatched: 142, minNivel: 6, maxNivel: 10
+    
+    genre: 'Fantasía',  minNivel: 6, maxNivel: 10
   },
   {
     id: 8,
@@ -85,8 +85,8 @@ export const ITEMS = [
     author: 'Rick Riordan',
     description: 'Un adolescente con TDAH descubre que es hijo de Poseidón y debe recuperar el rayo de Zeus para evitar una guerra olímpica.',
     image: 'https://images.unsplash.com/photo-1555116505-38ab61800975?auto=format&fit=crop&q=80&w=400',
-    professors: [{ name: 'Miss Danixa', dept: 'Historia' }, { name: 'Miss Danixa', dept: 'Biblioteca' }],
-    genre: 'Aventura', studentsMatched: 118, minNivel: 6, maxNivel: 9
+    
+    genre: 'Aventura',  minNivel: 6, maxNivel: 9
   },
   {
     id: 9,
@@ -95,8 +95,8 @@ export const ITEMS = [
     author: 'J.R.R. Tolkien',
     description: 'Bilbo Bolsón, un hobbit tranquilo, es arrastrado a una aventura épica con enanos y un mago para recuperar un tesoro guardado por un dragón.',
     image: 'https://images.unsplash.com/photo-1506466010722-395aa2bef877?auto=format&fit=crop&q=80&w=400',
-    professors: [{ name: 'Profe Gonzalo', dept: 'Lenguaje' }, { name: 'Miss Danixa', dept: 'Inglés' }],
-    genre: 'Fantasía', studentsMatched: 89, minNivel: 7, maxNivel: 12
+    
+    genre: 'Fantasía',  minNivel: 7, maxNivel: 12
   },
   {
     id: 10,
@@ -105,8 +105,8 @@ export const ITEMS = [
     author: 'Michael Ende',
     description: 'Una niña con poderes especiales para escuchar lucha contra los Hombres Grises que roban el tiempo a los humanos.',
     image: 'https://images.unsplash.com/photo-1470549638415-0a0755be0619?auto=format&fit=crop&q=80&w=400',
-    professors: [{ name: 'Profe Gonzalo', dept: 'Lenguaje' }, { name: 'Miss Danixa', dept: 'Psicopedagogía' }],
-    genre: 'Fantasía', studentsMatched: 44, minNivel: 7, maxNivel: 9
+    
+    genre: 'Fantasía',  minNivel: 7, maxNivel: 9
   },
   {
     id: 11,
@@ -115,8 +115,8 @@ export const ITEMS = [
     author: 'Robert L. Stevenson',
     description: 'Jim Hawkins encuentra un mapa del tesoro del pirata Flint y zarpa en una aventura llena de peligros y traiciones.',
     image: 'https://images.unsplash.com/photo-1439405326854-014607f694d7?auto=format&fit=crop&q=80&w=400',
-    professors: [{ name: 'Profe Gonzalo', dept: 'Lenguaje' }, { name: 'Miss Danixa', dept: 'Inglés' }],
-    genre: 'Aventura', studentsMatched: 36, minNivel: 7, maxNivel: 9
+    
+    genre: 'Aventura',  minNivel: 7, maxNivel: 9
   },
 
   // ── 8° Básico y 1° Medio ─────────────────────────────────────────────────────
@@ -127,8 +127,8 @@ export const ITEMS = [
     author: 'Ana Frank',
     description: 'El diario real de una niña judía que se escondió con su familia durante el Holocausto. Un testimonio de esperanza en tiempos oscuros.',
     image: 'https://images.unsplash.com/photo-1524985069026-dd778a71c7b4?auto=format&fit=crop&q=80&w=400',
-    professors: [{ name: 'Miss Danixa', dept: 'Historia' }, { name: 'Profe Gonzalo', dept: 'Lenguaje' }],
-    genre: 'Autobiografía', studentsMatched: 78, minNivel: 8, maxNivel: 12
+    
+    genre: 'Autobiografía',  minNivel: 8, maxNivel: 12
   },
   {
     id: 13,
@@ -137,8 +137,8 @@ export const ITEMS = [
     author: 'Paulo Coelho',
     description: 'Un pastor andaluz viaja desde España hasta las pirámides de Egipto en busca de un tesoro y descubre el verdadero significado de su vida.',
     image: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&q=80&w=400',
-    professors: [{ name: 'Profe Gonzalo', dept: 'Lenguaje' }, { name: 'Miss Danixa', dept: 'Psicopedagogía' }],
-    genre: 'Aventura', studentsMatched: 55, minNivel: 8, maxNivel: 12
+    
+    genre: 'Aventura',  minNivel: 8, maxNivel: 12
   },
   {
     id: 14,
@@ -147,8 +147,8 @@ export const ITEMS = [
     author: 'William Shakespeare',
     description: 'La tragedia más famosa del mundo: dos jóvenes de familias rivales se enamoran y su amor los lleva a un desenlace inevitable.',
     image: 'https://images.unsplash.com/photo-1518609878373-06d740f60d8b?auto=format&fit=crop&q=80&w=400',
-    professors: [{ name: 'Miss Danixa', dept: 'Inglés' }, { name: 'Miss Danixa', dept: 'Historia' }],
-    genre: 'Clásico', studentsMatched: 63, minNivel: 8, maxNivel: 12
+    
+    genre: 'Clásico',  minNivel: 8, maxNivel: 12
   },
 
   // ── 1° a 4° Medio ────────────────────────────────────────────────────────────
@@ -159,8 +159,8 @@ export const ITEMS = [
     author: 'William Golding',
     description: 'Un grupo de niños náufragos en una isla desierta crean su propia sociedad, que rápidamente degenera en violencia y caos.',
     image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&q=80&w=400',
-    professors: [{ name: 'Profe Gonzalo', dept: 'Lenguaje' }, { name: 'Miss Danixa', dept: 'Historia' }],
-    genre: 'Clásico', studentsMatched: 38, minNivel: 9, maxNivel: 12
+    
+    genre: 'Clásico',  minNivel: 9, maxNivel: 12
   },
   {
     id: 16,
@@ -169,8 +169,8 @@ export const ITEMS = [
     author: 'Gabriel García Márquez',
     description: 'El relato de un crimen que todo el pueblo sabía que iba a ocurrir pero nadie pudo o quiso evitar.',
     image: 'https://images.unsplash.com/photo-1506466010722-395aa2bef877?auto=format&fit=crop&q=80&w=400',
-    professors: [{ name: 'Profe Gonzalo', dept: 'Lenguaje' }, { name: 'Miss Danixa', dept: 'Biblioteca' }],
-    genre: 'Realismo Mágico', studentsMatched: 29, minNivel: 9, maxNivel: 12
+    
+    genre: 'Realismo Mágico',  minNivel: 9, maxNivel: 12
   },
   {
     id: 17,
@@ -179,8 +179,8 @@ export const ITEMS = [
     author: 'Franz Kafka',
     description: 'Gregor Samsa despierta convertido en un insecto gigante. Una poderosa alegoría sobre la alienación, la familia y la identidad.',
     image: 'https://images.unsplash.com/photo-1472396961693-142e6e269027?auto=format&fit=crop&q=80&w=400',
-    professors: [{ name: 'Profe Gonzalo', dept: 'Lenguaje' }, { name: 'Profe Juan Pablo', dept: 'Ciencias' }],
-    genre: 'Clásico', studentsMatched: 22, minNivel: 10, maxNivel: 12
+    
+    genre: 'Clásico',  minNivel: 10, maxNivel: 12
   },
   {
     id: 18,
@@ -189,8 +189,8 @@ export const ITEMS = [
     author: 'George Orwell',
     description: 'En un futuro distópico, el Gran Hermano lo vigila todo. Winston Smith se atreve a pensar en libertad en un mundo donde eso está prohibido.',
     image: 'https://images.unsplash.com/photo-1505664194779-8beaceb93744?auto=format&fit=crop&q=80&w=400',
-    professors: [{ name: 'Miss Danixa', dept: 'Historia' }, { name: 'Profe Gonzalo', dept: 'Lenguaje' }],
-    genre: 'Ciencia Ficción', studentsMatched: 47, minNivel: 10, maxNivel: 12
+    
+    genre: 'Ciencia Ficción',  minNivel: 10, maxNivel: 12
   },
   {
     id: 19,
@@ -199,8 +199,8 @@ export const ITEMS = [
     author: 'Gabriel García Márquez',
     description: 'La épica historia de la familia Buendía en Macondo, donde lo fantástico ocurre todos los días.',
     image: 'https://images.unsplash.com/photo-1541963463532-d68292c34b19?auto=format&fit=crop&q=80&w=400',
-    professors: [{ name: 'Profe Gonzalo', dept: 'Lenguaje' }, { name: 'Miss Danixa', dept: 'Biblioteca' }],
-    genre: 'Realismo Mágico', studentsMatched: 22, minNivel: 10, maxNivel: 12
+    
+    genre: 'Realismo Mágico',  minNivel: 10, maxNivel: 12
   },
   {
     id: 20,
@@ -209,8 +209,8 @@ export const ITEMS = [
     author: 'F. Scott Fitzgerald',
     description: 'Jay Gatsby, un millonario misterioso, organiza fiestas escandalosas esperando reconquistar a la mujer que ama. Una crítica al sueño americano.',
     image: 'https://images.unsplash.com/photo-1533090481720-856c6e3c1fdc?auto=format&fit=crop&q=80&w=400',
-    professors: [{ name: 'Miss Danixa', dept: 'Inglés' }, { name: 'Miss Danixa', dept: 'Historia' }],
-    genre: 'Clásico', studentsMatched: 31, minNivel: 10, maxNivel: 12
+    
+    genre: 'Clásico',  minNivel: 10, maxNivel: 12
   },
   {
     id: 21,
@@ -219,8 +219,8 @@ export const ITEMS = [
     author: 'Miguel de Cervantes',
     description: 'Un hidalgo que pierde la razón leyendo libros de caballería y decide convertirse en caballero andante por las tierras de España.',
     image: 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&q=80&w=400',
-    professors: [{ name: 'Profe Gonzalo', dept: 'Lenguaje' }, { name: 'Miss Danixa', dept: 'Historia' }],
-    genre: 'Clásico', studentsMatched: 34, minNivel: 11, maxNivel: 12
+    
+    genre: 'Clásico',  minNivel: 11, maxNivel: 12
   },
   {
     id: 22,
@@ -229,8 +229,8 @@ export const ITEMS = [
     author: 'Jane Austen',
     description: 'Una mujer adelantada a su tiempo que valora la independencia y la inteligencia por sobre las normas sociales.',
     image: 'https://images.unsplash.com/photo-1474932430478-3a7fb9065ba0?auto=format&fit=crop&q=80&w=400',
-    professors: [{ name: 'Miss Danixa', dept: 'Inglés' }, { name: 'Miss Danixa', dept: 'Historia' }],
-    genre: 'Romance', studentsMatched: 28, minNivel: 9, maxNivel: 12
+    
+    genre: 'Romance',  minNivel: 9, maxNivel: 12
   },
   {
     id: 23,
@@ -239,8 +239,8 @@ export const ITEMS = [
     author: 'Ernesto Sábato',
     description: 'Un pintor obsesivo relata el asesinato de la única persona que comprendió su arte. Una exploración oscura de la soledad y los celos.',
     image: 'https://images.unsplash.com/photo-1512314889357-e157c22f938d?auto=format&fit=crop&q=80&w=400',
-    professors: [{ name: 'Profe Gonzalo', dept: 'Lenguaje' }],
-    genre: 'Misterio', studentsMatched: 18, minNivel: 10, maxNivel: 12
+    
+    genre: 'Misterio',  minNivel: 10, maxNivel: 12
   },
   {
     id: 24,
@@ -249,8 +249,8 @@ export const ITEMS = [
     author: 'Aldous Huxley',
     description: 'Una sociedad futurista aparentemente perfecta donde el condicionamiento y las drogas eliminan el sufrimiento... y la libertad.',
     image: 'https://images.unsplash.com/photo-1464802686167-b939a6910659?auto=format&fit=crop&q=80&w=400',
-    professors: [{ name: 'Profe Juan Pablo', dept: 'Ciencias' }, { name: 'Profe Gonzalo', dept: 'Lenguaje' }],
-    genre: 'Ciencia Ficción', studentsMatched: 25, minNivel: 10, maxNivel: 12
+    
+    genre: 'Ciencia Ficción',  minNivel: 10, maxNivel: 12
   },
   {
     id: 25,
@@ -259,8 +259,8 @@ export const ITEMS = [
     author: 'Antoine de Saint-Exupéry',
     description: 'Un clásico eterno sobre la amistad, el amor y la pérdida que los adultos leen con otros ojos. "Las personas mayores nunca comprenden nada por sí solas."',
     image: 'https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&q=80&w=400',
-    professors: [{ name: 'Profe Gonzalo', dept: 'Lenguaje' }, { name: 'Miss Danixa', dept: 'Psicopedagogía' }],
-    genre: 'Fábula', studentsMatched: 110, minNivel: 9, maxNivel: 12
+    
+    genre: 'Fábula',  minNivel: 9, maxNivel: 12
   },
   {"id":101,"type":"libro","title":"Bajo la misma estrella","author":"John Green","description":"Dos adolescentes que padecen cáncer inician un viaje para reafirmar sus vidas.","image":"https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&q=80&w=400","professors":[{"name":"Gonzalo Andrés","dept":"Computación"}],"genre":"Romance","studentsMatched":45,"minNivel":8,"maxNivel":12},
   {"id":102,"type":"libro","title":"El diario de Ana Frank","author":"Ana Frank","description":"El testimonio humano más sobrecogedor sobre la persecución nazi.","image":"https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&q=80&w=400","professors":[{"name":"Miss Danixa","dept":"Historia"}],"genre":"Autobiografía","studentsMatched":89,"minNivel":7,"maxNivel":12},

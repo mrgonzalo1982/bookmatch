@@ -38,7 +38,11 @@ function MatchDeck({ user, likedIds, userProfile, onMatch, onShowTeacher }) {
     if (!item) return;
     setSwipeAction(direction);
     if (direction === 'right') {
-      setShowMatchModal(true);
+      if (item.professors && item.professors.length > 0) {
+        setShowMatchModal(true);
+      } else {
+        handleMatchContinue(); // Direct like if no professor matches yet
+      }
     } else {
       setTimeout(() => {
         setDiscardedIds(prev => [...prev, item.id]); // mark as discarded → removed from deck
@@ -90,10 +94,10 @@ function MatchDeck({ user, likedIds, userProfile, onMatch, onShowTeacher }) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="absolute inset-0 z-50 backdrop-blur-3xl flex flex-col items-center p-8 text-white text-center"
+            className="fixed inset-0 z-[100] backdrop-blur-3xl flex flex-col items-center p-8 text-white text-center"
             style={{ background: 'radial-gradient(circle at center, #A80A0A 0%, #3a0000 60%, #050505 100%)' }}
           >
-            <div className="flex-1 w-full max-w-sm flex flex-col items-center justify-center overflow-y-auto custom-scrollbar pt-10 pb-20">
+            <div className="flex-1 w-full max-w-sm flex flex-col items-center overflow-y-auto custom-scrollbar pt-20 pb-20">
             {/* Animated heart */}
             <motion.div
               initial={{ scale: 0.3 }}

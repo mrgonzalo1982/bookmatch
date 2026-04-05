@@ -102,9 +102,16 @@ function App() {
     }
 
     // Teachers
-    const TEACHER_RUTS = ['150685478', '186188225']; // Gonzalo Andrés, Danixa Paola
+        const TEACHER_RUTS = ['150685478', '186188225']; // Gonzalo Andrés, Danixa Paola
     if (TEACHER_RUTS.includes(cleanRut)) {
-       const teacherUser = { rut: cleanRut, nombre: 'Profesor Umbral', curso: 'Docente', role: 'teacher', avatar: '/umbral-shield.png' };
+       const isDanixa = cleanRut === '186188225';
+       const teacherUser = { 
+         rut: cleanRut, 
+         nombre: isDanixa ? 'Miss Danixa' : 'Profe Gonzalo', 
+         curso: 'Docente', 
+         role: 'teacher', 
+         avatar: '/umbral-shield.png' 
+       };
        setUser(teacherUser);
        localStorage.setItem('bm-user', JSON.stringify(teacherUser));
        localStorage.setItem('bm-active-rut', cleanRut);
@@ -116,11 +123,20 @@ function App() {
        const genres = profileData?.genres || [];
        
        if (!snap.exists() || genres.length === 0) {
-         await setDoc(docRef, { profile: { emoji: '📚', genres: [] }, likes: [], role: 'teacher' }, { merge: true });
+         // Default profile for new teachers
+         await setDoc(docRef, { 
+           profile: { 
+             emoji: '📚', 
+             genres: [], 
+             dept: isDanixa ? 'Lenguaje' : 'Inglés' 
+           }, 
+           likes: [], 
+           role: 'teacher' 
+         }, { merge: true });
          setView('onboarding');
        } else {
          setUserProfile(profileData);
-         setView('admin'); // Teachers jump to admin optimally.
+         setView('admin'); 
        }
        return true;
     }

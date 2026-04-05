@@ -1,9 +1,9 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { STUDENTS, ITEMS, GENRES } from '../data/mockData';
-import { Search, Trash2, RotateCcw, Users, BookOpen, ChevronLeft, ShieldCheck, Plus, X, Download, Star } from 'lucide-react';
+import { Search, Plus, Download, Trash2, ChevronLeft, ShieldCheck, Star, Database } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { db } from '../lib/firebase';
-import { doc, setDoc, collection, getDocs } from 'firebase/firestore';
+import { doc, setDoc, collection, getDocs, updateDoc, deleteField } from 'firebase/firestore';
 
 function AdminView({ onBack }) {
   const [search, setSearch] = useState('');
@@ -117,7 +117,7 @@ function AdminView({ onBack }) {
       maxNivel: Number(newBook.maxNivel),
       studentsMatched: 0,
       image: newBook.image || 'https://images.unsplash.com/photo-1532012197267-da84d127e765?auto=format&fit=crop&q=80&w=400',
-      professors: [{ name: 'Profe Gonzalo', dept: 'Inglés' }]
+      professors: []
     };
 
     // Save to Cloud Firestore
@@ -174,6 +174,25 @@ function AdminView({ onBack }) {
 
     } catch (e) {
       alert("Error exportando datos: " + e.message);
+    }
+  };
+
+  const handlePurgeFirestore = async () => {
+    if (!window.confirm("¿Estás seguro de eliminar TODOS los profesores y likes ficticios de los libros? Esta acción limpiará el catálogo por completo (solo quedarán título, autor, etc).")) return;
+    
+    try {
+      const catSnap = await getDocs(collection(db, 'catalog'));
+      const batchPromises = catSnap.docs.map(docSnap => 
+        updateDoc(doc(db, 'catalog', docSnap.id), { 
+          professors: [], 
+          studentsMatched: deleteField() 
+        })
+      );
+      await Promise.all(batchPromises);
+      alert("¡Base de Datos Limpia! Todos los profesores falsos han sido eliminados.");
+      window.location.reload();
+    } catch (e) {
+      alert("Error al limpiar: " + e.message);
     }
   };
 
@@ -234,9 +253,15 @@ function AdminView({ onBack }) {
           </button>
           <button 
             onClick={() => setShowAddBook(true)}
-            className="w-14 h-14 bg-[#A80A0A] text-white flex justify-center items-center rounded-[22px] shadow-lg flex-shrink-0 hover:bg-[#8B0707] transition-all"
+            className="w-12 h-12 bg-[#A80A0A] text-white flex justify-center items-center rounded-[18px] shadow-lg flex-shrink-0 hover:bg-[#8B0707] transition-all"
             title="Añadir Libro">
-            <Plus size={24} />
+            <Plus size={20} />
+          </button>
+          <button 
+            onClick={handlePurgeFirestore}
+            className="w-12 h-12 bg-gray-800 text-white flex justify-center items-center rounded-[18px] shadow-lg flex-shrink-0 hover:bg-black transition-all"
+            title="Limpiar Base de Datos">
+            <Database size={20} />
           </button>
         </div>
 
