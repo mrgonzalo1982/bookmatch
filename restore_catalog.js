@@ -65,7 +65,24 @@ const ALL_BOOKS = [
   
   // Sagas Populres
   { id: 105, type: 'libro', title: 'Los Juegos del Hambre', author: 'Suzanne Collins', genre: 'Ciencia Ficción', minNivel: 7, maxNivel: 12, description: 'Katniss Everdeen debe luchar por su vida en un reality show televisado.' },
-  { id: 120, type: 'libro', title: 'La Comunidad del Anillo', author: 'J.R.R. Tolkien', genre: 'Fantasía', minNivel: 8, maxNivel: 12, description: 'Frodo Bolsón emprende la misión de destruir el Anillo Único.' }
+  { id: 120, type: 'libro', title: 'La Comunidad del Anillo', author: 'J.R.R. Tolkien', genre: 'Fantasía', minNivel: 8, maxNivel: 12, description: 'Frodo Bolsón emprende la misión de destruir el Anillo Único.' },
+
+  // Nuevas Sugerencias (Tendencias Chile)
+  { id: 601, type: 'libro', title: 'Papelucho', author: 'Marcela Paz', genre: 'Aventura', minNivel: 5, maxNivel: 7, description: 'Las divertidas e ingeniosas memorias de un niño chileno que ve el mundo de una forma única.' },
+  { id: 602, type: 'libro', title: 'Quique Hache, Detective', author: 'Sergio Gómez', genre: 'Misterio', minNivel: 6, maxNivel: 9, description: 'Quique Hache comienza sus vacaciones con un caso intrigante en el Santiago de hoy.' },
+  { id: 603, type: 'libro', title: 'El Diario de Greg', author: 'Jeff Kinney', genre: 'Realismo', minNivel: 5, maxNivel: 8, description: 'Un diario ilustrado sobre la vida de un preadolescente tratando de sobrevivir al instituto.' },
+  { id: 604, type: 'libro', title: 'Frin', author: 'Luis Pescetti', genre: 'Realismo', minNivel: 5, maxNivel: 7, description: 'Frin descubre la amistad, el primer amor y los viajes en una historia llena de ternura y humor.' },
+  { id: 605, type: 'libro', title: 'Cuentos de la Selva', author: 'Horacio Quiroga', genre: 'Fantasía', minNivel: 5, maxNivel: 8, description: 'Relatos maravillosos donde animales y hombres conviven en la selva misionera.' },
+  { id: 606, type: 'libro', title: 'Asesinato en el Canadian Express', author: 'Eric Wilson', genre: 'Misterio', minNivel: 7, maxNivel: 10, description: 'Tom Austen se ve envuelto en un misterio a bordo de un tren transcontinental.' },
+  { id: 607, type: 'libro', title: 'Ami, el niño de las estrellas', author: 'Enrique Barrios', genre: 'Fábula', minNivel: 6, maxNivel: 9, description: 'Una historia de sabiduría universal y fraternidad entre mundos lejanos.' },
+  { id: 608, type: 'libro', title: 'Cuentos de Eva Luna', author: 'Isabel Allende', genre: 'Realismo Mágico', minNivel: 10, maxNivel: 12, description: 'Relatos llenos de pasión y magia que exploran la condición humana.' },
+  { id: 609, type: 'libro', title: 'Divergente', author: 'Veronica Roth', genre: 'Ciencia Ficción', minNivel: 8, maxNivel: 11, description: 'En una sociedad dividida en facciones, Beatrice debe elegir quién quiere ser.' },
+  { id: 610, type: 'libro', title: 'La Reina Roja', author: 'Victoria Aveyard', genre: 'Romantasy', minNivel: 9, maxNivel: 12, description: 'En un mundo dividido por el color de la sangre, una joven con poderes cambiará el destino.' },
+  { id: 611, type: 'libro', title: 'La Tregua', author: 'Mario Benedetti', genre: 'Clásico', minNivel: 10, maxNivel: 12, description: 'La historia de amor y rutina de Martín Santomé a través de su diario personal.' },
+  { id: 612, type: 'libro', title: 'El Psicoanalista', author: 'John Katzenbach', genre: 'Misterio', minNivel: 10, maxNivel: 12, description: 'Un thriller psicológico donde un doctor es amenazado de muerte por un desconocido.' },
+  { id: 613, type: 'libro', title: 'Bajo la misma estrella', author: 'John Green', genre: 'Romance', minNivel: 9, maxNivel: 12, description: 'Hazel y Gus comparten un viaje inolvidable lleno de humor, valentía y amor.' },
+  { id: 614, type: 'libro', title: 'La Casa de los Espíritus', author: 'Isabel Allende', genre: 'Realismo Mágico', minNivel: 11, maxNivel: 12, description: 'La épica historia de la familia Trueba a través de tres generaciones.' },
+  { id: 615, type: 'libro', title: 'Sub Sole', author: 'Baldomero Lillo', genre: 'Clásico', minNivel: 9, maxNivel: 12, description: 'Relatos realistas que exploran la vida social y minera del Chile del siglo XX.' }
 ];
 
 async function generate() {
@@ -97,7 +114,7 @@ export const TEACHERS = [
     bio: 'Apasionado por la ciencia ficción y los clásicos. Busco conectar la literatura con la modernidad.',
     emoji: '🤖',
     email: 'gonzalo@colegioumbral.cl',
-    recommendedIds: [1, 3, 9, 18, 113, 103],
+    recommendedIds: [1, 3, 9, 18, 612, 602, 615],
     genre: 'Ciencia Ficción',
     nivelMin: 5, nivelMax: 12,
   },
@@ -109,7 +126,7 @@ export const TEACHERS = [
     bio: 'Especialista en narrativa contemporánea y juvenil. ¡Amo ayudar a los alumnos a encontrar su próxima aventura!',
     emoji: '🌍',
     email: 'dpaola@colegioumbral.cl',
-    recommendedIds: [302, 401, 105, 402, 9, 7],
+    recommendedIds: [302, 401, 105, 402, 610, 608, 613],
     genre: 'Romantasy',
     nivelMin: 5, nivelMax: 12,
   }
