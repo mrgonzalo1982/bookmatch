@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
 import { GENRES, ITEMS } from '../data/mockData';
+import React, { useState, useRef } from 'react';
 
 import { Check, ChevronRight, BookOpen, Heart, Sparkles, Search } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -16,28 +16,43 @@ function Onboarding({ user, onFinish }) {
   const [selectedEmoji, setSelectedEmoji] = useState(null);
   const [googleResults, setGoogleResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
+  const [hasSearchedWeb, setHasSearchedWeb] = useState(false);
+  const resultsRef = useRef(null);
 
   const handleGoogleSearch = async () => {
     if (search.trim().length < 3) return;
     setIsSearching(true);
+    setHasSearchedWeb(false);
     try {
       const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(search)}&maxResults=5`);
       const data = await res.json();
       if (data.items) {
-        const results = data.items.map(item => ({
-          id: `google-${item.id}`,
-          title: item.volumeInfo.title,
-          author: item.volumeInfo.authors?.join(', ') || 'Autor desconocido',
-          image: item.volumeInfo.imageLinks?.thumbnail || 'https://images.unsplash.com/photo-1543002588-bfa74002ed7e?auto=format&fit=crop&q=80&w=200',
-          genre: 'Externo',
-          isGoogle: true
-        }));
+        const results = data.items.map(item => {
+          let thumb = item.volumeInfo.imageLinks?.thumbnail || 'https://images.unsplash.com/photo-1543002588-bfa74002ed7e?auto=format&fit=crop&q=80&w=200';
+          // Force HTTPS to avoid Mixed Content block
+          thumb = thumb.replace('http://', 'https://');
+          
+          return {
+            id: `google-${item.id}`,
+            title: item.volumeInfo.title,
+            author: item.volumeInfo.authors?.join(', ') || 'Autor desconocido',
+            image: thumb,
+            genre: 'Externo',
+            isGoogle: true
+          };
+        });
         setGoogleResults(results);
+        // Scroll to results after a small delay to let DOM update
+        setTimeout(() => {
+          resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 100);
       } else {
         setGoogleResults([]);
       }
+      setHasSearchedWeb(true);
     } catch (e) {
       console.warn("Google Books search failed", e);
+      alert("No pudimos conectar con la web. Revisa tu conexión.");
     } finally {
       setIsSearching(false);
     }
@@ -309,10 +324,12 @@ function Onboarding({ user, onFinish }) {
 
                 {googleResults.length > 0 && (
                   <>
+                  <div ref={resultsRef}>
                     <div className="border-t border-gray-100 mt-4 pt-4" />
                     <p className="text-[10px] font-black uppercase text-blue-600 tracking-widest mb-2 flex items-center gap-1.5">
                       <Sparkles size={10} /> Resultados de la Web
                     </p>
+                  </div>
                     {googleResults.map(book => {
                       const selected = favoriteBook?.id === book.id;
                       return (
@@ -339,11 +356,14 @@ function Onboarding({ user, onFinish }) {
                   </>
                 )}
 
-                {filteredBooks.length === 0 && googleResults.length === 0 && search.trim().length > 2 && (
+                {filteredBooks.length === 0 && googleResults.length === 0 && search.trim().length > 2 && !isSearching && (
                   <div className="py-6 text-center">
                     <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest leading-relaxed">
-                      Ese libro no está en el colegio.<br />
-                      <span className="text-[#A80A0A]">Presiona "Web" para buscarlo fuera.</span>
+                      {hasSearchedWeb 
+                        ? 'No encontramos nada en la web con ese título.' 
+                        : 'Ese libro no está en el catálogo del colegio.'}
+                      <br />
+                      {!hasSearchedWeb && <span className="text-blue-600">Presiona "Web" para buscarlo fuera.</span>}
                     </p>
                   </div>
                 )}
