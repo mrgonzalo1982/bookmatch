@@ -15,7 +15,7 @@ export function TeacherModal({ teacher, onClose }) {
       className="absolute inset-0 z-50 bg-white flex flex-col"
     >
       {/* Header */}
-      <div className="relative h-36 shrink-0" style={{ background: 'linear-gradient(135deg, #0E2A5C, #1a3a72)' }}>
+      <div className="relative h-36 shrink-0" style={{ background: 'linear-gradient(135deg, #003399, #001A4D)' }}>
         <button
           onClick={onClose}
           className="absolute top-4 right-4 bg-white/20 backdrop-blur-sm text-white p-2 rounded-full z-10"
@@ -33,7 +33,7 @@ export function TeacherModal({ teacher, onClose }) {
       <div className="flex-1 overflow-y-auto px-6 custom-scrollbar">
         <div className="pt-14 pb-6">
           <h2 className="text-2xl font-black text-gray-900 tracking-tighter">{teacher.name}</h2>
-          <p className="font-bold text-xs uppercase tracking-widest mb-1" style={{ color: '#A80A0A' }}>{teacher.dept}</p>
+          <p className="font-bold text-xs uppercase tracking-widest mb-1" style={{ color: '#D30F15' }}>{teacher.dept}</p>
           <p className="text-xs text-gray-400 font-mono mb-4">{teacher.email}</p>
 
           <p className="text-gray-600 font-medium leading-relaxed text-sm mb-6">{teacher.bio}</p>
@@ -52,8 +52,8 @@ export function TeacherModal({ teacher, onClose }) {
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="font-black text-sm text-gray-900 leading-tight truncate">{book.title}</p>
-                    <p className="text-xs text-indigo-400 font-bold truncate">{book.author}</p>
-                    <span className="inline-block mt-1 bg-indigo-50 text-indigo-600 text-[9px] font-black px-2 py-0.5 rounded-full">
+                    <p className="text-xs font-bold truncate" style={{ color: '#003399' }}>{book.author}</p>
+                    <span className="inline-block mt-1 bg-blue-50 text-blue-600 text-[9px] font-black px-2 py-0.5 rounded-full">
                       {book.genre}
                     </span>
                   </div>
@@ -63,8 +63,6 @@ export function TeacherModal({ teacher, onClose }) {
           </div>
         </div>
       </div>
-
-
     </motion.div>
   );
 }
@@ -108,18 +106,12 @@ function CommunityView({ user, likedIds, userProfile, allStudents, onShowTeacher
 
   return (
     <div className="flex-1 flex flex-col overflow-hidden relative">
-      <AnimatePresence>
-        {selectedTeacher && (
-          <TeacherModal teacher={selectedTeacher} onClose={() => setSelectedTeacher(null)} />
-        )}
-      </AnimatePresence>
-
       <div className="flex-1 overflow-y-auto custom-scrollbar">
         {/* ── Profesores Section ── */}
         <div className="pt-5 pb-3">
           <div className="flex items-center justify-between px-5 mb-4">
             <h2 className="text-xl font-black text-gray-900 tracking-tighter">Profesores</h2>
-            <span className="text-[10px] font-black text-blue-500 uppercase tracking-widest">{myTeachers.length} disponibles</span>
+            <span className="text-[10px] font-black uppercase tracking-widest" style={{ color: '#003399' }}>{myTeachers.length} disponibles</span>
           </div>
 
           {/* Horizontal scroll of teacher cards */}
@@ -136,7 +128,7 @@ function CommunityView({ user, likedIds, userProfile, allStudents, onShowTeacher
                   onClick={() => onShowTeacher(teacher)}
                   className={`shrink-0 w-36 rounded-3xl p-4 flex flex-col items-center text-center transition-all active:scale-95 border
                     ${hasMatch
-                      ? 'bg-white border-[#154996] shadow-md'
+                      ? 'bg-white border-[#003399] shadow-md'
                       : 'bg-white border-gray-100 shadow-sm'
                     }`}
                 >
@@ -146,15 +138,15 @@ function CommunityView({ user, likedIds, userProfile, allStudents, onShowTeacher
                     </div>
                     {hasMatch && (
                       <div className="absolute -top-1 -right-1 w-5 h-5 rounded-full border-2 border-white flex items-center justify-center"
-                          style={{ background: '#A80A0A' }}>
+                          style={{ background: '#D30F15' }}>
                         <span className="text-white text-[8px] font-black">{matchingBooks.length}</span>
                       </div>
                     )}
                   </div>
                   <p className="font-black text-xs text-gray-900 leading-tight">{teacher.shortName}</p>
-                  <p className="text-[9px] font-bold mt-0.5 leading-tight" style={{ color: '#154996' }}>{teacher.dept.split(' ')[0]}</p>
+                  <p className="text-[9px] font-bold mt-0.5 leading-tight" style={{ color: '#003399' }}>{teacher.dept.split(' ')[0]}</p>
                   {hasMatch && (
-                    <span className="mt-2 text-[8px] font-black px-2 py-0.5 rounded-full" style={{ background: '#FFF0F0', color: '#A80A0A' }}>
+                    <span className="mt-2 text-[8px] font-black px-2 py-0.5 rounded-full" style={{ background: '#FFF0F0', color: '#D30F15' }}>
                       {matchingBooks.length} libro{matchingBooks.length > 1 ? 's' : ''} en común
                     </span>
                   )}
@@ -172,14 +164,14 @@ function CommunityView({ user, likedIds, userProfile, allStudents, onShowTeacher
           <div className="flex items-end justify-between mb-4">
             <h2 className="text-xl font-black text-gray-900 tracking-tighter">Almas Gemelas</h2>
             {peers.length > 0 && (
-              <span className="text-[10px] font-black text-indigo-400 uppercase tracking-widest">{peers.length} coincidencias</span>
+              <span className="text-[10px] font-black uppercase tracking-widest" style={{ color: '#003399' }}>{peers.length} coincidencias</span>
             )}
           </div>
 
           {peers.length === 0 ? (
             <div className="flex flex-col items-center py-10 text-center">
-              <div className="w-20 h-20 bg-indigo-50 rounded-full flex items-center justify-center mb-4">
-                <Sparkles size={36} className="text-indigo-300" strokeWidth={1.5} />
+              <div className="w-20 h-20 bg-blue-50 rounded-full flex items-center justify-center mb-4">
+                <Sparkles size={36} style={{ color: '#003399' }} strokeWidth={1.5} opacity={0.3} />
               </div>
               <p className="text-sm font-black text-gray-400 max-w-[200px]">
                 {(userProfile?.genres?.length || 0) > 0
@@ -204,7 +196,7 @@ function CommunityView({ user, likedIds, userProfile, allStudents, onShowTeacher
                     {idx > 2 && <span className="text-sm font-black text-gray-300">#{idx + 1}</span>}
                   </div>
 
-                  <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-100 to-blue-100 overflow-hidden border-2 border-white shadow-sm shrink-0">
+                  <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-100 to-indigo-100 overflow-hidden border-2 border-white shadow-sm shrink-0">
                     <img src={peer.avatar} alt={peer.nombre} className="w-full h-full object-cover p-1"
                       onError={(e) => { e.target.style.display = 'none'; }} />
                   </div>
@@ -216,7 +208,7 @@ function CommunityView({ user, likedIds, userProfile, allStudents, onShowTeacher
                     <p className="text-[10px] text-gray-400 font-bold uppercase tracking-tighter truncate">{peer.curso}</p>
                     <div className="flex items-center gap-1 mt-1.5 flex-wrap">
                       {peer.commonBooks.slice(0, 1).map(book => (
-                        <span key={book.id} className="bg-indigo-50 text-indigo-600 text-[9px] font-black px-2 py-0.5 rounded-full border border-indigo-100 truncate max-w-[90px]">
+                        <span key={book.id} className="bg-blue-50 text-blue-600 text-[9px] font-black px-2 py-0.5 rounded-full border border-blue-100 truncate max-w-[90px]">
                           📚 {book.title.split(' ').slice(0, 2).join(' ')}
                         </span>
                       ))}
@@ -234,14 +226,14 @@ function CommunityView({ user, likedIds, userProfile, allStudents, onShowTeacher
                         <circle cx="18" cy="18" r="15.9" fill="none" stroke="#e0e7ff" strokeWidth="3" />
                         <circle
                           cx="18" cy="18" r="15.9" fill="none"
-                          stroke={peer.score >= 70 ? '#A80A0A' : peer.score >= 40 ? '#154996' : '#fca5a5'}
+                          stroke={peer.score >= 70 ? '#D30F15' : peer.score >= 40 ? '#003399' : '#fca5a5'}
                           strokeWidth="3"
                           strokeDasharray={`${peer.score} 100`}
                           strokeLinecap="round"
                         />
                       </svg>
                       <div className="absolute inset-0 flex items-center justify-center">
-                        <span className="text-xs font-black" style={{ color: '#A80A0A' }}>{peer.score}%</span>
+                        <span className="text-xs font-black" style={{ color: '#D30F15' }}>{peer.score}%</span>
                       </div>
                     </div>
                     <span className="text-[9px] text-gray-400 font-bold mt-0.5">Compat.</span>

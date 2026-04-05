@@ -18,8 +18,8 @@ const NAV = [
 ];
 
 // Institutional palette (Colegio Umbral)
-const RED  = '#A80A0A';
-const BLUE = '#154996'; // Standard institutional blue
+const RED  = '#D30F15';
+const BLUE = '#003399'; // Official institutional blue
 const GOLD = '#FFCC00';
 const BG   = '#F7F7F9';
 

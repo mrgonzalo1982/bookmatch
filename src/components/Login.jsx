@@ -10,8 +10,9 @@ function formatRut(raw) {
   return `${body.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}-${dv}`;
 }
 
-const NAVY = '#0E2A5C';
-const RED  = '#A80A0A';
+const RED  = '#D30F15';
+const BLUE = '#003399';
+const GOLD = '#FFCC00';
 
 function Login({ onLogin }) {
   const [rut, setRut]       = useState('');
@@ -22,110 +23,123 @@ function Login({ onLogin }) {
     e.preventDefault();
     if (!rut.trim()) return;
     setLoading(true); setError('');
-    await new Promise(r => setTimeout(r, 500));
-    if (!onLogin(rut)) setError('RUT no encontrado. Verifica que sea el correcto.');
+    await new Promise(r => setTimeout(r, 600));
+    if (!onLogin(rut)) setError('RUT no encontrado. Verifica los datos.');
     setLoading(false);
   };
 
   return (
     <div
-      className="min-h-screen flex flex-col items-center justify-center relative overflow-hidden px-5"
-      style={{ background: `linear-gradient(160deg, ${NAVY} 0%, #0a1f46 60%, #1a0a0a 100%)`, fontFamily: 'Poppins, sans-serif' }}
+      className="min-h-screen flex flex-col items-center justify-center relative overflow-hidden px-6"
+      style={{ 
+        background: `radial-gradient(circle at top left, ${BLUE} 0%, #001A4D 50%, #050505 100%)`, 
+        fontFamily: 'Outfit, sans-serif' 
+      }}
     >
-      {/* Decorative blobs */}
-      <div className="absolute top-0 left-0 w-80 h-80 rounded-full opacity-10 pointer-events-none"
-        style={{ background: '#A80A0A', filter: 'blur(80px)', transform: 'translate(-30%, -30%)' }} />
-      <div className="absolute bottom-0 right-0 w-96 h-96 rounded-full opacity-10 pointer-events-none"
-        style={{ background: '#FFCC00', filter: 'blur(100px)', transform: 'translate(30%, 30%)' }} />
+      {/* Dynamic light effects */}
+      <div className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] rounded-full opacity-20 pointer-events-none"
+        style={{ background: `radial-gradient(circle, ${RED}, transparent 70%)`, filter: 'blur(120px)' }} />
+      <div className="absolute bottom-[-5%] left-[-5%] w-[400px] h-[400px] rounded-full opacity-10 pointer-events-none"
+        style={{ background: `radial-gradient(circle, ${GOLD}, transparent 70%)`, filter: 'blur(100px)' }} />
 
       <motion.div
-        initial={{ opacity: 0, y: 24 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.45 }}
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
         className="w-full max-w-sm z-10"
       >
-        {/* Shield + title */}
-        <div className="text-center mb-8">
-          <motion.img
-            src="/umbral-shield.png"
-            alt="Escudo Colegio Umbral"
-            initial={{ scale: 0.7, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ type: 'spring', stiffness: 180, damping: 14, delay: 0.1 }}
-            className="w-32 h-auto mx-auto mb-4"
-            style={{ filter: 'drop-shadow(0 12px 32px rgba(0,0,0,0.5))' }}
-          />
-          <h1 className="text-4xl font-black text-white tracking-tighter">BookMatch</h1>
-          <p className="text-white/50 text-sm font-medium mt-1.5 tracking-wide">Colegio Umbral de Curauma</p>
+        {/* Main Logo & Identity */}
+        <div className="text-center mb-10">
+          <motion.div
+            initial={{ y: -20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.2, duration: 0.8 }}
+          >
+            <img src="/umbral-shield.png" alt="Umbral" className="w-28 h-auto mx-auto mb-6 drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)]" />
+            <h1 className="text-5xl font-black text-white tracking-tighter mb-1 drop-shadow-sm">BookMatch</h1>
+            <p className="text-blue-200/60 text-xs font-black uppercase tracking-[0.3em] mt-2">Colegio Umbral de Curauma</p>
+          </motion.div>
         </div>
-        {/* Form card */}
-        <div className="bg-white/95 backdrop-blur rounded-3xl p-7 shadow-2xl relative mt-12">
-          <div className="absolute -top-12 left-1/2 -translate-x-1/2 w-24 h-24 bg-white rounded-3xl shadow-2xl flex items-center justify-center p-4 border border-gray-50">
-            <img src="/umbral-shield.png" alt="Umbral" className="w-full h-auto" />
-          </div>
 
-          <div className="text-center mb-10 mt-8">
-            <h1 className="text-4xl font-black text-gray-900 tracking-tighter mb-2">BookMatch</h1>
-            <div className="flex items-center justify-center gap-2">
-              <span className="h-px w-8 bg-gray-200"></span>
-              <p className="text-xs font-black text-[#A80A0A] uppercase tracking-widest">Comunidad Lectora</p>
-              <span className="h-px w-8 bg-gray-200"></span>
+        {/* Premium Form Card (Glassmorphism) */}
+        <div className="relative">
+          {/* Subtle Glow behind card */}
+          <div className="absolute inset-0 bg-white/5 blur-3xl rounded-[40px] -z-10" />
+          
+          <div className="bg-white/95 backdrop-blur-xl rounded-[40px] p-8 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.4)] border border-white/20">
+            <div className="text-center mb-8">
+              <h2 className="text-2xl font-black text-gray-900 tracking-tight mb-1">Bienvenido de nuevo</h2>
+              <p className="text-gray-400 text-sm font-medium">Ingresa con tu RUT para continuar</p>
             </div>
-          </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="block text-[10px] font-black uppercase tracking-widest mb-2" style={{ color: NAVY }}>
-                RUT Escolar
-              </label>
-              <div className="relative">
-                <Shield className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4"
-                  style={{ color: error ? RED : '#9ca3af' }} />
-                <input
-                  type="text"
-                  value={rut}
-                  onChange={e => { setRut(formatRut(e.target.value)); setError(''); }}
-                  placeholder="12.345.678-9"
-                  maxLength={12}
-                  className="w-full pl-11 pr-4 py-4 rounded-2xl text-base font-semibold text-gray-900 outline-none transition-all border-2 bg-gray-50"
-                  style={{ borderColor: error ? RED : '#e5e7eb', fontFamily: 'Poppins, monospace' }}
-                  onFocus={e => { if (!error) e.target.style.borderColor = NAVY; }}
-                  onBlur={e => { if (!error) e.target.style.borderColor = '#e5e7eb'; }}
-                />
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="space-y-2">
+                <label className="block text-[10px] font-black uppercase tracking-[0.15em] text-gray-400 ml-1">
+                  Identificación (RUT)
+                </label>
+                <div className="relative group">
+                  <Shield className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 transition-colors duration-300"
+                    style={{ color: error ? RED : rut ? BLUE : '#D1D5DB' }} />
+                  <input
+                    type="text"
+                    value={rut}
+                    onChange={e => { setRut(formatRut(e.target.value)); setError(''); }}
+                    placeholder="12.345.678-9"
+                    maxLength={12}
+                    className="w-full pl-12 pr-5 py-4.5 rounded-2xl text-lg font-bold text-gray-900 outline-none transition-all border-2 bg-gray-50/50"
+                    style={{ 
+                      borderColor: error ? RED : '#F3F4F6',
+                      fontFamily: 'Space Grotesk, monospace' 
+                    }}
+                    onFocus={e => { if (!error) e.target.style.borderColor = BLUE; }}
+                    onBlur={e => { if (!error) e.target.style.borderColor = '#F3F4F6'; }}
+                  />
+                </div>
               </div>
-            </div>
 
-            {error && (
-              <motion.div initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }}
-                className="flex items-start gap-2 p-3 rounded-xl"
-                style={{ background: '#FEF2F2', border: `1px solid #FECACA` }}>
-                <AlertCircle size={15} className="shrink-0 mt-0.5" style={{ color: RED }} />
-                <p className="text-xs font-semibold" style={{ color: RED }}>{error}</p>
-              </motion.div>
-            )}
+              {error && (
+                <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }}
+                  className="flex items-center gap-2.5 p-3.5 rounded-2xl bg-red-50 border border-red-100">
+                  <AlertCircle size={16} className="shrink-0 text-red-500" />
+                  <p className="text-[11px] font-bold text-red-600 leading-tight">{error}</p>
+                </motion.div>
+              )}
 
-            <button
-              type="submit"
-              disabled={loading || !rut.trim()}
-              className="w-full py-4 rounded-2xl font-black text-white text-sm transition-all active:scale-95 disabled:opacity-40"
-              style={{
-                background: loading || !rut.trim() ? '#9ca3af' : `linear-gradient(135deg, ${NAVY}, #1a3a72)`,
-                boxShadow: !loading && rut.trim() ? `0 8px 24px rgba(14,42,92,0.35)` : 'none',
-              }}
-            >
-              {loading ? (
-                <span className="flex items-center justify-center gap-2">
-                  <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                  Verificando…
-                </span>
-              ) : 'Ingresar →'}
-            </button>
-          </form>
+              <button
+                type="submit"
+                disabled={loading || !rut.trim()}
+                className="w-full py-5 rounded-2xl font-black text-white text-base transition-all active:scale-[0.98] disabled:opacity-30 relative overflow-hidden group"
+                style={{
+                  background: loading || !rut.trim() ? '#9ca3af' : `linear-gradient(135deg, ${BLUE}, #1a3a72)`,
+                  boxShadow: !loading && rut.trim() ? `0 20px 40px -12px rgba(0,51,153,0.4)` : 'none',
+                }}
+              >
+                {loading ? (
+                  <span className="flex items-center justify-center gap-3">
+                    <span className="w-5 h-5 border-3 border-white/20 border-t-white rounded-full animate-spin" />
+                    <span className="tracking-wide">VALIDANDO...</span>
+                  </span>
+                ) : (
+                  <span className="flex items-center justify-center gap-2">
+                    INGRESAR <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                  </span>
+                )}
+                
+                {/* Subtle shine effect */}
+                {!loading && rut.trim() && (
+                  <div className="absolute inset-0 bg-white/10 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 skew-x-[-20deg]" />
+                )}
+              </button>
+            </form>
+          </div>
         </div>
 
-        <p className="text-center text-white/25 text-xs font-medium mt-6">
-          © {new Date().getFullYear()} Colegio Umbral de Curauma
-        </p>
+        <div className="flex flex-col items-center mt-10 space-y-4 opacity-40">
+          <div className="h-px w-12 bg-white/30" />
+          <p className="text-[10px] font-black text-white uppercase tracking-[0.2em]">
+            © {new Date().getFullYear()} COMUNIDAD LECTORA UMBRAL
+          </p>
+        </div>
       </motion.div>
     </div>
   );

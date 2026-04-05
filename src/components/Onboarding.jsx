@@ -68,11 +68,11 @@ function Onboarding({ user, onFinish }) {
             <div
               key={i}
               className={`h-1.5 rounded-full flex-1 transition-all duration-500`}
-              style={{ background: i <= step ? '#A80A0A' : '#e5e7eb' }}
+              style={{ background: i <= step ? '#D30F15' : '#e5e7eb' }}
             />
           ))}
         </div>
-        <p className="text-[10px] font-black uppercase tracking-widest" style={{ color: '#A80A0A' }}>
+        <p className="text-[10px] font-black uppercase tracking-widest" style={{ color: '#D30F15' }}>
           Paso {step + 1} de {STEPS.length}
         </p>
       </div>
@@ -87,7 +87,7 @@ function Onboarding({ user, onFinish }) {
               key="bienvenida"
               variants={variants} initial="enter" animate="center" exit="exit"
               transition={{ duration: 0.25 }}
-              className="flex-1 flex flex-col justify-center items-center text-center pb-28"
+              className="flex-1 flex flex-col justify-center items-center text-center pb-12"
             >
               <motion.div
                 initial={{ scale: 0 }}
@@ -103,10 +103,10 @@ function Onboarding({ user, onFinish }) {
                 ¡Hola,<br />{firstNameShort}! 👋
               </h1>
               <p className="text-gray-500 font-medium text-lg leading-relaxed max-w-xs">
-                Vamos a crear tu <span className="font-bold" style={{ color: '#A80A0A' }}>perfil lector</span> para conectarte con libros y personas que comparten tus gustos.
+                Vamos a crear tu <span className="font-bold" style={{ color: '#D30F15' }}>perfil lector</span> para conectarte con libros y personas que comparten tus gustos.
               </p>
 
-              <div className="mt-10 space-y-3 w-full text-left">
+              <div className="mt-6 space-y-2.5 w-full text-left">
                 {[
                   { icon: '📚', text: 'Elige tus géneros favoritos' },
                   { icon: '⭐', text: 'Agrega tu libro de cabecera' },
@@ -237,7 +237,7 @@ function Onboarding({ user, onFinish }) {
                   value={search}
                   onChange={e => { setSearch(e.target.value); setCustomBook(''); }}
                   placeholder="Busca en el catálogo..."
-                  className="w-full pl-10 pr-4 py-3.5 bg-white border-2 border-gray-100 focus:border-[#154996] rounded-2xl outline-none text-sm font-medium text-gray-800 transition-all"
+                  className="w-full pl-10 pr-4 py-3.5 bg-white border-2 border-gray-100 focus:border-[#003399] rounded-2xl outline-none text-sm font-medium text-gray-800 transition-all font-bold"
                 />
               </div>
 
@@ -249,26 +249,26 @@ function Onboarding({ user, onFinish }) {
                     <button
                       key={book.id}
                       onClick={() => { setFavoriteBook(book); setCustomBook(''); setSearch(''); }}
-                      className={`w-full flex items-center gap-4 p-3.5 rounded-2xl border-2 transition-all text-left
+                      className={`w-full flex items-center gap-4 p-3.5 rounded-2xl border-2 transition-all text-left group
                         ${selected
-                          ? 'border-[#154996] bg-[#F0F5FF]'
-                          : 'border-transparent bg-white shadow-sm hover:border-[#154996]/20'
+                          ? 'border-[#003399] bg-[#003399] shadow-lg shadow-blue-900/20 scale-[1.02]'
+                          : 'border-transparent bg-white shadow-sm hover:border-[#003399]/20'
                         }`}
                     >
                       <div className="w-12 h-16 rounded-xl overflow-hidden bg-gray-100 shrink-0">
                         <img src={book.image} alt={book.title} className="w-full h-full object-cover" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className={`font-black text-sm leading-tight mb-0.5 ${selected ? 'text-[#154996]' : 'text-gray-800'}`}>
+                        <p className={`font-black text-sm leading-tight mb-0.5 ${selected ? 'text-white' : 'text-gray-800'}`}>
                           {book.title}
                         </p>
-                        <p className="text-xs text-gray-400 font-bold truncate">{book.author}</p>
-                        <span className={`text-[10px] font-black px-2 py-0.5 rounded-full mt-1.5 inline-block ${selected ? 'bg-[#154996]/10 text-[#154996]' : 'bg-gray-100 text-gray-500'}`}>
+                        <p className={`text-xs font-bold truncate ${selected ? 'text-white/80' : 'text-gray-400'}`}>{book.author}</p>
+                        <span className={`text-[10px] font-black px-2 py-0.5 rounded-full mt-1.5 inline-block ${selected ? 'bg-white/20 text-white' : 'bg-gray-100 text-gray-500'}`}>
                           {book.genre}
                         </span>
                       </div>
                       {selected && (
-                        <div className="shrink-0 bg-[#154996] text-white rounded-full w-7 h-7 flex items-center justify-center">
+                        <div className="shrink-0 bg-white text-[#003399] rounded-full w-7 h-7 flex items-center justify-center shadow-sm">
                           <Heart size={14} fill="currentColor" />
                         </div>
                       )}
@@ -285,7 +285,7 @@ function Onboarding({ user, onFinish }) {
                   value={customBook}
                   onChange={e => { setCustomBook(e.target.value); setFavoriteBook(null); setSearch(''); }}
                   placeholder="Nombre del libro o personaje..."
-                  className="w-full px-4 py-3.5 bg-white border-2 border-gray-100 focus:border-[#154996] rounded-2xl outline-none text-sm font-medium text-gray-800 transition-all"
+                  className="w-full px-4 py-3.5 bg-white border-2 border-gray-100 focus:border-[#003399] rounded-2xl outline-none text-sm font-bold text-gray-800 transition-all shadow-sm"
                 />
               </div>
             </motion.div>
@@ -362,7 +362,7 @@ function Onboarding({ user, onFinish }) {
             onClick={() => setStep(s => s + 1)}
             disabled={!canAdvance}
             className="w-full text-white py-5 rounded-2xl font-black text-lg shadow-lg disabled:opacity-40 active:scale-95 transition-all flex items-center justify-center gap-2 group"
-            style={{ background: canAdvance ? 'linear-gradient(135deg, #154996, #A80A0A)' : '#9ca3af', boxShadow: canAdvance ? '0 8px 24px rgba(21,73,150,0.3)' : 'none' }}
+            style={{ background: canAdvance ? 'linear-gradient(135deg, #003399, #D30F15)' : '#d1d5db', boxShadow: canAdvance ? '0 12px 32px -10px rgba(0,51,153,0.5)' : 'none' }}
           >
             {step === 0 ? 'Empezar' : step === STEPS.length - 2 ? 'Continuar' : 'Siguiente'}
             <ChevronRight size={20} className={canAdvance ? 'group-hover:translate-x-1 transition-transform' : ''} />
