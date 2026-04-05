@@ -1,6 +1,6 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { STUDENTS, ITEMS, GENRES } from '../data/mockData';
-import { Search, Trash2, RotateCcw, Users, BookOpen, ChevronLeft, ShieldCheck, Plus, X, Download } from 'lucide-react';
+import { Search, Trash2, RotateCcw, Users, BookOpen, ChevronLeft, ShieldCheck, Plus, X, Download, Star } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { db } from '../lib/firebase';
 import { doc, setDoc, collection, getDocs } from 'firebase/firestore';
@@ -9,11 +9,65 @@ function AdminView({ onBack }) {
   const [search, setSearch] = useState('');
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [showAddBook, setShowAddBook] = useState(false);
-  const [newBook, setNewBook] = useState({ title: '', author: '', description: '', genre: '', minNivel: 5, maxNivel: 12 });
+  const [newBook, setNewBook] = useState({ title: '', author: '', description: '', genre: '', minNivel: 5, maxNivel: 12, image: '' });
+  const [googleSearch, setGoogleSearch] = useState('');
+  const [isSearching, setIsSearching] = useState(false);
+  const [activeProfiles, setActiveProfiles] = useState(0);
+  const [topLikes, setTopLikes] = useState([]);
   
-  // In a real app, this would come from a backend.
-  // Here we'll simulate "Active Profiles" by checking if entries exist in localStorage
-  // Or just show the full list and allow "Resetting" them.
+  // Fetch real metrics from Firestore
+  useEffect(() => {
+    const fetchMetrics = async () => {
+      const snap = await getDocs(collection(db, 'users'));
+      let active = 0;
+      const likesMap = {};
+      
+      snap.forEach(docSnap => {
+        const data = docSnap.data();
+        if (data.profile?.genres?.length > 0) active++;
+        if (data.likes) {
+          data.likes.forEach(item => {
+            likesMap[item.title] = (likesMap[item.title] || 0) + 1;
+          });
+        }
+      });
+      
+      setActiveProfiles(active);
+      const topArr = Object.entries(likesMap)
+        .sort((a,b) => b[1] - a[1])
+        .slice(0, 5);
+      setTopLikes(topArr);
+    };
+    fetchMetrics();
+  }, []);
+  
+  const handleGoogleSearch = async () => {
+    if (!googleSearch.trim()) return;
+    setIsSearching(true);
+    try {
+      const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(googleSearch)}`);
+      const data = await res.json();
+      if (data.items && data.items.length > 0) {
+        const book = data.items[0].volumeInfo;
+        setNewBook({
+          title: book.title || '',
+          author: book.authors ? book.authors.join(', ') : '',
+          description: book.description ? book.description.substring(0, 300) + '...' : '',
+          genre: GENRES[0], // Default
+          minNivel: 5,
+          maxNivel: 12,
+          image: book.imageLinks?.thumbnail || 'https://images.unsplash.com/photo-1532012197267-da84d127e765?auto=format&fit=crop&q=80&w=400'
+        });
+      } else {
+        alert("No se encontraron libros con ese título.");
+      }
+    } catch (e) {
+      console.error(e);
+      alert("Error buscando en Google Books.");
+    } finally {
+      setIsSearching(false);
+    }
+  };
   
   // Unique courses sorted (Basic mapping sort logic)
   const courses = useMemo(() => {
@@ -62,8 +116,8 @@ function AdminView({ onBack }) {
       minNivel: Number(newBook.minNivel),
       maxNivel: Number(newBook.maxNivel),
       studentsMatched: 0,
-      image: 'https://images.unsplash.com/photo-1532012197267-da84d127e765?auto=format&fit=crop&q=80&w=400',
-      professors: [{ name: 'Docente Válido', dept: 'Colegio' }]
+      image: newBook.image || 'https://images.unsplash.com/photo-1532012197267-da84d127e765?auto=format&fit=crop&q=80&w=400',
+      professors: [{ name: 'Profe Gonzalo', dept: 'Inglés' }]
     };
 
     // Save to Cloud Firestore
@@ -73,7 +127,8 @@ function AdminView({ onBack }) {
       ITEMS.push(bookToSave);
       
       setShowAddBook(false);
-      setNewBook({ title: '', author: '', description: '', genre: '', minNivel: 5, maxNivel: 12 });
+      setNewBook({ title: '', author: '', description: '', genre: '', minNivel: 5, maxNivel: 12, image: '' });
+      setGoogleSearch('');
       alert('¡Libro subido a la base de datos de BookMatch exitosamente!');
     } catch(err) {
       alert('Error en la conexión a la nube.');
@@ -151,7 +206,7 @@ function AdminView({ onBack }) {
             <p className="text-[9px] font-black text-white/40 uppercase tracking-widest mt-1.5">Total Alumnos</p>
           </div>
           <div className="bg-white/10 backdrop-blur-md rounded-[20px] p-4 border border-white/10 shadow-inner">
-            <p className="text-2xl font-black text-white leading-none">42</p>
+            <p className="text-2xl font-black text-white leading-none">{activeProfiles}</p>
             <p className="text-[9px] font-black text-white/40 uppercase tracking-widest mt-1.5">Perfiles Activos</p>
           </div>
         </div>
@@ -199,21 +254,44 @@ function AdminView({ onBack }) {
           
           {/* View: Course Grid */}
           {!selectedCourse && !search.trim() && (
-            <div className="grid grid-cols-2 gap-3">
-              {courses.map(curso => {
-                const count = STUDENTS.filter(s => s.curso === curso).length;
-                return (
-                  <button key={curso} onClick={() => setSelectedCourse(curso)}
-                    className="bg-white border border-gray-100 rounded-[22px] p-5 shadow-sm hover:shadow-md hover:border-[#A80A0A]/30 transition-all text-left flex flex-col items-start active:scale-95 group">
-                    <div className="w-10 h-10 bg-blue-50/50 rounded-2xl flex items-center justify-center text-[#A80A0A] mb-3 group-hover:bg-[#A80A0A] group-hover:text-white transition-all">
-                      <Users size={20} />
-                    </div>
-                    <p className="font-black text-gray-900 text-sm">{curso}</p>
-                    <p className="text-[10px] font-bold text-gray-400 mt-1 uppercase tracking-widest">{count} estudiantes</p>
-                  </button>
-                );
-              })}
-            </div>
+            <>
+              {topLikes.length > 0 && (
+                <div className="mb-6 bg-[#A80A0A] p-5 rounded-[22px] text-white shadow-xl relative overflow-hidden">
+                   <div className="relative z-10">
+                     <h3 className="font-black text-sm uppercase tracking-tighter mb-4 flex items-center gap-2">
+                       <Star size={16} fill="#FFD700" color="#FFD700" /> Top Tendencias del Colegio
+                     </h3>
+                     <div className="space-y-2.5">
+                       {topLikes.map(([title, count], i) => (
+                         <div key={i} className="flex items-center gap-3">
+                            <span className="text-[10px] font-black bg-white/20 px-2 py-0.5 rounded-full">{count} likes</span>
+                            <p className="text-xs font-bold truncate flex-1 opacity-90">{title}</p>
+                            <div className="h-1.5 bg-white/10 flex-1 rounded-full overflow-hidden">
+                              <div className="h-full bg-emerald-400" style={{ width: `${Math.min(100, (count/topLikes[0][1])*100)}%` }} />
+                            </div>
+                         </div>
+                       ))}
+                     </div>
+                   </div>
+                </div>
+              )}
+              
+              <div className="grid grid-cols-2 gap-3">
+                {courses.map(curso => {
+                  const count = STUDENTS.filter(s => s.curso === curso).length;
+                  return (
+                    <button key={curso} onClick={() => setSelectedCourse(curso)}
+                      className="bg-white border border-gray-100 rounded-[22px] p-5 shadow-sm hover:shadow-md hover:border-[#A80A0A]/30 transition-all text-left flex flex-col items-start active:scale-95 group">
+                      <div className="w-10 h-10 bg-blue-50/50 rounded-2xl flex items-center justify-center text-[#A80A0A] mb-3 group-hover:bg-[#A80A0A] group-hover:text-white transition-all">
+                        <Users size={20} />
+                      </div>
+                      <p className="font-black text-gray-900 text-sm">{curso}</p>
+                      <p className="text-[10px] font-bold text-gray-400 mt-1 uppercase tracking-widest">{count} estudiantes</p>
+                    </button>
+                  );
+                })}
+              </div>
+            </>
           )}
 
           {/* View: Student List (Search or Selected Course) */}
@@ -290,6 +368,27 @@ function AdminView({ onBack }) {
                 <BookOpen size={20} className="text-[#A80A0A]" /> Añadir Libro al Catálogo
               </h2>
               
+              <div className="mb-4 space-y-2">
+                <p className="text-[10px] font-black uppercase text-gray-400 tracking-widest">Autollenado Inteligente</p>
+                <div className="flex gap-2">
+                  <input 
+                    type="text" 
+                    placeholder="Escribe título para prellenar..." 
+                    value={googleSearch}
+                    onChange={e => setGoogleSearch(e.target.value)}
+                    className="flex-1 p-3 bg-blue-50 border border-blue-100 rounded-xl font-bold text-sm outline-none focus:border-blue-400"
+                  />
+                  <button 
+                    type="button"
+                    onClick={handleGoogleSearch}
+                    disabled={isSearching}
+                    className="bg-blue-600 text-white px-4 rounded-xl font-black text-[10px] uppercase tracking-widest active:scale-95 transition-all disabled:opacity-50"
+                  >
+                    {isSearching ? '...' : 'Buscar'}
+                  </button>
+                </div>
+              </div>
+
               <form onSubmit={handleSaveBook} className="space-y-3">
                 <input required type="text" placeholder="Título del libro" value={newBook.title} onChange={e => setNewBook({...newBook, title: e.target.value})} className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl font-bold text-sm outline-none focus:border-[#A80A0A]" />
                 <input required type="text" placeholder="Autor" value={newBook.author} onChange={e => setNewBook({...newBook, author: e.target.value})} className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl font-bold text-sm outline-none focus:border-[#A80A0A]" />

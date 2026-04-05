@@ -163,18 +163,7 @@ function MatchDeck({ user, likedIds, userProfile, onMatch, onShowTeacher }) {
               ))}
             </motion.div>
 
-            {/* studentsMatched counter */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.7 }}
-              className="flex items-center gap-2 bg-white/10 px-4 py-2 rounded-full mb-8 border border-white/20"
-            >
-              <Users size={14} className="text-[#FFD700]" />
-              <span className="text-sm font-bold text-blue-100">
-                <span className="text-white font-black">{item.studentsMatched}</span> compañeros ya lo leyeron
-              </span>
-            </motion.div>
+
 
             <motion.button
               initial={{ y: 20, opacity: 0 }}

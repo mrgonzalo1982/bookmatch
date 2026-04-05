@@ -205,12 +205,12 @@ function App() {
 
   // ── Badges ───────────────────────────────────────────────────────────────────
   const ALL_BADGES = [
-    { id: 'first_match', emoji: '🌟', name: 'Primer Match',    desc: 'Diste tu primer Like',              unlocked: likedIds.length >= 1 },
-    { id: 'voraz',       emoji: '📚', name: 'Lector Voraz',    desc: '5 libros en tu biblioteca',          unlocked: likedIds.length >= 5 },
-    { id: 'perfil',      emoji: '🎓', name: 'Perfil Completo', desc: 'Completaste tu perfil lector',       unlocked: !!userProfile?.genres?.length },
-    { id: 'explorador',  emoji: '📌', name: 'Explorador',      desc: 'Iniciaste sesión por primera vez',   unlocked: true },
-    { id: 'genero',      emoji: '🎨', name: 'Con Estilo',      desc: 'Seleccionaste 3 géneros favoritos',  unlocked: (userProfile?.genres?.length || 0) >= 3 },
-    { id: 'favorito',    emoji: '⭐', name: 'Libro del Alma',  desc: 'Agregaste tu libro favorito',        unlocked: !!userProfile?.favoriteBook },
+    { id: 'first_match', emoji: '🥉', name: 'Iniciado',      desc: '1er Match realizado',               unlocked: likedIds.length >= 1 },
+    { id: 'critic',      emoji: '🥈', name: 'Crítico',       desc: '10 libros en tu biblioteca',        unlocked: likedIds.length >= 10 },
+    { id: 'top_fan',     emoji: '🥇', name: 'Ratón de Bib.', desc: '30 libros en tu biblioteca',        unlocked: likedIds.length >= 30 },
+    { id: 'erudito',     emoji: '🏛️', name: 'Erudito',       desc: 'Hiciste Match con un Clásico',      unlocked: likedItems.some(i => i.genre === 'Clásico') },
+    { id: 'atlas',       emoji: '🌍', name: 'Atlas',         desc: '3+ géneros favoritos elegidos',     unlocked: (userProfile?.genres?.length || 0) >= 3 },
+    { id: 'corazon',     emoji: '💝', name: 'Fiel',          desc: 'Agregaste tu libro del alma',       unlocked: !!userProfile?.favoriteBook },
   ];
 
   // ── Views ────────────────────────────────────────────────────────────────────

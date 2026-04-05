@@ -14,8 +14,7 @@ export const ITEMS = [
     author: 'Roald Dahl',
     description: 'Una niña superdotada descubre que tiene poderes telequinéticos y los usa para enfrentar a sus crueles padres y directora escolar.',
     image: 'https://images.unsplash.com/photo-1576872381149-7847515ce5d8?auto=format&fit=crop&q=80&w=400',
-    professors: [{ name: 'Miss Danixa', dept: 'Psicopedagogía' }, { name: 'Profe Rodrigo', dept: 'Artes' }],
-    genre: 'Fantasía', studentsMatched: 72, minNivel: 5, maxNivel: 7
+    genre: 'Fantasía', minNivel: 5, maxNivel: 7
   },
   {
     id: 2,
@@ -239,7 +238,7 @@ export const ITEMS = [
     title: 'El Túnel',
     author: 'Ernesto Sábato',
     description: 'Un pintor obsesivo relata el asesinato de la única persona que comprendió su arte. Una exploración oscura de la soledad y los celos.',
-    image: 'https://images.unsplash.com/photo-1462275646964-a0e3386b89fa?auto=format&fit=crop&q=80&w=400',
+    image: 'https://images.unsplash.com/photo-1512314889357-e157c22f938d?auto=format&fit=crop&q=80&w=400',
     professors: [{ name: 'Profe Gonzalo', dept: 'Lenguaje' }],
     genre: 'Misterio', studentsMatched: 18, minNivel: 10, maxNivel: 12
   },
@@ -282,24 +281,7 @@ export const ITEMS = [
   {"id":117,"type":"libro","title":"Percy Jackson y los dioses del Olimpo","author":"Rick Riordan","description":"Percy descubre que es hijo de Poseidón y es enviado al Campamento Mestizo donde enfrenta aventuras mitológicas.","image":"https://images.unsplash.com/photo-1521587760476-6c12a4b040da?auto=format&fit=crop&q=80&w=400","professors":[{"name":"Miss Danixa","dept":"Biblioteca"}],"genre":"Aventura","studentsMatched":130,"minNivel":5,"maxNivel":8},
   {"id":118,"type":"libro","title":"El visitante","author":"Stephen King","description":"Un horrendo asesinato involucra a un querido profesor local, pero huellas digitales y hechos desafían toda explicación.","image":"https://images.unsplash.com/photo-1589998059171-988d887df646?auto=format&fit=crop&q=80&w=400","professors":[{"name":"Profe Gonzalo","dept":"Computación"}],"genre":"Misterio","studentsMatched":22,"minNivel":11,"maxNivel":12},
   {"id":119,"type":"libro","title":"Un mundo feliiz","author":"Aldous Huxley","description":"Una sociedad condicionada genticamente dende todos son felices consumiendo drogas y anulando el arte.","image":"https://images.unsplash.com/photo-1506466010722-395aa2bef877?auto=format&fit=crop&q=80&w=400","professors":[{"name":"Miss Danixa","dept":"Historia"}],"genre":"Ciencia Ficción","studentsMatched":48,"minNivel":10,"maxNivel":12},
-  {"id":120,"type":"libro","title":"Papelucho","author":"Marcela Paz","description":"El diario de vida de un ingenioso niño chileno que constantemente inventa soluciones para resolver entuertos de los adultos.","image":"https://images.unsplash.com/photo-1576872381149-7847515ce5d8?auto=format&fit=crop&q=80&w=400","professors":[{"name":"Miss Danixa","dept":"Psicopedagogía"}],"genre":"Fábula","minNivel":5,"maxNivel":7},
-  {"id":121,"type":"libro","title":"La Ilíada","author":"Homero","description":"La cólera de Aquiles durante el asedio a la ciudad de Troya, en una de las obras épicas más antiguas de la literatura.","image":"https://images.unsplash.com/photo-1544830177-33bf3d0b28fd?auto=format&fit=crop&q=80&w=400","professors":[{"name":"Profe Gonzalo","dept":"Lenguaje"}],"genre":"Aventura","minNivel":9,"maxNivel":12},
-  {"id":122,"type":"libro","title":"El Señor de los Anillos: La Comunidad del Anillo","author":"J.R.R. Tolkien","description":"Un anillo para gobernarlos a todos. El inicio de la épica aventura de Frodo para destruir el anillo único.","image":"https://images.unsplash.com/photo-1535666669445-e8c15cd2e7d9?auto=format&fit=crop&q=80&w=400","professors":[{"name":"Miss Danixa","dept":"Historia"}],"genre":"Fantasía","minNivel":7,"maxNivel":12},
-  {"id":123,"type":"libro","title":"El Señor de los Anillos: Las Dos Torres","author":"J.R.R. Tolkien","description":"La Comunidad se ha roto, pero la misión continúa frente a las amenazas de Isengard y Mordor.","image":"https://images.unsplash.com/photo-1535666669445-e8c15cd2e7d9?auto=format&fit=crop&q=80&w=400","professors":[{"name":"Miss Danixa","dept":"Historia"}],"genre":"Fantasía","minNivel":7,"maxNivel":12},
-  {"id":124,"type":"libro","title":"El Señor de los Anillos: El Retorno del Rey","author":"J.R.R. Tolkien","description":"La batalla final por la Tierra Media mientras Frodo y Sam se acercan al Monte del Destino.","image":"https://images.unsplash.com/photo-1535666669445-e8c15cd2e7d9?auto=format&fit=crop&q=80&w=400","professors":[{"name":"Miss Danixa","dept":"Historia"}],"genre":"Fantasía","minNivel":7,"maxNivel":12},
-  {"id":125,"type":"libro","title":"Harry Potter y la Piedra Filosofal","author":"J.K. Rowling","description":"Un niño huérfano descubre que es un mago con una cicatriz famosa y asiste a Hogwarts.","image":"https://images.unsplash.com/photo-1474366521946-c3d4b507abf2?auto=format&fit=crop&q=80&w=400","professors":[{"name":"Miss Danixa","dept":"Biblioteca"}],"genre":"Fantasía","minNivel":5,"maxNivel":8},
-  {"id":126,"type":"libro","title":"Harry Potter y la Cámara Secreta","author":"J.K. Rowling","description":"Un oscuro misterio encierra la escuela de magia cuando los alumnos comienzan a aparecer petrificados.","image":"https://images.unsplash.com/photo-1474366521946-c3d4b507abf2?auto=format&fit=crop&q=80&w=400","professors":[{"name":"Miss Danixa","dept":"Biblioteca"}],"genre":"Fantasía","minNivel":5,"maxNivel":8},
-  {"id":127,"type":"libro","title":"Harry Potter y el Prisionero de Azkaban","author":"J.K. Rowling","description":"El asesino Sirius Black ha escapado y parece ir tras Harry, pero las apariencias engañan en el mundo mágico.","image":"https://images.unsplash.com/photo-1474366521946-c3d4b507abf2?auto=format&fit=crop&q=80&w=400","professors":[{"name":"Miss Danixa","dept":"Biblioteca"}],"genre":"Fantasía","minNivel":6,"maxNivel":10},
-  {"id":128,"type":"libro","title":"Harry Potter y el Cáliz de Fuego","author":"J.K. Rowling","description":"Harry es inscrito sin su consentimiento en un torneo mortal que marca el regreso del Señor Tenebroso.","image":"https://images.unsplash.com/photo-1474366521946-c3d4b507abf2?auto=format&fit=crop&q=80&w=400","professors":[{"name":"Miss Danixa","dept":"Biblioteca"}],"genre":"Fantasía","minNivel":7,"maxNivel":12},
-  {"id":129,"type":"libro","title":"Harry Potter y la Orden del Fénix","author":"J.K. Rowling","description":"Voldemort ha regresado y el Ministerio de Magia intenta ocultarlo tomando el control de Hogwarts.","image":"https://images.unsplash.com/photo-1474366521946-c3d4b507abf2?auto=format&fit=crop&q=80&w=400","professors":[{"name":"Miss Danixa","dept":"Biblioteca"}],"genre":"Fantasía","minNivel":7,"maxNivel":12},
-  {"id":130,"type":"libro","title":"Harry Potter y el Misterio del Príncipe","author":"J.K. Rowling","description":"Dumbledore prepara a Harry para la guerra a través de recuerdos oscuros del pasado de Tom Riddle.","image":"https://images.unsplash.com/photo-1474366521946-c3d4b507abf2?auto=format&fit=crop&q=80&w=400","professors":[{"name":"Miss Danixa","dept":"Biblioteca"}],"genre":"Fantasía","minNivel":8,"maxNivel":12},
-  {"id":131,"type":"libro","title":"Harry Potter y las Reliquias de la Muerte","author":"J.K. Rowling","description":"La épica conclusión de la saga donde Harry, Ron y Hermione deben cazar los Horrocruxes.","image":"https://images.unsplash.com/photo-1474366521946-c3d4b507abf2?auto=format&fit=crop&q=80&w=400","professors":[{"name":"Miss Danixa","dept":"Biblioteca"}],"genre":"Fantasía","minNivel":8,"maxNivel":12},
-  {"id":132,"type":"libro","title":"Percy Jackson: El Mar de los Monstruos","author":"Rick Riordan","description":"Percy emprende un arriesgado viaje al Triángulo de las Bermudas para salvar el lugar más seguro de los mestizos.","image":"https://images.unsplash.com/photo-1521587760476-6c12a4b040da?auto=format&fit=crop&q=80&w=400","professors":[{"name":"Miss Danixa","dept":"Biblioteca"}],"genre":"Aventura","minNivel":5,"maxNivel":9},
-  {"id":133,"type":"libro","title":"Percy Jackson: La Maldición del Titán","author":"Rick Riordan","description":"La Diosa Artemisa ha desaparecido y Percy debe enfrentarse a los misterios más peligrosos de los mitos griegos.","image":"https://images.unsplash.com/photo-1521587760476-6c12a4b040da?auto=format&fit=crop&q=80&w=400","professors":[{"name":"Miss Danixa","dept":"Biblioteca"}],"genre":"Aventura","minNivel":6,"maxNivel":10},
-  {"id":134,"type":"libro","title":"Percy Jackson: La Batalla del Laberinto","author":"Rick Riordan","description":"Percy entra al peligroso Laberinto de Dédalo para detener la inminente invasión enemiga.","image":"https://images.unsplash.com/photo-1521587760476-6c12a4b040da?auto=format&fit=crop&q=80&w=400","professors":[{"name":"Miss Danixa","dept":"Biblioteca"}],"genre":"Aventura","minNivel":7,"maxNivel":11},
-  {"id":135,"type":"libro","title":"Percy Jackson: El Último Héroe del Olimpo","author":"Rick Riordan","description":"La Profecía se cumple en una defensa espectacular de Manhattan y el Monte Olimpo contra los Titanes.","image":"https://images.unsplash.com/photo-1521587760476-6c12a4b040da?auto=format&fit=crop&q=80&w=400","professors":[{"name":"Miss Danixa","dept":"Biblioteca"}],"genre":"Aventura","minNivel":7,"maxNivel":11},
-  {"id":136,"type":"libro","title":"Los Juegos del Hambre: En Llamas","author":"Suzanne Collins","description":"El Vasallaje de los Veinticinco obliga a Katniss a volver a la arena en medio de una inminente insurrección rebelde.","image":"https://images.unsplash.com/photo-1541963463532-d68292c34b19?auto=format&fit=crop&q=80&w=400","professors":[{"name":"Profe Gonzalo","dept":"Lenguaje"}],"genre":"Ciencia Ficción","minNivel":8,"maxNivel":12},
-  {"id":137,"type":"libro","title":"Los Juegos del Hambre: Sinsajo","author":"Suzanne Collins","description":"El asalto final a la capital del Capitolio. Katniss se convierte en el símbolo de la rebelión.","image":"https://images.unsplash.com/photo-1541963463532-d68292c34b19?auto=format&fit=crop&q=80&w=400","professors":[{"name":"Profe Gonzalo","dept":"Lenguaje"}],"genre":"Ciencia Ficción","minNivel":9,"maxNivel":12}
+  {"id":137,"type":"libro","title":"Los Juegos del Hambre: Sinsajo","author":"Suzanne Collins","description":"El asalto final a la capital del Capitolio. Katniss se convierte en el símbolo de la rebelión.","image":"https://images.unsplash.com/photo-1541963463532-d68292c34b19?auto=format&fit=crop&q=80&w=400","genre":"Ciencia Ficción","minNivel":9,"maxNivel":12}
 ];
 
 // ─── Teacher Profiles ────────────────────────────────────────────────────────
@@ -309,7 +291,7 @@ export const TEACHERS = [
     rut: '150685478',
     name: 'Gonzalo Andrés',
     shortName: 'Profe Gonzalo',
-    dept: 'Computación',
+    dept: 'Inglés',
     bio: 'Profesor de especialidades. Le apasionan los clásicos universales y busca siempre innovar en el aula.',
     emoji: '🤖',
     email: 'gonzalo@colegioumbral.cl',
@@ -322,7 +304,7 @@ export const TEACHERS = [
     rut: '186188225',
     name: 'Danixa Paola',
     shortName: 'Miss Danixa',
-    dept: 'Historia',
+    dept: 'Lenguaje',
     bio: 'Apasionada por la historia universal y la narrativa histórica, incentivando a sus alumnos a entender el pasado mediante buenas lecturas.',
     emoji: '🌍',
     email: 'dpaola@colegioumbral.cl',
