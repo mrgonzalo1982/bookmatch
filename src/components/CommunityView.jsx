@@ -4,8 +4,10 @@ import { ITEMS, TEACHERS, canMatch, getPeerLikes, getPeerProfile, compatibilityS
 import { Users, X, BookOpen, Star, ChevronRight, Sparkles } from 'lucide-react';
 
 // ── Teacher Detail Modal ──────────────────────────────────────────────────────
-export function TeacherModal({ teacher, onClose }) {
-  const books = ITEMS.filter(item => teacher.recommendedIds.includes(item.id));
+export function TeacherModal({ teacher: partialTeacher, onClose }) {
+  const teacher = TEACHERS.find(t => t.name === partialTeacher.name) || partialTeacher;
+  const recomIds = teacher.recommendedIds || [];
+  const books = ITEMS.filter(item => recomIds.includes(item.id));
 
   return (
     <motion.div
@@ -15,7 +17,7 @@ export function TeacherModal({ teacher, onClose }) {
       className="absolute inset-0 z-50 bg-white flex flex-col"
     >
       {/* Header */}
-      <div className="relative h-36 shrink-0" style={{ background: 'linear-gradient(135deg, #154996, #001A4D)' }}>
+      <div className="relative h-36 shrink-0" style={{ background: 'linear-gradient(135deg, #A80A0A, #001A4D)' }}>
         <button
           onClick={onClose}
           className="absolute top-4 right-4 bg-white/20 backdrop-blur-sm text-white p-2 rounded-full z-10"
@@ -52,7 +54,7 @@ export function TeacherModal({ teacher, onClose }) {
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="font-black text-sm text-gray-900 leading-tight truncate">{book.title}</p>
-                    <p className="text-xs font-bold truncate" style={{ color: '#154996' }}>{book.author}</p>
+                    <p className="text-xs font-bold truncate" style={{ color: '#A80A0A' }}>{book.author}</p>
                     <span className="inline-block mt-1 bg-blue-50 text-blue-600 text-[9px] font-black px-2 py-0.5 rounded-full">
                       {book.genre}
                     </span>
@@ -111,7 +113,7 @@ function CommunityView({ user, likedIds, userProfile, allStudents, onShowTeacher
         <div className="pt-5 pb-3">
           <div className="flex items-center justify-between px-5 mb-4">
             <h2 className="text-xl font-black text-gray-900 tracking-tighter">Profesores</h2>
-            <span className="text-[10px] font-black uppercase tracking-widest" style={{ color: '#154996' }}>{myTeachers.length} disponibles</span>
+            <span className="text-[10px] font-black uppercase tracking-widest" style={{ color: '#A80A0A' }}>{myTeachers.length} disponibles</span>
           </div>
 
           {/* Horizontal scroll of teacher cards */}
@@ -128,7 +130,7 @@ function CommunityView({ user, likedIds, userProfile, allStudents, onShowTeacher
                   onClick={() => onShowTeacher(teacher)}
                   className={`shrink-0 w-36 rounded-3xl p-4 flex flex-col items-center text-center transition-all active:scale-95 border
                     ${hasMatch
-                      ? 'bg-white border-[#154996] shadow-md'
+                      ? 'bg-white border-[#A80A0A] shadow-md'
                       : 'bg-white border-gray-100 shadow-sm'
                     }`}
                 >
@@ -144,7 +146,7 @@ function CommunityView({ user, likedIds, userProfile, allStudents, onShowTeacher
                     )}
                   </div>
                   <p className="font-black text-xs text-gray-900 leading-tight">{teacher.shortName}</p>
-                  <p className="text-[9px] font-bold mt-0.5 leading-tight" style={{ color: '#154996' }}>{teacher.dept.split(' ')[0]}</p>
+                  <p className="text-[9px] font-bold mt-0.5 leading-tight" style={{ color: '#A80A0A' }}>{teacher.dept.split(' ')[0]}</p>
                   {hasMatch && (
                     <span className="mt-2 text-[8px] font-black px-2 py-0.5 rounded-full" style={{ background: '#FFF0F0', color: '#A80A0A' }}>
                       {matchingBooks.length} libro{matchingBooks.length > 1 ? 's' : ''} en común
@@ -164,14 +166,14 @@ function CommunityView({ user, likedIds, userProfile, allStudents, onShowTeacher
           <div className="flex items-end justify-between mb-4">
             <h2 className="text-xl font-black text-gray-900 tracking-tighter">Almas Gemelas</h2>
             {peers.length > 0 && (
-              <span className="text-[10px] font-black uppercase tracking-widest" style={{ color: '#154996' }}>{peers.length} coincidencias</span>
+              <span className="text-[10px] font-black uppercase tracking-widest" style={{ color: '#A80A0A' }}>{peers.length} coincidencias</span>
             )}
           </div>
 
           {peers.length === 0 ? (
             <div className="flex flex-col items-center py-10 text-center">
               <div className="w-20 h-20 bg-blue-50 rounded-full flex items-center justify-center mb-4">
-                <Sparkles size={36} style={{ color: '#154996' }} strokeWidth={1.5} opacity={0.3} />
+                <Sparkles size={36} style={{ color: '#A80A0A' }} strokeWidth={1.5} opacity={0.3} />
               </div>
               <p className="text-sm font-black text-gray-400 max-w-[200px]">
                 {(userProfile?.genres?.length || 0) > 0
@@ -226,7 +228,7 @@ function CommunityView({ user, likedIds, userProfile, allStudents, onShowTeacher
                         <circle cx="18" cy="18" r="15.9" fill="none" stroke="#e0e7ff" strokeWidth="3" />
                         <circle
                           cx="18" cy="18" r="15.9" fill="none"
-                          stroke={peer.score >= 70 ? '#A80A0A' : peer.score >= 40 ? '#154996' : '#fca5a5'}
+                          stroke={peer.score >= 70 ? '#A80A0A' : peer.score >= 40 ? '#A80A0A' : '#fca5a5'}
                           strokeWidth="3"
                           strokeDasharray={`${peer.score} 100`}
                           strokeLinecap="round"

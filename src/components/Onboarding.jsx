@@ -237,7 +237,7 @@ function Onboarding({ user, onFinish }) {
                   value={search}
                   onChange={e => { setSearch(e.target.value); setCustomBook(''); }}
                   placeholder="Busca en el catálogo..."
-                  className="w-full pl-10 pr-4 py-3.5 bg-white border-2 border-gray-100 focus:border-[#154996] rounded-2xl outline-none text-sm font-medium text-gray-800 transition-all font-bold"
+                  className="w-full pl-10 pr-4 py-3.5 bg-white border-2 border-gray-100 focus:border-[#A80A0A] rounded-2xl outline-none text-sm font-medium text-gray-800 transition-all font-bold"
                 />
               </div>
 
@@ -251,8 +251,8 @@ function Onboarding({ user, onFinish }) {
                       onClick={() => { setFavoriteBook(book); setCustomBook(''); setSearch(''); }}
                       className={`w-full flex items-center gap-4 p-3.5 rounded-2xl border-2 transition-all text-left group
                         ${selected
-                          ? 'border-[#154996] bg-[#154996] shadow-lg shadow-blue-900/20 scale-[1.02]'
-                          : 'border-transparent bg-white shadow-sm hover:border-[#154996]/20'
+                          ? 'border-[#A80A0A] bg-[#A80A0A] shadow-lg shadow-red-900/20 scale-[1.02]'
+                          : 'border-transparent bg-white shadow-sm hover:border-[#A80A0A]/20'
                         }`}
                     >
                       <div className="w-12 h-16 rounded-xl overflow-hidden bg-gray-100 shrink-0">
@@ -268,7 +268,7 @@ function Onboarding({ user, onFinish }) {
                         </span>
                       </div>
                       {selected && (
-                        <div className="shrink-0 bg-white text-[#154996] rounded-full w-7 h-7 flex items-center justify-center shadow-sm">
+                        <div className="shrink-0 bg-white text-[#A80A0A] rounded-full w-7 h-7 flex items-center justify-center shadow-sm">
                           <Heart size={14} fill="currentColor" />
                         </div>
                       )}
@@ -285,7 +285,7 @@ function Onboarding({ user, onFinish }) {
                   value={customBook}
                   onChange={e => { setCustomBook(e.target.value); setFavoriteBook(null); setSearch(''); }}
                   placeholder="Nombre del libro o personaje..."
-                  className="w-full px-4 py-3.5 bg-white border-2 border-gray-100 focus:border-[#154996] rounded-2xl outline-none text-sm font-bold text-gray-800 transition-all shadow-sm"
+                  className="w-full px-4 py-3.5 bg-white border-2 border-gray-100 focus:border-[#A80A0A] rounded-2xl outline-none text-sm font-bold text-gray-800 transition-all shadow-sm"
                 />
               </div>
             </motion.div>
@@ -362,7 +362,7 @@ function Onboarding({ user, onFinish }) {
             onClick={() => setStep(s => s + 1)}
             disabled={!canAdvance}
             className="w-full text-white py-5 rounded-2xl font-black text-lg shadow-lg disabled:opacity-40 active:scale-95 transition-all flex items-center justify-center gap-2 group"
-            style={{ background: canAdvance ? 'linear-gradient(135deg, #154996, #A80A0A)' : '#d1d5db', boxShadow: canAdvance ? '0 12px 32px -10px rgba(0,51,153,0.5)' : 'none' }}
+            style={{ background: canAdvance ? 'linear-gradient(135deg, #A80A0A, #5e0000)' : '#d1d5db', boxShadow: canAdvance ? '0 12px 32px -10px rgba(168,10,10,0.5)' : 'none' }}
           >
             {step === 0 ? 'Empezar' : step === STEPS.length - 2 ? 'Continuar' : 'Siguiente'}
             <ChevronRight size={20} className={canAdvance ? 'group-hover:translate-x-1 transition-transform' : ''} />
@@ -371,7 +371,7 @@ function Onboarding({ user, onFinish }) {
           <button
             onClick={handleFinish}
             className="w-full text-white py-5 rounded-2xl font-black text-lg shadow-xl active:scale-95 transition-all flex items-center justify-center gap-2"
-            style={{ background: 'linear-gradient(135deg, #154996, #A80A0A)', boxShadow: '0 8px 24px rgba(21,73,150,0.3)' }}
+            style={{ background: 'linear-gradient(135deg, #A80A0A, #5e0000)', boxShadow: '0 8px 24px rgba(168,10,10,0.3)' }}
           >
             <BookOpen size={20} />
             ¡Descubrir Libros!

@@ -41,9 +41,9 @@ function MatchList({ matches, setView, onShowTeacher }) {
                   <span className="text-2xl font-black text-indigo-200 w-8 text-center shrink-0">{i + 1}</span>
                   <div className="flex-1 min-w-0">
                     <p className="font-black text-gray-900 text-sm truncate">{m.title}</p>
-                    <p className="text-xs font-bold truncate" style={{ color: '#154996' }}>{m.author}</p>
+                    <p className="text-xs font-bold truncate" style={{ color: '#A80A0A' }}>{m.author}</p>
                   </div>
-                  <span className="text-[10px] bg-blue-50 text-[#154996] px-2 py-0.5 rounded-full font-black uppercase tracking-tighter shrink-0">{m.genre}</span>
+                  <span className="text-[10px] bg-blue-50 text-[#A80A0A] px-2 py-0.5 rounded-full font-black uppercase tracking-tighter shrink-0">{m.genre}</span>
                 </div>
               ))}
             </div>
@@ -51,7 +51,7 @@ function MatchList({ matches, setView, onShowTeacher }) {
               <button
                 onClick={handleCopyLoan}
                 className="w-full text-white py-4 rounded-2xl font-black flex items-center justify-center gap-3 active:scale-95 transition-all shadow-lg"
-                style={{ background: '#154996' }}
+                style={{ background: '#A80A0A' }}
               >
                 {copied ? <Check size={18} /> : <Copy size={18} />}
                 {copied ? '¡Copiado!' : 'Copiar Lista'}
@@ -67,7 +67,7 @@ function MatchList({ matches, setView, onShowTeacher }) {
           <h2 className="text-3xl font-black text-gray-900 tracking-tighter">Mis Matches</h2>
           <p className="text-xs text-gray-400 font-medium mt-0.5">Tu biblioteca personal</p>
         </div>
-        <span className="text-xs font-black uppercase tracking-widest" style={{ color: '#154996' }}>{matches.length} libro{matches.length !== 1 ? 's' : ''}</span>
+        <span className="text-xs font-black uppercase tracking-widest" style={{ color: '#A80A0A' }}>{matches.length} libro{matches.length !== 1 ? 's' : ''}</span>
       </div>
 
       {/* Content */}
@@ -105,12 +105,12 @@ function MatchList({ matches, setView, onShowTeacher }) {
                 </div>
                 <div className="p-3 flex-1 flex flex-col">
                   <h3 className="font-black text-xs text-gray-900 line-clamp-2 leading-tight mb-1">{match.title}</h3>
-                  <p className="text-[10px] font-bold uppercase tracking-tighter truncate" style={{ color: '#154996' }}>{match.author}</p>
+                  <p className="text-[10px] font-bold uppercase tracking-tighter truncate" style={{ color: '#A80A0A' }}>{match.author}</p>
                   <div className="mt-auto pt-2 border-t border-gray-50 flex items-center justify-between">
                     <div className="flex -space-x-1.5 pointer-events-auto">
                       {match.professors?.slice(0, 2).map((p, i) => (
                         <button key={i} title={p.name} onClick={() => onShowTeacher(p)} className="w-6 h-6 rounded-full border-2 border-white flex items-center justify-center text-[8px] font-black text-white shadow-sm hover:scale-110 active:scale-90 transition-transform"
-                          style={{ background: '#154996' }}>
+                          style={{ background: '#A80A0A' }}>
                           {p.name.replace('Profe ', '').replace('Miss ', '').replace('Tía ', '').charAt(0)}
                         </button>
                       ))}
@@ -132,7 +132,7 @@ function MatchList({ matches, setView, onShowTeacher }) {
           <button
             onClick={() => setShowLoanList(true)}
             className="w-full bg-white py-4 rounded-2xl font-black border-2 border-blue-100 shadow-md flex items-center justify-center gap-2 active:scale-95 transition-all text-sm"
-            style={{ color: '#154996' }}
+            style={{ color: '#A80A0A' }}
           >
             <BookOpen size={16} /> Lista para Biblioteca
           </button>

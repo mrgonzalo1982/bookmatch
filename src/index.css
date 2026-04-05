@@ -31,13 +31,13 @@
   }
   /* Gradient utilities for Umbral branding */
   .umbral-gradient {
-    background: linear-gradient(135deg, #154996 0%, #1a5ab5 50%, #A80A0A 100%);
+    background: linear-gradient(135deg, #A80A0A 0%, #3a0000 100%);
   }
   .umbral-gradient-red {
     background: linear-gradient(135deg, #A80A0A, #C91010);
   }
   .umbral-gradient-blue {
-    background: linear-gradient(135deg, #154996, #1a5ab5);
+    background: linear-gradient(135deg, #A80A0A, #5e0000);
   }
   .line-clamp-2 {
     display: -webkit-box;

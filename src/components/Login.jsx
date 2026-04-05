@@ -32,14 +32,14 @@ function Login({ onLogin }) {
     <div
       className="min-h-screen flex flex-col items-center justify-center relative overflow-hidden px-6"
       style={{ 
-        background: `radial-gradient(circle at top left, ${BLUE} 0%, #001A4D 50%, #050505 100%)`, 
+        background: `radial-gradient(circle at top left, ${RED} 0%, #3a0000 50%, #111111 100%)`, 
         fontFamily: 'Outfit, sans-serif' 
       }}
     >
       {/* Dynamic light effects */}
-      <div className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] rounded-full opacity-20 pointer-events-none"
-        style={{ background: `radial-gradient(circle, ${RED}, transparent 70%)`, filter: 'blur(120px)' }} />
-      <div className="absolute bottom-[-5%] left-[-5%] w-[400px] h-[400px] rounded-full opacity-10 pointer-events-none"
+      <div className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] rounded-full opacity-30 pointer-events-none"
+        style={{ background: `radial-gradient(circle, ${BLUE}, transparent 70%)`, filter: 'blur(120px)' }} />
+      <div className="absolute bottom-[-5%] left-[-5%] w-[400px] h-[400px] rounded-full opacity-20 pointer-events-none"
         style={{ background: `radial-gradient(circle, ${GOLD}, transparent 70%)`, filter: 'blur(100px)' }} />
 
       <motion.div
@@ -79,7 +79,7 @@ function Login({ onLogin }) {
                 </label>
                 <div className="relative group">
                   <Shield className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 transition-colors duration-300"
-                    style={{ color: error ? RED : rut ? BLUE : '#D1D5DB' }} />
+                    style={{ color: error ? '#FF3333' : rut ? RED : '#D1D5DB' }} />
                   <input
                     type="text"
                     value={rut}
@@ -88,10 +88,10 @@ function Login({ onLogin }) {
                     maxLength={12}
                     className="w-full pl-12 pr-5 py-4.5 rounded-2xl text-lg font-bold text-gray-900 outline-none transition-all border-2 bg-gray-50/50"
                     style={{ 
-                      borderColor: error ? RED : '#F3F4F6',
+                      borderColor: error ? '#FF3333' : '#F3F4F6',
                       fontFamily: 'Space Grotesk, monospace' 
                     }}
-                    onFocus={e => { if (!error) e.target.style.borderColor = BLUE; }}
+                    onFocus={e => { if (!error) e.target.style.borderColor = RED; }}
                     onBlur={e => { if (!error) e.target.style.borderColor = '#F3F4F6'; }}
                   />
                 </div>
@@ -110,8 +110,8 @@ function Login({ onLogin }) {
                 disabled={loading || !rut.trim()}
                 className="w-full py-5 rounded-2xl font-black text-white text-base transition-all active:scale-[0.98] disabled:opacity-30 relative overflow-hidden group"
                 style={{
-                  background: loading || !rut.trim() ? '#9ca3af' : `linear-gradient(135deg, ${BLUE}, #1a3a72)`,
-                  boxShadow: !loading && rut.trim() ? `0 20px 40px -12px rgba(0,51,153,0.4)` : 'none',
+                  background: loading || !rut.trim() ? '#9ca3af' : `linear-gradient(135deg, ${RED}, #5c0000)`,
+                  boxShadow: !loading && rut.trim() ? `0 20px 40px -12px rgba(168,10,10,0.4)` : 'none',
                 }}
               >
                 {loading ? (
