@@ -236,13 +236,6 @@ function MatchDeck({ user, likedIds, userProfile, onMatch, onShowTeacher }) {
                   <Bookmark size={10} fill="currentColor" /> {item.type}
                 </span>
               </div>
-              {/* Students matched badge */}
-              <div className="absolute top-4 right-4">
-                <span className="bg-white/90 backdrop-blur-md text-gray-700 px-3 py-1.5 rounded-full text-[10px] font-black flex items-center gap-1.5 shadow-lg"
-                    style={{ borderLeft: '3px solid #FFD700' }}>
-                  <Users size={10} className="text-[#A80A0A]" /> {item.studentsMatched} compañeros
-                </span>
-              </div>
               {/* Title overlay */}
               <div className="absolute bottom-0 inset-x-0 p-6 bg-gradient-to-t from-gray-900 via-gray-900/50 to-transparent text-white">
                 <h2 className="text-3xl font-black leading-tight tracking-tighter mb-1">{item.title}</h2>
