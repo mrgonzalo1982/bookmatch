@@ -65,7 +65,6 @@ const ALL_BOOKS = [
   
   // Sagas Populres
   { id: 105, type: 'libro', title: 'Los Juegos del Hambre', author: 'Suzanne Collins', genre: 'Ciencia Ficción', minNivel: 7, maxNivel: 12, description: 'Katniss Everdeen debe luchar por su vida en un reality show televisado.' },
-  { id: 501, type: 'libro', title: 'Heartstopper', author: 'Alice Oseman', genre: 'Romance', minNivel: 8, maxNivel: 12, description: 'Charlie y Nick descubren que su amistad se está convirtiendo en algo más. Una historia dulce y moderna.' },
   { id: 120, type: 'libro', title: 'La Comunidad del Anillo', author: 'J.R.R. Tolkien', genre: 'Fantasía', minNivel: 8, maxNivel: 12, description: 'Frodo Bolsón emprende la misión de destruir el Anillo Único.' }
 ];
 
@@ -110,7 +109,7 @@ export const TEACHERS = [
     bio: 'Especialista en narrativa contemporánea y juvenil. ¡Amo ayudar a los alumnos a encontrar su próxima aventura!',
     emoji: '🌍',
     email: 'dpaola@colegioumbral.cl',
-    recommendedIds: [302, 401, 501, 402, 9, 7],
+    recommendedIds: [302, 401, 105, 402, 9, 7],
     genre: 'Romantasy',
     nivelMin: 5, nivelMax: 12,
   }
