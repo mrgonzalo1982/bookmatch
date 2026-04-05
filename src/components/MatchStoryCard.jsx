@@ -11,8 +11,8 @@ export function MatchStoryCard({ book, teacher, user, innerRef }) {
     ? (user.profile?.dept || 'Docente') 
     : (user.curso || 'Alumno');
 
-  const userName = user.nombre?.split(' ')[0] || 'Usuario';
-  const teacherName = teacher.name?.replace('Profe ', '').replace('Miss ', '').split(' ')[0] || 'Docente';
+  const userName = user.nombre || 'Usuario';
+  const teacherName = teacher.name || 'Docente';
 
   return (
     <div 
