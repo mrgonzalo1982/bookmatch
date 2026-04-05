@@ -5,8 +5,10 @@ import { Users, X, BookOpen, Star, Sparkles, Heart, Loader2, Bookmark } from 'lu
 import { db } from '../lib/firebase';
 import { collection, getDocs } from 'firebase/firestore';
 
-const RED  = '#A80A0A';
+const RED  = '#A10D12';
 const BLUE = '#154996';
+const GOLD = '#D4AF37';
+const GREEN = '#22C55E';
 
 // ── Teacher Detail Modal ──────────────────────────────────────────────────────
 // Now receives full teacher data from Firestore (likes = recommended books)
@@ -280,7 +282,7 @@ function CommunityView({ user, likedIds, userProfile, allStudents, onShowTeacher
 
                   <div className="flex-1 min-w-0">
                     <p className="font-black text-gray-900 text-sm truncate leading-tight">
-                      {peer.nombre.split(' ').slice(2).join(' ') || peer.nombre.split(' ')[0]}
+                      {peer.nombre.split(' ').slice(0, 2).join(' ')}
                     </p>
                     <p className="text-[10px] text-gray-400 font-bold uppercase tracking-tighter truncate">{peer.curso}</p>
                     <div className="flex items-center gap-1 mt-1.5 flex-wrap">
