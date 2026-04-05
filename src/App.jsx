@@ -34,14 +34,24 @@ function App() {
   // ── Restore session ──────────────────────────────────────────────────────────
   useEffect(() => {
     try {
-      const saved      = localStorage.getItem('bm-user');
-      const savedLikes = localStorage.getItem('bm-likes');
-      const savedProf  = localStorage.getItem('bm-profile');
-      if (saved) {
+      const saved = localStorage.getItem('bm-user');
+      const savedRut = localStorage.getItem('bm-active-rut');
+      
+      if (saved && savedRut) {
+        // Hydrate from DB
+        const db = JSON.parse(localStorage.getItem('bm-users-db') || '{}');
+        const userState = db[savedRut];
+        
         setUser(JSON.parse(saved));
-        setView('deck');
-        if (savedLikes) setLikedItems(JSON.parse(savedLikes));
-        if (savedProf)  setUserProfile(JSON.parse(savedProf));
+        
+        if (userState) {
+          if (userState.likes) setLikedItems(userState.likes);
+          if (userState.profile) setUserProfile(userState.profile);
+          setView(userState.role === 'teacher' || userState.role === 'admin' ? 'admin' : 'deck');
+        } else {
+           // Not completed onboarding yet
+           setView('onboarding');
+        }
       }
     } catch {}
   }, []);
@@ -49,23 +59,50 @@ function App() {
   // ── Login ────────────────────────────────────────────────────────────────────
   const handleLogin = (rut) => {
     const clean = s => s.replace(/[^0-9kK]/gi, '').toLowerCase();
+    const cleanRut = clean(rut);
+    const db = JSON.parse(localStorage.getItem('bm-users-db') || '{}');
     
     // Admin Backdoor
-    if (clean(rut) === 'admin' || clean(rut) === '123456789') {
+    if (cleanRut === 'admin' || cleanRut === '123456789') {
       const adminUser = { rut: '12.345.678-9', nombre: 'Administrador Umbral', curso: 'Staff', role: 'admin', avatar: '/umbral-shield.png' };
       setUser(adminUser);
       localStorage.setItem('bm-user', JSON.stringify(adminUser));
+      localStorage.setItem('bm-active-rut', 'admin');
+      
+      db['admin'] = { profile: { emoji: '🛡️', genres: [] }, likes: [], role: 'admin' };
+      localStorage.setItem('bm-users-db', JSON.stringify(db));
+      setUserProfile(db['admin'].profile);
+      
       setView('admin');
       return true;
     }
 
-    const found = STUDENTS.find(s => clean(s.rut) === clean(rut));
+    // Teachers
+    const TEACHER_RUTS = ['150685478', '186188225']; // Gonzalo Andrés, Danixa Paola
+    if (TEACHER_RUTS.includes(cleanRut)) {
+       const teacherUser = { rut: cleanRut, nombre: 'Profesor Umbral', curso: 'Docente', role: 'teacher', avatar: '/umbral-shield.png' };
+       setUser(teacherUser);
+       localStorage.setItem('bm-user', JSON.stringify(teacherUser));
+       localStorage.setItem('bm-active-rut', cleanRut);
+       
+       if (!db[cleanRut]) {
+         db[cleanRut] = { profile: { emoji: '📚', genres: [] }, likes: [], role: 'teacher' };
+         localStorage.setItem('bm-users-db', JSON.stringify(db));
+       }
+       setUserProfile(db[cleanRut].profile);
+       setView('admin'); // Teachers go to the Admin/Dashboard view
+       return true;
+    }
+
+    const found = STUDENTS.find(s => clean(s.rut) === cleanRut);
     if (found) {
       setUser(found);
       localStorage.setItem('bm-user', JSON.stringify(found));
-      const existingProfile = localStorage.getItem('bm-profile');
-      if (existingProfile) {
-        setUserProfile(JSON.parse(existingProfile));
+      localStorage.setItem('bm-active-rut', cleanRut);
+      
+      if (db[cleanRut] && db[cleanRut].profile) {
+        setUserProfile(db[cleanRut].profile);
+        setLikedItems(db[cleanRut].likes || []);
         setView('deck');
       } else {
         setView('onboarding');
@@ -77,8 +114,13 @@ function App() {
 
   // ── Onboarding ───────────────────────────────────────────────────────────────
   const handleFinishOnboarding = (profile) => {
+    const cleanRut = user.rut.replace(/[^0-9kK]/gi, '').toLowerCase();
+    const db = JSON.parse(localStorage.getItem('bm-users-db') || '{}');
+    
+    db[cleanRut] = { profile, likes: [], role: 'student' };
+    localStorage.setItem('bm-users-db', JSON.stringify(db));
+    
     setUserProfile(profile);
-    localStorage.setItem('bm-profile', JSON.stringify(profile));
     setView('deck');
   };
 
@@ -87,13 +129,21 @@ function App() {
     if (likedItems.find(m => m.id === item.id)) return;
     const updated = [...likedItems, item];
     setLikedItems(updated);
-    localStorage.setItem('bm-likes', JSON.stringify(updated));
+    
+    const cleanRut = user.rut.replace(/[^0-9kK]/gi, '').toLowerCase();
+    const db = JSON.parse(localStorage.getItem('bm-users-db') || '{}');
+    if (db[cleanRut]) {
+      db[cleanRut].likes = updated;
+      localStorage.setItem('bm-users-db', JSON.stringify(db));
+    }
   };
 
   // ── Logout ───────────────────────────────────────────────────────────────────
   const handleLogout = () => {
     setUser(null); setLikedItems([]); setUserProfile(null);
-    setView('login'); localStorage.clear();
+    setView('login'); 
+    localStorage.removeItem('bm-user');
+    localStorage.removeItem('bm-active-rut');
   };
 
   // ── Guard ────────────────────────────────────────────────────────────────────
@@ -149,12 +199,11 @@ function App() {
         return (
           <div key="profile" className="flex-1 overflow-y-auto" style={{ scrollbarWidth: 'none' }}>
             {/* Profile hero */}
-            <div className="pb-10 px-6 pt-10" style={{ background: `linear-gradient(160deg, ${BLUE} 0%, #1a5ab5 100%)` }}>
+            <div className="pb-10 px-6 pt-10" style={{ background: `linear-gradient(160deg, ${RED} 0%, #3a0000 100%)` }}>
               <div className="flex flex-col items-center">
                 <div className="relative mb-4">
-                  <div className="w-28 h-28 rounded-3xl overflow-hidden bg-white/10 border-4 border-white/20 shadow-2xl">
-                    <img src={user.avatar} alt={user.nombre} className="w-full h-full object-cover p-1.5"
-                      onError={e => { e.target.style.display = 'none'; }} />
+                  <div className="w-28 h-28 rounded-3xl overflow-hidden bg-white/20 backdrop-blur-xl border-4 border-white/30 shadow-2xl flex items-center justify-center text-6xl">
+                    {userProfile?.emoji || user.avatar || '👤'}
                   </div>
                   <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-emerald-400 px-3 py-0.5 rounded-full text-white text-[9px] font-black uppercase tracking-widest shadow">
                     En línea
@@ -284,9 +333,9 @@ function App() {
     <div className="min-h-screen flex flex-col max-w-md mx-auto relative overflow-hidden shadow-2xl"
       style={{ height: '100dvh', fontFamily: 'Poppins, sans-serif', background: BG }}>
 
-      {/* ── Header (Institutional Blue) ─────────────────────────────────────────────── */}
+      {/* ── Header (Institutional Carmine) ─────────────────────────────────────────────── */}
       <header className="px-5 py-3 flex items-center justify-between shrink-0 z-10"
-        style={{ background: BLUE }}>
+        style={{ background: RED }}>
 
         {/* Avatar */}
         <button onClick={() => setView('profile')}
@@ -327,9 +376,9 @@ function App() {
         </AnimatePresence>
       </main>
 
-      {/* ── Bottom Nav (Institutional Blue) ─────────────────────────────────────────── */}
+      {/* ── Bottom Nav (Institutional Carmine) ─────────────────────────────────────────── */}
       <nav className="px-4 py-2 flex justify-around items-center shrink-0 z-10 border-t border-white/10"
-        style={{ background: BLUE }}>
+        style={{ background: RED }}>
         {NAV.map(({ id, label, Icon }) => {
           const active = view === id;
           return (
