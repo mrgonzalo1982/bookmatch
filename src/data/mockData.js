@@ -11,7 +11,7 @@ export const ITEMS = [
     title: 'Matilda',
     author: 'Roald Dahl',
     description: 'Una niña superdotada descubre que tiene poderes telequinéticos y los usa para enfrentar a sus crueles padres y directora escolar.',
-    image: 'https://m.media-amazon.com/images/I/81L6E-u0L8L._AC_UF1000,1000_QL80_.jpg',
+    image: 'https://covers.openlibrary.org/b/id/12889769-L.jpg',
     genre: 'Fantasía', minNivel: 5, maxNivel: 7
   },
   {
@@ -20,7 +20,7 @@ export const ITEMS = [
     title: 'Gravity Falls: Diario 3',
     author: 'Rob Renzetti',
     description: 'El diario misterioso que Dipper encuentra en el bosque. Lleno de criaturas, secretos y anomalías del pueblo.',
-    image: 'https://m.media-amazon.com/images/I/91t7yCmqQoL._AC_UF1000,1000_QL80_.jpg',
+    image: 'https://placehold.co/400x600/A10D12/D4AF37.png?text=Gravity%2BFalls%3A%2BDiario%2B3',
     genre: 'Misterio', minNivel: 5, maxNivel: 8
   },
   {
@@ -29,7 +29,7 @@ export const ITEMS = [
     title: 'El Principito',
     author: 'Antoine de Saint-Exupéry',
     description: 'Un pequeño príncipe viaja de planeta en planeta descubriendo que "lo esencial es invisible a los ojos".',
-    image: 'https://m.media-amazon.com/images/I/71li8S0t+6L._AC_UF1000,1000_QL80_.jpg',
+    image: 'https://covers.openlibrary.org/b/id/10708272-L.jpg',
     genre: 'Fábula', minNivel: 5, maxNivel: 12
   },
   {
@@ -38,7 +38,7 @@ export const ITEMS = [
     title: 'El Hombre Perro (Dog Man)',
     author: 'Dav Pilkey',
     description: '¡Mitad perro, mitad hombre, todo un héroe! Una novela gráfica divertidísima sobre un policía canino.',
-    image: 'https://m.media-amazon.com/images/I/81G3B+d9TGL._AC_UF1000,1000_QL80_.jpg',
+    image: 'https://covers.openlibrary.org/b/id/8315371-L.jpg',
     genre: 'Aventura', minNivel: 5, maxNivel: 7
   },
   {
@@ -47,7 +47,7 @@ export const ITEMS = [
     title: 'Wonder: La Lección de August',
     author: 'R.J. Palacio',
     description: 'August Pullman nació con una deformidad facial que le impidió ir a la escuela normal... hasta ahora. Una historia sobre empatía.',
-    image: 'https://m.media-amazon.com/images/I/81VfS2n-kLL._AC_UF1000,1000_QL80_.jpg',
+    image: 'https://covers.openlibrary.org/b/id/8223160-L.jpg',
     genre: 'Realismo', minNivel: 5, maxNivel: 9
   },
 
@@ -58,7 +58,7 @@ export const ITEMS = [
     title: 'Harry Potter y la Piedra Filosofal',
     author: 'J.K. Rowling',
     description: 'Un niño huérfano descubre que es un mago y comienza su educación en Hogwarts.',
-    image: 'https://m.media-amazon.com/images/I/81f7bXC-tTL._AC_UF1000,1000_QL80_.jpg',
+    image: 'https://covers.openlibrary.org/b/id/15155833-L.jpg',
     genre: 'Fantasía', minNivel: 6, maxNivel: 10
   },
   {
@@ -67,7 +67,7 @@ export const ITEMS = [
     title: 'Percy Jackson y el Ladrón del Rayo',
     author: 'Rick Riordan',
     description: 'Un adolescente descubre que es hijo de un dios griego y debe evitar una guerra en el Olimpo.',
-    image: 'https://m.media-amazon.com/images/I/81fT4QpSogL._AC_UF1000,1000_QL80_.jpg',
+    image: 'https://covers.openlibrary.org/b/id/7239831-L.jpg',
     genre: 'Aventura', minNivel: 6, maxNivel: 9
   },
   {
@@ -76,7 +76,7 @@ export const ITEMS = [
     title: 'Invisible',
     author: 'Eloy Moreno',
     description: '¿Quién no ha deseado alguna vez ser invisible? Una historia conmovedora sobre el acoso escolar y la valentía de mirar.',
-    image: 'https://m.media-amazon.com/images/I/81x12V5-1zL._AC_UF1000,1000_QL80_.jpg',
+    image: 'https://covers.openlibrary.org/b/id/11171586-L.jpg',
     genre: 'Realismo', minNivel: 7, maxNivel: 12
   },
   {
@@ -85,7 +85,7 @@ export const ITEMS = [
     title: 'La Selección',
     author: 'Kiera Cass',
     description: 'Para treinta y cinco chicas, la Selección es la oportunidad de su vida; el camino a la corona. Pero para America Singer, es una pesadilla.',
-    image: 'https://m.media-amazon.com/images/I/81A+X7InX9L._AC_UF1000,1000_QL80_.jpg',
+    image: 'https://covers.openlibrary.org/b/id/7101900-L.jpg',
     genre: 'Romantasy', minNivel: 8, maxNivel: 12
   },
 
@@ -96,7 +96,7 @@ export const ITEMS = [
     title: 'Heartstopper: Dos Chicos Juntos',
     author: 'Alice Oseman',
     description: 'Charlie y Nick van al mismo instituto, pero no se conocen hasta que les hacen sentarse juntos. La ternura hecha novela gráfica.',
-    image: 'https://m.media-amazon.com/images/I/81S64S2W+eL._AC_UF1000,1000_QL80_.jpg',
+    image: 'https://covers.openlibrary.org/b/id/9020805-L.jpg',
     genre: 'Romance', minNivel: 8, maxNivel: 12
   },
   {
@@ -105,7 +105,7 @@ export const ITEMS = [
     title: 'Cinder (Crónicas Lunares)',
     author: 'Marissa Meyer',
     description: 'Cenicienta es una cyborg en la Nueva Pekín futurista. Una mezcla épica de Sci-Fi y fantasía con toques de romance.',
-    image: 'https://m.media-amazon.com/images/I/81W9ADL6LmL._AC_UF1000,1000_QL80_.jpg',
+    image: 'https://covers.openlibrary.org/b/id/8947137-L.jpg',
     genre: 'Romantasy', minNivel: 9, maxNivel: 12
   },
   {
@@ -114,7 +114,7 @@ export const ITEMS = [
     title: 'Frankenstein',
     author: 'Mary Shelley',
     description: 'El científico Victor Frankenstein crea una criatura a partir de cadáveres, desatando consecuencias trágicas. El origen del terror moderno.',
-    image: 'https://m.media-amazon.com/images/I/81fH+8p0B9L._AC_UF1000,1000_QL80_.jpg',
+    image: 'https://covers.openlibrary.org/b/id/12356249-L.jpg',
     genre: 'Terror', minNivel: 10, maxNivel: 12
   },
   {
@@ -123,7 +123,7 @@ export const ITEMS = [
     title: '1984',
     author: 'George Orwell',
     description: 'En un futuro distópico, el Gran Hermano lo vigila todo. Una crítica mordaz a la vigilancia y al autoritarismo.',
-    image: 'https://m.media-amazon.com/images/I/41-996N268L._SY445_SX342_.jpg',
+    image: 'https://covers.openlibrary.org/b/id/9267242-L.jpg',
     genre: 'Ciencia Ficción', minNivel: 10, maxNivel: 12
   },
   {
@@ -132,7 +132,7 @@ export const ITEMS = [
     title: 'Érase una vez un corazón roto',
     author: 'Stephanie Garber',
     description: 'Evangeline Fox viaja al Norte en busca de venganza y termina haciendo un trato peligroso con el Príncipe de Corazones.',
-    image: 'https://m.media-amazon.com/images/I/81o+C9KOn-L._AC_UF1000,1000_QL80_.jpg',
+    image: 'https://covers.openlibrary.org/b/id/11427092-L.jpg',
     genre: 'Romantasy', minNivel: 9, maxNivel: 12
   },
   {
@@ -141,7 +141,7 @@ export const ITEMS = [
     title: 'Cien Años de Soledad',
     author: 'Gabriel García Márquez',
     description: 'La épica historia de la familia Buendía en el pueblo ficticio de Macondo. La obra maestra del realismo mágico.',
-    image: 'https://m.media-amazon.com/images/I/81T6L8UeZ0L._AC_UF1000,1000_QL80_.jpg',
+    image: 'https://placehold.co/400x600/A10D12/D4AF37.png?text=Cien%2BA%C3%B1os%2Bde%2BSoledad',
     genre: 'Realismo Mágico', minNivel: 10, maxNivel: 12
   },
   {
@@ -150,7 +150,7 @@ export const ITEMS = [
     title: 'Los Juegos del Hambre',
     author: 'Suzanne Collins',
     description: 'Un futuro donde los jóvenes deben luchar a muerte en un reality show por orden del Capitolio.',
-    image: 'https://m.media-amazon.com/images/I/61vU9L-N8AL._AC_UF1000,1000_QL80_.jpg',
+    image: 'https://covers.openlibrary.org/b/id/12646537-L.jpg',
     genre: 'Ciencia Ficción', minNivel: 8, maxNivel: 11
   },
 ];
