@@ -1,11 +1,11 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence, useMotionValue, useTransform } from 'framer-motion';
 import { ITEMS } from '../data/mockData';
-import { Heart, X, Bookmark, ChevronRight, BookOpen, Users, Loader2 } from 'lucide-react';
+import { Heart, X, Bookmark, ChevronRight, BookOpen, Users, Loader2, Share2 } from 'lucide-react';
 import { db } from '../lib/firebase';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, doc, updateDoc, arrayUnion } from 'firebase/firestore';
 
-function MatchDeck({ user, likedIds, userProfile, onMatch, onShowTeacher }) {
+function MatchDeck({ user, likedIds, userProfile, onMatch, onShowTeacher, allTeachers }) {
   const [discardedIds, setDiscardedIds] = useState([]);
   const [showMatchModal, setShowMatchModal] = useState(false);
   const [swipeAction, setSwipeAction] = useState(null); // 'left' | 'right'
@@ -15,36 +15,7 @@ function MatchDeck({ user, likedIds, userProfile, onMatch, onShowTeacher }) {
   const likeOpacity = useTransform(x, [30, 120], [0, 1]);
   const nopeOpacity = useTransform(x, [-30, -120], [0, 1]);
   
-  const [teachers, setTeachers] = useState([]);
-  const [loadingTeachers, setLoadingTeachers] = useState(true);
-
-  // Load active teachers from Firestore
-  useEffect(() => {
-    const loadTeachers = async () => {
-      try {
-        const snap = await getDocs(collection(db, 'users'));
-        const list = [];
-        snap.forEach(docSnap => {
-          const data = docSnap.data();
-          if (data.role === 'teacher' && data.profile) {
-            list.push({
-              id: docSnap.id,
-              name: data.profile.name,
-              dept: data.profile.dept,
-              emoji: data.profile.emoji || '👨‍🏫',
-              likes: data.likes || []
-            });
-          }
-        });
-        setTeachers(list);
-      } catch (e) {
-        console.error("Error loading teachers for deck:", e);
-      } finally {
-        setLoadingTeachers(false);
-      }
-    };
-    loadTeachers();
-  }, []);
+  const [isSharing, setIsSharing] = useState(false);
 
   // Filter by level, exclude liked + discarded, sort by genre affinity
   const deck = useMemo(() => {
@@ -69,9 +40,35 @@ function MatchDeck({ user, likedIds, userProfile, onMatch, onShowTeacher }) {
 
   // Real-time matching: which teachers liked THIS specific book?
   const matchingTeachers = useMemo(() => {
-    if (!item || loadingTeachers) return [];
-    return teachers.filter(t => t.likes.some(l => l.id === item.id));
-  }, [item, teachers, loadingTeachers]);
+    if (!item) return [];
+    return allTeachers.filter(t => (t.likes || []).some(l => String(l.id) === String(item.id)));
+  }, [item, allTeachers]);
+
+  const handleSocialShare = async () => {
+    if (!item || matchingTeachers.length === 0) return;
+    setIsSharing(true);
+
+    const firstTeacher = matchingTeachers[0];
+    const text = `¡Acabo de hacer match con el libro "${item.title}" en BookMatch Umbral! 📚✨ Coincidí con ${firstTeacher.name}. #BookMatch #ColegioUmbral`;
+    
+    try {
+      if (navigator.share) {
+        await navigator.share({
+          title: '¡BookMatch Perfecto!',
+          text: text,
+          url: window.location.origin
+        });
+      } else {
+        // Fallback: Copy to clipboard
+        await navigator.clipboard.writeText(text);
+        alert('¡Copiado al portapapeles! Ya puedes pegarlo en tus redes.');
+      }
+    } catch (err) {
+      console.warn('Share error:', err);
+    } finally {
+      setIsSharing(false);
+    }
+  };
 
   const handleSwipe = (direction) => {
     if (!item) return;
@@ -208,15 +205,28 @@ function MatchDeck({ user, likedIds, userProfile, onMatch, onShowTeacher }) {
 
 
 
-            <motion.button
+            <motion.div
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.8 }}
-              onClick={handleMatchContinue}
-              className="text-[#A80A0A] bg-white px-10 py-5 rounded-2xl font-black text-xl shadow-2xl hover:scale-105 active:scale-95 transition-all w-full max-w-sm mt-auto"
+              transition={{ delay: 0.7 }}
+              className="flex flex-col gap-3 w-full max-w-sm mt-auto"
             >
-              ¡Sigue Explorando! →
-            </motion.button>
+              <button
+                onClick={handleSocialShare}
+                disabled={isSharing}
+                className="bg-[#25D366] hover:bg-[#128C7E] text-white px-10 py-4 rounded-2xl font-black text-lg shadow-xl hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-3 border-4 border-white/20"
+              >
+                <Share2 size={24} />
+                {isSharing ? 'Compartiendo...' : 'Compartir Match 🚀'}
+              </button>
+
+              <button
+                onClick={handleMatchContinue}
+                className="text-[#A80A0A] bg-white px-10 py-4 rounded-2xl font-black text-lg shadow-2xl hover:scale-105 active:scale-95 transition-all w-full"
+              >
+                ¡Sigue Explorando! →
+              </button>
+            </motion.div>
 </div>
           </motion.div>
         )}
@@ -290,11 +300,10 @@ function MatchDeck({ user, likedIds, userProfile, onMatch, onShowTeacher }) {
                   {matchingTeachers.map((p, i) => (
                     <div
                       key={p.id}
-                      title={`${p.name} - ${p.dept}`}
-                      className="w-8 h-8 rounded-full border-2 border-white flex items-center justify-center text-[10px] font-black text-white shadow-sm"
+                      className="w-8 h-8 rounded-full border-2 border-white flex items-center justify-center text-lg shadow-sm"
                       style={{ background: '#A80A0A' }}
                     >
-                      {p.emoji || p.name.charAt(0)}
+                      {p.emoji || '👨‍🏫'}
                     </div>
                   ))}
                 </div>

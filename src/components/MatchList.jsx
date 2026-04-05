@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Bookmark, Heart, Star, BookOpen, X, Copy, Check } from 'lucide-react';
+import { Bookmark, Heart, Star, BookOpen, X, Copy, Check, Share2 } from 'lucide-react';
 
-function MatchList({ matches, setView, onShowTeacher }) {
+function MatchList({ matches, setView, onShowTeacher, allTeachers }) {
   const [showLoanList, setShowLoanList] = useState(false);
   const [copied, setCopied] = useState(false);
 
@@ -12,6 +12,22 @@ function MatchList({ matches, setView, onShowTeacher }) {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     });
+  };
+
+  const handleShare = async (match, profs) => {
+    const teacherName = profs.length > 0 ? profs[0].name : 'un docente';
+    const text = `¡Tengo un match con "${match.title}" en BookMatch Umbral! 📚✨ Recomendado por ${teacherName}. #BookMatchUmbral`;
+    
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: 'Mi Match Literario', text: text, url: window.location.origin });
+      } else {
+        await navigator.clipboard.writeText(text);
+        alert('Texto copiado al portapapeles.');
+      }
+    } catch (err) {
+      console.warn(err);
+    }
   };
 
   return (
@@ -106,17 +122,37 @@ function MatchList({ matches, setView, onShowTeacher }) {
                 <div className="p-3 flex-1 flex flex-col">
                   <h3 className="font-black text-xs text-gray-900 line-clamp-2 leading-tight mb-1">{match.title}</h3>
                   <p className="text-[10px] font-bold uppercase tracking-tighter truncate" style={{ color: '#A80A0A' }}>{match.author}</p>
+                  
+                  {/* Dynamic matching teachers for this book */}
                   <div className="mt-auto pt-2 border-t border-gray-50 flex items-center justify-between">
                     <div className="flex -space-x-1.5 pointer-events-auto">
-                      {match.professors?.slice(0, 2).map((p, i) => (
-                        <button key={i} title={p.name} onClick={() => onShowTeacher(p)} className="w-6 h-6 rounded-full border-2 border-white flex items-center justify-center text-[8px] font-black text-white shadow-sm hover:scale-110 active:scale-90 transition-transform"
-                          style={{ background: '#A80A0A' }}>
-                          {p.name.replace('Profe ', '').replace('Miss ', '').replace('Tía ', '').charAt(0)}
-                        </button>
-                      ))}
+                      {allTeachers
+                        .filter(t => (t.likes || []).some(l => String(l.id) === String(match.id)))
+                        .slice(0, 3)
+                        .map((p, i) => (
+                          <button 
+                            key={p.id} 
+                            title={p.name} 
+                            onClick={(e) => { e.stopPropagation(); onShowTeacher(p); }} 
+                            className="w-6 h-6 rounded-full border-2 border-white flex items-center justify-center text-[10px] shadow-sm hover:scale-110 transition-transform"
+                            style={{ background: '#A10D12' }}
+                          >
+                            {p.emoji || '👨‍🏫'}
+                          </button>
+                        ))
+                      }
                     </div>
-                    <div className="bg-red-50 text-[#A80A0A] p-1 rounded-lg">
-                      <Heart size={12} fill="currentColor" />
+                    <div className="flex items-center gap-1">
+                      <button 
+                        onClick={(e) => { 
+                          e.stopPropagation(); 
+                          const matchedProfs = allTeachers.filter(t => (t.likes || []).some(l => String(l.id) === String(match.id)));
+                          handleShare(match, matchedProfs); 
+                        }}
+                        className="p-1.5 rounded-lg text-gray-400 hover:bg-gray-100 transition-colors"
+                      >
+                        <Share2 size={14} />
+                      </button>
                     </div>
                   </div>
                 </div>

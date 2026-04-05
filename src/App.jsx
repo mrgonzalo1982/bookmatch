@@ -34,6 +34,7 @@ function App() {
   const [userProfile, setUserProfile] = useState(null);
   const [selectedTeacher, setSelectedTeacher] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [allTeachers, setAllTeachers] = useState([]);
 
   // ── Restore session ──────────────────────────────────────────────────────────
   useEffect(() => {
@@ -81,6 +82,37 @@ function App() {
       }
     };
     hydrate();
+  }, []);
+
+  // ── Load Global Teachers ──────────────────────────────────────────────────
+  useEffect(() => {
+    const loadTeachers = async () => {
+      try {
+        const snap = await getDocs(collection(db, 'users'));
+        const list = [];
+        snap.forEach(docSnap => {
+          const data = docSnap.data();
+          if (data.role === 'teacher' && data.profile) {
+            list.push({
+              id: docSnap.id,
+              rut: docSnap.id,
+              name: data.profile.name,
+              dept: data.profile.dept || 'Docente',
+              emoji: data.profile.emoji || '👨‍🏫',
+              bio: data.profile.bio || '',
+              email: data.profile.email || '',
+              likes: data.likes || [],
+              nivelMin: 5,
+              nivelMax: 12
+            });
+          }
+        });
+        setAllTeachers(list);
+      } catch (e) {
+        console.error("Error loading global teachers:", e);
+      }
+    };
+    loadTeachers();
   }, []);
 
   // ── Login ────────────────────────────────────────────────────────────────────
@@ -254,11 +286,20 @@ function App() {
             userProfile={userProfile}
             onMatch={handleMatch}
             onShowTeacher={setSelectedTeacher}
+            allTeachers={allTeachers}
           />
         );
 
       case 'matches':
-        return <MatchList key="matches" matches={likedItems} setView={setView} onShowTeacher={setSelectedTeacher} />;
+        return (
+          <MatchList
+            key="matches"
+            matches={likedItems}
+            setView={setView}
+            onShowTeacher={setSelectedTeacher}
+            allTeachers={allTeachers}
+          />
+        );
 
       case 'community':
         return (
@@ -269,6 +310,7 @@ function App() {
             userProfile={userProfile}
             allStudents={STUDENTS}
             onShowTeacher={setSelectedTeacher}
+            allTeachers={allTeachers}
           />
         );
       

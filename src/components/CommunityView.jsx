@@ -92,48 +92,29 @@ export function TeacherModal({ teacher, onClose }) {
 }
 
 // ── Main CommunityView ────────────────────────────────────────────────────────
-function CommunityView({ user, likedIds, userProfile, allStudents, onShowTeacher }) {
+function CommunityView({ user, likedIds, userProfile, allStudents, onShowTeacher, allTeachers }) {
   const [teachers, setTeachers]   = useState([]);
   const [firestoreDb, setFirestoreDb] = useState({}); // { rut: { likes, profile } }
   const [isLoading, setIsLoading] = useState(true);
 
-  // Load real teachers from Firestore and peer data
   useEffect(() => {
     const load = async () => {
       setIsLoading(true);
       try {
         const snap = await getDocs(collection(db, 'users'));
-        const teacherList = [];
         const dbMap = {};
 
         snap.forEach(docSnap => {
           const data = docSnap.data();
           const rut = docSnap.id;
 
-          if (data.role === 'teacher') {
-            // Only show teachers with at least a name
-            if (data.profile?.name) {
-              teacherList.push({
-                id: rut,
-                rut,
-                name: data.profile.name,
-                dept: data.profile.dept || 'Docente',
-                emoji: data.profile.emoji || '📚',
-                bio: data.profile.bio || '',
-                email: data.profile.email || '',
-                likes: data.likes || [],
-                nivelMin: 5,
-                nivelMax: 12,
-              });
-            }
-          } else if (data.role === 'student' || !data.role) {
+          if (data.role === 'student' || !data.role) {
             if (data.profile && data.likes) {
               dbMap[rut] = { profile: data.profile, likes: data.likes };
             }
           }
         });
 
-        setTeachers(teacherList);
         setFirestoreDb(dbMap);
       } catch (e) {
         console.error('CommunityView load error:', e);
@@ -144,8 +125,8 @@ function CommunityView({ user, likedIds, userProfile, allStudents, onShowTeacher
     load();
   }, []);
 
-  // My teachers (no nivel filter — all teachers are shown for now)
-  const myTeachers = teachers;
+  // My teachers (all teachers from props)
+  const myTeachers = allTeachers;
 
   // Compute compatible peers from Firestore data
   const peers = useMemo(() => {
