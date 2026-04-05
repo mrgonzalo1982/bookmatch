@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Bookmark, Heart, Star, BookOpen, X, Copy, Check, Share2 } from 'lucide-react';
+import { Bookmark, Heart, Star, BookOpen, X, Copy, Check, Share2, Loader2 } from 'lucide-react';
+import html2canvas from 'html2canvas';
+import { MatchStoryCard } from './MatchStoryCard';
 
-function MatchList({ matches, setView, onShowTeacher, allTeachers }) {
+function MatchList({ user, matches, setView, onShowTeacher, allTeachers }) {
   const [showLoanList, setShowLoanList] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(null); // ID of book being generated
+  const cardRef = React.useRef(null);
 
   const handleCopyLoan = () => {
     const list = matches.map((m, i) => `${i + 1}. ${m.title} — ${m.author}`).join('\n');
@@ -15,18 +19,44 @@ function MatchList({ matches, setView, onShowTeacher, allTeachers }) {
   };
 
   const handleShare = async (match, profs) => {
+    if (isGenerating) return;
+    setIsGenerating(match.id);
+    
     const teacherName = profs.length > 0 ? profs[0].name : 'un docente';
     const text = `¡Tengo un match con "${match.title}" en BookMatch Umbral! 📚✨ Recomendado por ${teacherName}. #BookMatchUmbral`;
     
     try {
-      if (navigator.share) {
-        await navigator.share({ title: 'Mi Match Literario', text: text, url: window.location.origin });
+      // Wait for React to render the hidden card (it will be rendered because isGenerating === match.id)
+      await new Promise(resolve => setTimeout(resolve, 100));
+
+      const canvas = await html2canvas(cardRef.current, {
+        useCORS: true, 
+        scale: 2,
+        backgroundColor: '#A80A0A'
+      });
+      
+      const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png', 0.9));
+      const file = new File([blob], `match-${match.id}.png`, { type: 'image/png' });
+
+      if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({
+          files: [file],
+          title: 'Mí Match Literario',
+          text: text
+        });
       } else {
-        await navigator.clipboard.writeText(text);
-        alert('Texto copiado al portapapeles.');
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `match-${match.id}.png`;
+        link.click();
+        alert('¡Story Card generada! Ya puedes subirla a tus historias.');
       }
     } catch (err) {
       console.warn(err);
+      alert('Error al generar la imagen.');
+    } finally {
+      setIsGenerating(null);
     }
   };
 
@@ -149,9 +179,10 @@ function MatchList({ matches, setView, onShowTeacher, allTeachers }) {
                           const matchedProfs = allTeachers.filter(t => (t.likes || []).some(l => String(l.id) === String(match.id)));
                           handleShare(match, matchedProfs); 
                         }}
-                        className="p-1.5 rounded-lg text-gray-400 hover:bg-gray-100 transition-colors"
+                        disabled={isGenerating === match.id}
+                        className="p-1.5 rounded-lg text-gray-400 hover:bg-gray-100 transition-colors flex items-center justify-center min-w-[32px]"
                       >
-                        <Share2 size={14} />
+                        {isGenerating === match.id ? <Loader2 size={12} className="animate-spin" /> : <Share2 size={14} />}
                       </button>
                     </div>
                   </div>
@@ -159,6 +190,18 @@ function MatchList({ matches, setView, onShowTeacher, allTeachers }) {
               </motion.div>
             ))}
           </div>
+
+          {/* Hidden Card rendering only during generation */}
+          {isGenerating && (
+            <div className="absolute opacity-0 pointer-events-none" style={{ left: '-5000px' }}>
+              <MatchStoryCard 
+                book={matches.find(m => m.id === isGenerating)} 
+                teacher={allTeachers.find(t => (t.likes || []).some(l => String(l.id) === String(isGenerating)))} 
+                user={user} 
+                innerRef={cardRef} 
+              />
+            </div>
+          )}
         </div>
       )}
 

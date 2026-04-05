@@ -1,9 +1,11 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence, useMotionValue, useTransform } from 'framer-motion';
 import { ITEMS } from '../data/mockData';
-import { Heart, X, Bookmark, ChevronRight, BookOpen, Users, Loader2, Share2 } from 'lucide-react';
+import { Heart, X, Bookmark, ChevronRight, BookOpen, Users, Loader2, Share2, Download } from 'lucide-react';
 import { db } from '../lib/firebase';
 import { collection, doc, updateDoc, arrayUnion } from 'firebase/firestore';
+import html2canvas from 'html2canvas';
+import { MatchStoryCard } from './MatchStoryCard';
 
 function MatchDeck({ user, likedIds, userProfile, onMatch, onShowTeacher, allTeachers }) {
   const [discardedIds, setDiscardedIds] = useState([]);
@@ -15,6 +17,7 @@ function MatchDeck({ user, likedIds, userProfile, onMatch, onShowTeacher, allTea
   const likeOpacity = useTransform(x, [30, 120], [0, 1]);
   const nopeOpacity = useTransform(x, [-30, -120], [0, 1]);
   
+  const cardRef = React.useRef(null);
   const [isSharing, setIsSharing] = useState(false);
 
   // Filter by level, exclude liked + discarded, sort by genre affinity
@@ -49,22 +52,41 @@ function MatchDeck({ user, likedIds, userProfile, onMatch, onShowTeacher, allTea
     setIsSharing(true);
 
     const firstTeacher = matchingTeachers[0];
-    const text = `¡Acabo de hacer match con el libro "${item.title}" en BookMatch Umbral! 📚✨ Coincidí con ${firstTeacher.name}. #BookMatch #ColegioUmbral`;
+    const text = `¡Tengo un match con "${item.title}" en BookMatch Umbral! 📚✨ Recomendado por ${firstTeacher.name}. #BookMatchUmbral`;
     
     try {
-      if (navigator.share) {
+      // 1. Generate image from hidden card
+      const canvas = await html2canvas(cardRef.current, {
+        useCORS: true, 
+        scale: 2, // Better resolution (2160x3840 ideally, but 2x is enough for 1080px base)
+        logging: false,
+        backgroundColor: '#A80A0A'
+      });
+      
+      const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png', 0.9));
+      const file = new File([blob], `match-${item.id}.png`, { type: 'image/png' });
+
+      // 2. Share via Native API if possible
+      if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
         await navigator.share({
+          files: [file],
           title: '¡BookMatch Perfecto!',
-          text: text,
-          url: window.location.origin
+          text: text
         });
       } else {
-        // Fallback: Copy to clipboard
+        // Fallback: Download and copy text
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `match-${item.id}.png`;
+        link.click();
+        
         await navigator.clipboard.writeText(text);
-        alert('¡Copiado al portapapeles! Ya puedes pegarlo en tus redes.');
+        alert('¡Imagen descargada! Ya puedes subirla a tus historias. El texto para el pie de foto ha sido copiado al portapapeles.');
       }
     } catch (err) {
       console.warn('Share error:', err);
+      alert('Hubo un problema al generar la imagen. Inténtalo de nuevo.');
     } finally {
       setIsSharing(false);
     }
@@ -211,18 +233,32 @@ function MatchDeck({ user, likedIds, userProfile, onMatch, onShowTeacher, allTea
               transition={{ delay: 0.7 }}
               className="flex flex-col gap-3 w-full max-w-sm mt-auto"
             >
+              {/* Hidden Card for capture */}
+              <div className="absolute opacity-0 pointer-events-none" style={{ left: '-5000px' }}>
+                <MatchStoryCard 
+                  book={item} 
+                  teacher={matchingTeachers[0]} 
+                  user={user} 
+                  innerRef={cardRef} 
+                />
+              </div>
+
               <button
                 onClick={handleSocialShare}
                 disabled={isSharing}
-                className="bg-[#25D366] hover:bg-[#128C7E] text-white px-10 py-4 rounded-2xl font-black text-lg shadow-xl hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-3 border-4 border-white/20"
+                className="bg-[#25D366] hover:bg-[#128C7E] text-white px-10 py-4 rounded-2xl font-black text-lg shadow-xl hover:scale-105 active:scale-95 transition-all flex flex-col items-center justify-center gap-1 border-4 border-white/20"
               >
-                <Share2 size={24} />
-                {isSharing ? 'Compartiendo...' : 'Compartir Match 🚀'}
+                <div className="flex items-center gap-3">
+                  {isSharing ? <Loader2 size={24} className="animate-spin" /> : <Share2 size={24} />}
+                  <span className="text-xl">COMPARTIR HISTORIA</span>
+                </div>
+                <span className="text-[10px] font-bold opacity-80 uppercase tracking-widest leading-none mt-1">Generado para Instagram/TikTok</span>
               </button>
 
               <button
                 onClick={handleMatchContinue}
-                className="text-[#A80A0A] bg-white px-10 py-4 rounded-2xl font-black text-lg shadow-2xl hover:scale-105 active:scale-95 transition-all w-full"
+                disabled={isSharing}
+                className="text-[#A80A0A] bg-white px-10 py-4 rounded-2xl font-black text-lg shadow-2xl hover:scale-105 active:scale-95 transition-all w-full flex items-center justify-center"
               >
                 ¡Sigue Explorando! →
               </button>

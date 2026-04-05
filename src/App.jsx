@@ -294,6 +294,7 @@ function App() {
         return (
           <MatchList
             key="matches"
+            user={user}
             matches={likedItems}
             setView={setView}
             onShowTeacher={setSelectedTeacher}
