@@ -6,6 +6,7 @@ import MatchDeck from './components/MatchDeck';
 import MatchList from './components/MatchList';
 import CommunityView from './components/CommunityView';
 import AdminView from './components/AdminView';
+import TeacherView from './components/TeacherView';
 import { BookOpen, Heart, Users, User, LogOut, GraduationCap, Star, Loader2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { db } from './lib/firebase';
@@ -273,6 +274,17 @@ function App() {
       case 'admin':
         return <AdminView key="admin" onBack={() => setView('profile')} />;
 
+      case 'teacher-panel':
+        return (
+          <TeacherView
+            key="teacher-panel"
+            user={user}
+            userProfile={userProfile}
+            likedItems={likedItems}
+            onBack={() => setView('profile')}
+          />
+        );
+
       case 'profile':
         return (
           <div key="profile" className="flex-1 overflow-y-auto" style={{ scrollbarWidth: 'none' }}>
@@ -292,9 +304,14 @@ function App() {
                 </h2>
                 <p className="font-bold text-xs uppercase tracking-widest mt-1" style={{ color: GOLD }}>{user.curso}</p>
                 <p className="text-white/40 font-mono text-xs mt-1">{user.rut}</p>
-                {(user.role === 'admin' || user.role === 'teacher') && (
+                {user.role === 'admin' && (
                   <button onClick={() => setView('admin')} className="mt-4 bg-[#A80A0A] hover:bg-[#8B0707] text-white px-5 py-2 rounded-full text-[11px] font-black uppercase tracking-widest transition-all shadow-lg border-2 border-white/20">
-                    Panel Docente ⚙️
+                    Panel Admin ⚙️
+                  </button>
+                )}
+                {user.role === 'teacher' && (
+                  <button onClick={() => setView('teacher-panel')} className="mt-4 bg-[#A80A0A] hover:bg-[#8B0707] text-white px-5 py-2 rounded-full text-[11px] font-black uppercase tracking-widest transition-all shadow-lg border-2 border-white/20">
+                    Panel Docente 📊
                   </button>
                 )}
                 <button onClick={() => setView('onboarding')} className="mt-3 bg-white/20 hover:bg-white/30 text-white px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all border border-white/30">
