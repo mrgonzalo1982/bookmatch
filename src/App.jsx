@@ -127,7 +127,9 @@ function App() {
         localStorage.setItem('bm-user', JSON.stringify(teacherUser));
         localStorage.setItem('bm-active-rut', cleanRut);
         setUserProfile(userData.profile);
-        setView(userData.profile?.genres?.length > 0 ? 'admin' : 'onboarding');
+        // Teachers land on deck (books) just like students.
+        // Admin panel is accessible via the Profile tab → "Panel Docente" button.
+        setView(userData.profile?.genres?.length > 0 ? 'deck' : 'onboarding');
         return true;
       }
       
@@ -189,7 +191,9 @@ function App() {
     await setDoc(docRef, { profile, likes: snap.exists() ? (snap.data().likes || []) : [], role }, { merge: true });
     
     setUserProfile(profile);
-    setView(role === 'teacher' || role === 'admin' ? 'admin' : 'deck');
+    // All users (including teachers) go to 'deck' after onboarding.
+    // Teachers can access the admin panel via the button in their Profile tab.
+    setView('deck');
   };
 
   // ── Match ────────────────────────────────────────────────────────────────────
