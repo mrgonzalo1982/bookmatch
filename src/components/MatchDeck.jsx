@@ -1,7 +1,9 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence, useMotionValue, useTransform } from 'framer-motion';
 import { ITEMS } from '../data/mockData';
-import { Heart, X, Bookmark, ChevronRight, BookOpen, Users } from 'lucide-react';
+import { Heart, X, Bookmark, ChevronRight, BookOpen, Users, Loader2 } from 'lucide-react';
+import { db } from '../lib/firebase';
+import { collection, getDocs } from 'firebase/firestore';
 
 function MatchDeck({ user, likedIds, userProfile, onMatch, onShowTeacher }) {
   const [discardedIds, setDiscardedIds] = useState([]);
@@ -12,6 +14,37 @@ function MatchDeck({ user, likedIds, userProfile, onMatch, onShowTeacher }) {
   const rotate = useTransform(x, [-200, 200], [-20, 20]);
   const likeOpacity = useTransform(x, [30, 120], [0, 1]);
   const nopeOpacity = useTransform(x, [-30, -120], [0, 1]);
+  
+  const [teachers, setTeachers] = useState([]);
+  const [loadingTeachers, setLoadingTeachers] = useState(true);
+
+  // Load active teachers from Firestore
+  useEffect(() => {
+    const loadTeachers = async () => {
+      try {
+        const snap = await getDocs(collection(db, 'users'));
+        const list = [];
+        snap.forEach(docSnap => {
+          const data = docSnap.data();
+          if (data.role === 'teacher' && data.profile) {
+            list.push({
+              id: docSnap.id,
+              name: data.profile.name,
+              dept: data.profile.dept,
+              emoji: data.profile.emoji || '👨‍🏫',
+              likes: data.likes || []
+            });
+          }
+        });
+        setTeachers(list);
+      } catch (e) {
+        console.error("Error loading teachers for deck:", e);
+      } finally {
+        setLoadingTeachers(false);
+      }
+    };
+    loadTeachers();
+  }, []);
 
   // Filter by level, exclude liked + discarded, sort by genre affinity
   const deck = useMemo(() => {
@@ -34,11 +67,17 @@ function MatchDeck({ user, likedIds, userProfile, onMatch, onShowTeacher }) {
   // The current card is always deck[0]
   const item = deck[0] ?? null;
 
+  // Real-time matching: which teachers liked THIS specific book?
+  const matchingTeachers = useMemo(() => {
+    if (!item || loadingTeachers) return [];
+    return teachers.filter(t => t.likes.some(l => l.id === item.id));
+  }, [item, teachers, loadingTeachers]);
+
   const handleSwipe = (direction) => {
     if (!item) return;
     setSwipeAction(direction);
     if (direction === 'right') {
-      if (item.professors && item.professors.length > 0) {
+      if (matchingTeachers.length > 0) {
         setShowMatchModal(true);
       } else {
         handleMatchContinue(); // Direct like if no professor matches yet
@@ -144,9 +183,9 @@ function MatchDeck({ user, likedIds, userProfile, onMatch, onShowTeacher }) {
               transition={{ delay: 0.5 }}
               className="space-y-3 w-full max-w-sm mb-8"
             >
-              {item.professors?.map((prof, i) => (
+              {matchingTeachers.map((prof, i) => (
                 <button
-                  key={i}
+                  key={prof.id}
                   onClick={() => onShowTeacher(prof)}
                   className="w-full bg-white/10 p-4 rounded-2xl flex items-center gap-4 border border-white/20 hover:bg-white/20 transition-all group"
                 >
@@ -154,7 +193,7 @@ function MatchDeck({ user, likedIds, userProfile, onMatch, onShowTeacher }) {
                     className="w-14 h-14 rounded-xl flex items-center justify-center font-black text-xl border-2 border-white/30 shadow-lg group-hover:rotate-6 transition-transform shrink-0"
                     style={{ background: 'linear-gradient(135deg, #FFD700, #E0B300)', color: '#A80A0A' }}
                   >
-                    {prof.name.replace('Profe ', '').replace('Miss ', '').replace('Tía ', '').charAt(0)}
+                    {prof.emoji || prof.name.charAt(0)}
                   </div>
                   <div className="text-left flex-1">
                     <p className="font-black text-lg leading-tight">{prof.name}</p>
@@ -248,19 +287,22 @@ function MatchDeck({ user, likedIds, userProfile, onMatch, onShowTeacher }) {
               {/* Professor hint */}
               <div className="flex items-center gap-2 mt-auto pt-3 border-t border-gray-50">
                 <div className="flex -space-x-2">
-                  {item.professors?.map((p, i) => (
+                  {matchingTeachers.map((p, i) => (
                     <div
-                      key={i}
+                      key={p.id}
                       title={`${p.name} - ${p.dept}`}
                       className="w-8 h-8 rounded-full border-2 border-white flex items-center justify-center text-[10px] font-black text-white shadow-sm"
                       style={{ background: '#A80A0A' }}
                     >
-                      {p.name.replace('Profe ', '').replace('Miss ', '').replace('Tía ', '').charAt(0)}
+                      {p.emoji || p.name.charAt(0)}
                     </div>
                   ))}
                 </div>
                 <p className="text-xs text-gray-400 font-medium">
-                  {item.professors?.length} profe{item.professors?.length !== 1 ? 's' : ''} lo recomiendan
+                  {matchingTeachers.length === 0 
+                    ? 'Sé el primero en recomendarlo' 
+                    : `${matchingTeachers.length} profe${matchingTeachers.length !== 1 ? 's' : ''} lo recomienda${matchingTeachers.length !== 1 ? 'n' : ''}`
+                  }
                 </p>
               </div>
             </div>
