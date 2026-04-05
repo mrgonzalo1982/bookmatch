@@ -195,7 +195,7 @@ function MatchDeck({ user, likedIds, userProfile, onMatch, onShowTeacher }) {
         <AnimatePresence>
           <motion.div
             key={item.id}
-            style={{ x, rotate }}
+            style={{ x, rotate, touchAction: 'pan-y' }}
             drag="x"
             dragConstraints={{ left: 0, right: 0 }}
             dragElastic={0.9}

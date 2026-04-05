@@ -1,10 +1,12 @@
 import React, { useState, useMemo } from 'react';
-import { STUDENTS } from '../data/mockData';
-import { Search, Trash2, RotateCcw, Users, BookOpen, ChevronLeft, ShieldCheck } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { STUDENTS, ITEMS, GENRES } from '../data/mockData';
+import { Search, Trash2, RotateCcw, Users, BookOpen, ChevronLeft, ShieldCheck, Plus, X } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 function AdminView({ onBack }) {
   const [search, setSearch] = useState('');
+  const [showAddBook, setShowAddBook] = useState(false);
+  const [newBook, setNewBook] = useState({ title: '', author: '', description: '', genre: '', minNivel: 5, maxNivel: 12 });
   
   // In a real app, this would come from a backend.
   // Here we'll simulate "Active Profiles" by checking if entries exist in localStorage
@@ -19,10 +21,37 @@ function AdminView({ onBack }) {
 
   const handleResetProfile = (rut) => {
     if (window.confirm(`¿Estás seguro de resetear el perfil de RUT ${rut}? Se borrarán sus gustos y libros favoritos.`)) {
-      // In this local-only version, we can only really clear the CURRENT user if it matches
-      // But for the sake of the demo, we'll simulate success.
       alert(`Perfil ${rut} reseteado con éxito.`);
     }
+  };
+
+  const handleSaveBook = (e) => {
+    e.preventDefault();
+    const bookToSave = {
+      id: 'custom-' + Date.now(),
+      type: 'libro',
+      title: newBook.title,
+      author: newBook.author,
+      description: newBook.description,
+      genre: newBook.genre || GENRES[0],
+      minNivel: Number(newBook.minNivel),
+      maxNivel: Number(newBook.maxNivel),
+      studentsMatched: 0,
+      image: 'https://images.unsplash.com/photo-1532012197267-da84d127e765?auto=format&fit=crop&q=80&w=400',
+      professors: [{ name: 'Docente Válido', dept: 'Colegio' }]
+    };
+
+    // Save to local storage for persistence
+    const extraBooks = JSON.parse(localStorage.getItem('bm-extra-books') || '[]');
+    extraBooks.push(bookToSave);
+    localStorage.setItem('bm-extra-books', JSON.stringify(extraBooks));
+    
+    // Live update memory
+    ITEMS.push(bookToSave);
+    
+    setShowAddBook(false);
+    setNewBook({ title: '', author: '', description: '', genre: '', minNivel: 5, maxNivel: 12 });
+    alert('¡Libro añadido al catálogo institucional exitosamente!');
   };
 
   return (
@@ -62,15 +91,23 @@ function AdminView({ onBack }) {
 
       {/* Content */}
       <div className="flex-1 flex flex-col p-6 overflow-hidden bg-[#F7F7F9]">
-        <div className="relative mb-6 shrink-0 group">
-          <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#A80A0A] transition-colors" />
-          <input
-            type="text"
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-            placeholder="Buscar por nombre o RUT..."
-            className="w-full pl-12 pr-4 py-4 bg-white border-2 border-gray-100 focus:border-[#A80A0A] rounded-[22px] outline-none text-sm font-bold shadow-sm transition-all text-gray-800"
-          />
+        <div className="flex gap-2 mb-6 shrink-0">
+          <div className="relative flex-1 group">
+            <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#A80A0A] transition-colors" />
+            <input
+              type="text"
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              placeholder="Buscar por nombre o RUT..."
+              className="w-full pl-12 pr-4 py-4 bg-white border-2 border-gray-100 focus:border-[#A80A0A] rounded-[22px] outline-none text-sm font-bold shadow-sm transition-all text-gray-800"
+            />
+          </div>
+          <button 
+            onClick={() => setShowAddBook(true)}
+            className="w-14 h-14 bg-[#A80A0A] text-white flex justify-center items-center rounded-[22px] shadow-lg flex-shrink-0 hover:bg-[#8B0707] transition-all"
+            title="Añadir Libro">
+            <Plus size={24} />
+          </button>
         </div>
 
         <div className="flex-1 overflow-y-auto custom-scrollbar space-y-3 pb-10">
@@ -134,6 +171,50 @@ function AdminView({ onBack }) {
           </p>
         </div>
       </div>
+
+      {/* Add Book Modal */}
+      <AnimatePresence>
+        {showAddBook && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-50 flex flex-col justify-end bg-black/60 p-4">
+            <motion.div initial={{ y: 300, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 300, opacity: 0 }} className="bg-white p-6 rounded-3xl shadow-2xl relative">
+              <button onClick={() => setShowAddBook(false)} className="absolute top-4 right-4 text-gray-400 hover:text-red-500 bg-gray-100 p-2 rounded-full">
+                <X size={18} />
+              </button>
+              <h2 className="text-lg font-black tracking-tighter text-gray-900 flex items-center gap-2 mb-4">
+                <BookOpen size={20} className="text-[#A80A0A]" /> Añadir Libro al Catálogo
+              </h2>
+              
+              <form onSubmit={handleSaveBook} className="space-y-3">
+                <input required type="text" placeholder="Título del libro" value={newBook.title} onChange={e => setNewBook({...newBook, title: e.target.value})} className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl font-bold text-sm outline-none focus:border-[#A80A0A]" />
+                <input required type="text" placeholder="Autor" value={newBook.author} onChange={e => setNewBook({...newBook, author: e.target.value})} className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl font-bold text-sm outline-none focus:border-[#A80A0A]" />
+                <textarea required placeholder="Resumen o sinopsis breve" value={newBook.description} onChange={e => setNewBook({...newBook, description: e.target.value})} className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl text-xs font-medium outline-none focus:border-[#A80A0A]" rows={3} />
+                
+                <select required value={newBook.genre} onChange={e => setNewBook({...newBook, genre: e.target.value})} className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl font-bold text-sm outline-none focus:border-[#A80A0A]">
+                  <option value="" disabled>Seleccionar Género</option>
+                  {GENRES.map(g => <option key={g} value={g}>{g}</option>)}
+                </select>
+                
+                <div className="flex gap-3">
+                  <div className="flex-1">
+                    <span className="text-[10px] uppercase font-bold text-gray-400 ml-2">Nivel Mínimo</span>
+                    <input type="number" min={5} max={12} value={newBook.minNivel} onChange={e => setNewBook({...newBook, minNivel: e.target.value})} className="w-full mt-1 p-3 bg-gray-50 border border-gray-200 rounded-xl font-bold text-sm outline-none focus:border-[#A80A0A]" />
+                  </div>
+                  <div className="flex-1">
+                    <span className="text-[10px] uppercase font-bold text-gray-400 ml-2">Nivel Máximo</span>
+                    <input type="number" min={5} max={12} value={newBook.maxNivel} onChange={e => setNewBook({...newBook, maxNivel: e.target.value})} className="w-full mt-1 p-3 bg-gray-50 border border-gray-200 rounded-xl font-bold text-sm outline-none focus:border-[#A80A0A]" />
+                  </div>
+                </div>
+
+                <div className="pt-2">
+                  <button type="submit" className="w-full bg-[#A80A0A] hover:bg-[#8B0707] text-white p-4 rounded-2xl font-black uppercase tracking-widest text-xs transition-all shadow-lg active:scale-95">
+                    Guardar Libro
+                  </button>
+                </div>
+              </form>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

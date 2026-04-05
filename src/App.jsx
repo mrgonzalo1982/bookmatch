@@ -46,8 +46,12 @@ function App() {
         
         if (userState) {
           if (userState.likes) setLikedItems(userState.likes);
-          if (userState.profile) setUserProfile(userState.profile);
-          setView(userState.role === 'teacher' || userState.role === 'admin' ? 'admin' : 'deck');
+          if (userState.profile && userState.profile.genres) {
+             setUserProfile(userState.profile);
+             setView(userState.role === 'admin' ? 'admin' : 'deck');
+          } else {
+             setView('onboarding');
+          }
         } else {
            // Not completed onboarding yet
            setView('onboarding');
@@ -85,12 +89,14 @@ function App() {
        localStorage.setItem('bm-user', JSON.stringify(teacherUser));
        localStorage.setItem('bm-active-rut', cleanRut);
        
-       if (!db[cleanRut]) {
+       if (!db[cleanRut] || !db[cleanRut].profile?.genres) {
          db[cleanRut] = { profile: { emoji: '📚', genres: [] }, likes: [], role: 'teacher' };
          localStorage.setItem('bm-users-db', JSON.stringify(db));
+         setView('onboarding');
+       } else {
+         setUserProfile(db[cleanRut].profile);
+         setView('deck'); // Teachers go to the deck initially, can enter admin from profile
        }
-       setUserProfile(db[cleanRut].profile);
-       setView('admin'); // Teachers go to the Admin/Dashboard view
        return true;
     }
 
@@ -214,11 +220,14 @@ function App() {
                 </h2>
                 <p className="font-bold text-xs uppercase tracking-widest mt-1" style={{ color: GOLD }}>{user.curso}</p>
                 <p className="text-white/40 font-mono text-xs mt-1">{user.rut}</p>
-                {user.role === 'admin' && (
-                  <button onClick={() => setView('admin')} className="mt-4 bg-white/20 hover:bg-white/30 text-white px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all">
-                    Panel Admin
+                {(user.role === 'admin' || user.role === 'teacher') && (
+                  <button onClick={() => setView('admin')} className="mt-4 bg-[#A80A0A] hover:bg-[#8B0707] text-white px-5 py-2 rounded-full text-[11px] font-black uppercase tracking-widest transition-all shadow-lg border-2 border-white/20">
+                    Panel Docente ⚙️
                   </button>
                 )}
+                <button onClick={() => setView('onboarding')} className="mt-3 bg-white/20 hover:bg-white/30 text-white px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all border border-white/30">
+                  Editar Perfil ✏️
+                </button>
               </div>
 
               {/* Stats inside hero */}

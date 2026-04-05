@@ -440,3 +440,15 @@ export const compatibilityScore = (myProfile, peerLikedIds, peerProfile) => {
     myFavBook.toLowerCase() === peerProfile.favoriteBook.toLowerCase()) ? 15 : 0;
   return Math.round(bookScore + genreScore + favBookScore);
 };
+
+// ─── Initialize Extra Books ──────────────────────────────────────────────────
+try {
+  if (typeof window !== 'undefined') {
+    const extraBooks = JSON.parse(localStorage.getItem('bm-extra-books') || '[]');
+    if (extraBooks.length > 0) {
+      ITEMS.push(...extraBooks);
+    }
+  }
+} catch (e) {
+  console.log('Could not load extra books', e);
+}
