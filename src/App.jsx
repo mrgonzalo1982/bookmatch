@@ -112,12 +112,15 @@ function App() {
        const docRef = doc(db, 'users', cleanRut);
        const snap = await getDoc(docRef);
        
-       if (!snap.exists() || !snap.data().profile?.genres) {
+       const profileData = snap.exists() ? snap.data().profile : null;
+       const genres = profileData?.genres || [];
+       
+       if (!snap.exists() || genres.length === 0) {
          await setDoc(docRef, { profile: { emoji: '📚', genres: [] }, likes: [], role: 'teacher' }, { merge: true });
          setView('onboarding');
        } else {
-         setUserProfile(snap.data().profile);
-         setView('deck');
+         setUserProfile(profileData);
+         setView('admin'); // Teachers jump to admin optimally.
        }
        return true;
     }
@@ -131,9 +134,12 @@ function App() {
       const docRef = doc(db, 'users', cleanRut);
       const snap = await getDoc(docRef);
       
-      if (snap.exists() && snap.data().profile) {
+      const profileData = snap.exists() ? snap.data().profile : null;
+      const genres = profileData?.genres || [];
+
+      if (snap.exists() && profileData && genres.length > 0) {
         const udata = snap.data();
-        setUserProfile(udata.profile);
+        setUserProfile(profileData);
         setLikedItems(udata.likes || []);
         setView('deck');
       } else {
@@ -183,6 +189,15 @@ function App() {
   };
 
   // ── Guard ────────────────────────────────────────────────────────────────────
+  if (view === 'loading') {
+     return (
+       <div className="min-h-screen flex items-center justify-center relative overflow-hidden" style={{ background: '#F7F7F9' }}>
+         <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1, ease: 'linear' }}>
+            <Loader2 size={40} className="text-[#A80A0A]" />
+         </motion.div>
+       </div>
+     );
+  }
   if (!user || view === 'login')   return <Login onLogin={handleLogin} />;
   if (view === 'onboarding')       return <Onboarding user={user} onFinish={handleFinishOnboarding} />;
 
