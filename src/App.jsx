@@ -101,7 +101,15 @@ function App() {
       return true;
     }
 
-    // Step 1: Check Firestore for existing user (Teachers or registered Students)
+    // ── Known Teacher RUTs (seed list) ─────────────────────────────────────
+    // These RUTs are always treated as teachers. New teachers can be added
+    // via the Admin panel → Profesores tab.
+    const SEED_TEACHERS = {
+      '150685478': { name: 'Profe Gonzalo', dept: 'Inglés' },
+      '186188225': { name: 'Miss Danixa',   dept: 'Lenguaje' },
+    };
+
+    // Step 1: Check Firestore for existing user
     const docRef = doc(db, 'users', cleanRut);
     const snap = await getDoc(docRef);
     
@@ -119,11 +127,11 @@ function App() {
         localStorage.setItem('bm-user', JSON.stringify(teacherUser));
         localStorage.setItem('bm-active-rut', cleanRut);
         setUserProfile(userData.profile);
-        setView('admin');
+        setView(userData.profile?.genres?.length > 0 ? 'admin' : 'onboarding');
         return true;
       }
       
-      // Registered Student
+      // Registered Student with existing profile
       const studentMatch = STUDENTS.find(s => clean(s.rut) === cleanRut);
       if (studentMatch) {
          setUser(studentMatch);
@@ -131,12 +139,30 @@ function App() {
          localStorage.setItem('bm-active-rut', cleanRut);
          setUserProfile(userData.profile);
          setLikedItems(userData.likes || []);
-         setView(userData.profile.genres?.length > 0 ? 'deck' : 'onboarding');
+         setView(userData.profile?.genres?.length > 0 ? 'deck' : 'onboarding');
          return true;
       }
     }
 
-    // Step 2: Check Mock Students (New students logging in for the first time)
+    // Step 2: Seed known teacher RUTs (no Firestore doc yet → create teacher seed)
+    if (SEED_TEACHERS[cleanRut]) {
+      const seed = SEED_TEACHERS[cleanRut];
+      const seedData = {
+        role: 'teacher',
+        profile: { name: seed.name, dept: seed.dept, emoji: '📚', genres: [] },
+        likes: []
+      };
+      await setDoc(docRef, seedData, { merge: true });
+      const teacherUser = { rut: cleanRut, nombre: seed.name, curso: 'Docente', role: 'teacher', avatar: '/umbral-shield.png' };
+      setUser(teacherUser);
+      localStorage.setItem('bm-user', JSON.stringify(teacherUser));
+      localStorage.setItem('bm-active-rut', cleanRut);
+      setUserProfile(seedData.profile);
+      setView('onboarding');
+      return true;
+    }
+
+    // Step 3: New student logging in for the first time
     const found = STUDENTS.find(s => clean(s.rut) === cleanRut);
     if (found) {
       setUser(found);
