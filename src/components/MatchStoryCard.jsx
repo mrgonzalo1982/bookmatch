@@ -1,10 +1,16 @@
 import React from 'react';
 
-const RED = '#A80A0A';
-const GOLD = '#FFD700';
+const RED = '#A10D12'; // Institutional Umbral Red
+const GOLD = '#D4AF37'; // Institutional Gold
+const DARK = '#0A0A0A';
 
 export function MatchStoryCard({ book, teacher, user, innerRef }) {
   if (!book || !teacher || !user) return null;
+
+  // Fix: Role Label logic - Mr. Gonzalo (or staff) should not be "Alumno"
+  const userRoleLabel = (user.role === 'admin' || user.role === 'teacher' || user.curso === 'Staff') 
+    ? (user.profile?.dept || 'Docente') 
+    : (user.curso || 'Alumno');
 
   return (
     <div 
@@ -12,127 +18,201 @@ export function MatchStoryCard({ book, teacher, user, innerRef }) {
       style={{
         width: '1080px',
         height: '1920px',
-        background: `radial-gradient(circle at center, #A80A0A 0%, #3a0000 60%, #050505 100%)`,
+        background: `linear-gradient(180deg, ${DARK} 0%, #2A0404 40%, #4A0808 50%, #2A0404 60%, ${DARK} 100%)`,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        padding: '120px 80px',
+        padding: '100px 60px',
         color: 'white',
-        fontFamily: 'Inter, system-ui, sans-serif',
+        fontFamily: "'Inter', system-ui, -apple-system, sans-serif",
         position: 'fixed',
-        left: '-3000px', // Hidden from view but in DOM for canvas capture
+        left: '-4000px', 
         top: 0,
-        zIndex: -1
+        zIndex: -1,
+        overflow: 'hidden'
       }}
     >
-      {/* Institutional Header */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '30px', marginBottom: '80px' }}>
-        <img src="/umbral-shield.png" alt="Logo" style={{ width: '120px', height: '120px' }} />
-        <div style={{ textAlign: 'left' }}>
-          <h1 style={{ fontSize: '64px', fontWeight: '900', margin: 0, tracking: '-0.05em' }}>BOOKMATCH</h1>
-          <p style={{ fontSize: '28px', fontWeight: '700', color: GOLD, margin: 0, textTransform: 'uppercase', letterSpacing: '4px' }}>
-            Colegio Umbral de Curauma
+      {/* Decorative background glow */}
+      <div style={{
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: '1200px',
+        height: '1200px',
+        background: 'radial-gradient(circle, rgba(161,13,18,0.15) 0%, transparent 70%)',
+        pointerEvents: 'none'
+      }} />
+
+      {/* Institutional Header - Modern layout */}
+      <div style={{ 
+        display: 'flex', 
+        flexDirection: 'column',
+        alignItems: 'center', 
+        gap: '20px', 
+        marginBottom: '100px',
+        width: '100%'
+      }}>
+        <img src="/umbral-shield.png" alt="Logo" style={{ width: '160px', height: '160px', filter: 'drop-shadow(0 10px 20px rgba(0,0,0,0.5))' }} />
+        <div style={{ textAlign: 'center' }}>
+          <h1 style={{ fontSize: '72px', fontWeight: '900', margin: 0, letterSpacing: '-0.04em', textShadow: '0 4px 10px rgba(0,0,0,0.3)' }}>BOOKMATCH</h1>
+          <p style={{ fontSize: '24px', fontWeight: '800', color: GOLD, margin: '5px 0 0 0', textTransform: 'uppercase', letterSpacing: '6px', opacity: 0.9 }}>
+            COLEGIO UMBRAL DE CURAUMA
           </p>
         </div>
       </div>
 
-      {/* Match Badge */}
+      {/* Modern Badge */}
       <div style={{
-        background: GOLD,
-        color: 'black',
-        padding: '20px 60px',
+        background: 'rgba(255, 255, 255, 0.08)',
+        border: `3px solid ${GOLD}`,
+        color: GOLD,
+        padding: '18px 50px',
         borderRadius: '100px',
-        fontSize: '48px',
+        fontSize: '42px',
         fontWeight: '900',
         textTransform: 'uppercase',
-        marginBottom: '60px',
-        boxShadow: '0 20px 40px rgba(0,0,0,0.4)',
-        border: '8px solid white'
+        marginBottom: '100px',
+        letterSpacing: '2px',
+        boxShadow: '0 20px 40px rgba(0,0,0,0.3)'
       }}>
         ¡COINCIDENCIA LECTORA!
       </div>
 
-      {/* Book Cover Container */}
+      {/* Book Cover Container - Professional aspect ratio (2:3) */}
       <div style={{
-        width: '800px',
-        height: '1100px',
+        width: '640px',
+        height: '960px',
         position: 'relative',
-        marginBottom: '80px',
-        perspective: '1000px'
+        marginBottom: '100px',
+        zIndex: 2
       }}>
+        {/* Subtle shadow glow behind book */}
+        <div style={{
+          position: 'absolute',
+          inset: '-20px',
+          background: 'rgba(0,0,0,0.4)',
+          filter: 'blur(40px)',
+          borderRadius: '40px',
+          zIndex: -1
+        }} />
+        
         <img 
           src={book.image} 
           alt={book.title} 
           style={{
             width: '100%',
             height: '100%',
-            objectCover: 'cover',
-            borderRadius: '40px',
-            boxShadow: '0 50px 100px rgba(0,0,0,0.6)',
-            border: '2px solid rgba(255,255,255,0.2)'
+            objectFit: 'cover',
+            borderRadius: '24px',
+            boxShadow: '0 60px 120px rgba(0,0,0,0.8)',
+            border: '2px solid rgba(255,255,255,0.1)'
           }} 
         />
-        {/* Genre Tag on image */}
+        
+        {/* Genre Tag - Minimalist */}
         <div style={{
           position: 'absolute',
-          top: '40px',
-          left: '40px',
+          bottom: '40px',
+          right: '-20px',
           background: RED,
-          padding: '15px 40px',
-          borderRadius: '20px',
-          fontSize: '32px',
+          padding: '12px 36px',
+          borderRadius: '12px',
+          fontSize: '28px',
           fontWeight: '900',
-          boxShadow: '0 10px 20px rgba(0,0,0,0.3)'
+          boxShadow: '0 15px 30px rgba(0,0,0,0.5)',
+          border: '2px solid rgba(255,255,255,0.2)'
         }}>
           {book.genre}
         </div>
       </div>
 
-      {/* Names and Match Details */}
-      <div style={{ textAlign: 'center', width: '100%' }}>
-        <h2 style={{ fontSize: '80px', fontWeight: '900', margin: '0 0 20px 0', lineHeight: '1.1' }}>
+      {/* Names and Match Details - Bold and Modern */}
+      <div style={{ textAlign: 'center', width: '100%', marginBottom: '100px', padding: '0 40px' }}>
+        <h2 style={{ fontSize: '84px', fontWeight: '900', margin: '0 0 10px 0', lineHeight: '1.05', letterSpacing: '-0.03em' }}>
           {book.title}
         </h2>
-        <p style={{ fontSize: '48px', color: '#B0C4DE', fontWeight: '700', margin: 0 }}>
+        <p style={{ fontSize: '42px', color: '#AAA', fontWeight: '600', margin: 0, opacity: 0.8 }}>
           {book.author}
         </p>
       </div>
 
-      {/* Avatars / Emojis Footer */}
+      {/* Match Section - Glassmorphism Card */}
       <div style={{
         marginTop: 'auto',
         display: 'flex',
         alignItems: 'center',
-        gap: '60px',
+        justifyContent: 'center',
+        gap: '80px',
         padding: '60px',
-        background: 'rgba(255,255,255,0.1)',
-        borderRadius: '60px',
-        border: '4px solid rgba(255,255,255,0.1)',
+        background: 'rgba(255, 255, 255, 0.05)',
+        borderRadius: '50px',
+        border: '3px solid rgba(255, 255, 255, 0.1)',
         width: '100%',
-        justifyContent: 'center'
+        boxShadow: '0 30px 60px rgba(0,0,0,0.4)',
+        position: 'relative',
+        overflow: 'hidden'
       }}>
-        {/* Student */}
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-          <div style={{ fontSize: '120px', marginBottom: '20px' }}>{user.profile?.emoji || '👤'}</div>
-          <p style={{ fontSize: '32px', fontWeight: '900', margin: 0 }}>{user.nombre?.split(' ')[0]}</p>
-          <p style={{ fontSize: '24px', color: GOLD }}>Alumno</p>
+        {/* Glass highlight */}
+        <div style={{
+          position: 'absolute',
+          top: 0, left: 0, right: 0, height: '40%',
+          background: 'linear-gradient(180deg, rgba(255,255,255,0.05) 0%, transparent 100%)',
+          pointerEvents: 'none'
+        }} />
+
+        {/* User */}
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative' }}>
+          <div style={{ fontSize: '130px', marginBottom: '15px', filter: 'drop-shadow(0 10px 20px rgba(0,0,0,0.3))' }}>
+            {user.profile?.emoji || '👤'}
+          </div>
+          <p style={{ fontSize: '32px', fontWeight: '900', margin: 0, textTransform: 'uppercase' }}>
+            {user.nombre?.split(' ')[0]}
+          </p>
+          <p style={{ fontSize: '24px', color: GOLD, fontWeight: '800', margin: 0, opacity: 0.9 }}>
+            {userRoleLabel}
+          </p>
         </div>
 
-        {/* Big Star */}
-        <div style={{ fontSize: '120px', color: GOLD, filter: 'drop-shadow(0 0 20px rgba(255,215,0,0.5))' }}>⭐</div>
+        {/* Big Star Match */}
+        <div style={{ 
+          fontSize: '140px', 
+          color: GOLD, 
+          filter: 'drop-shadow(0 0 40px rgba(212,175,55,0.6))',
+          animation: 'pulse 3s infinite ease-in-out'
+        }}>
+          ⭐
+        </div>
 
         {/* Teacher */}
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-          <div style={{ fontSize: '120px', marginBottom: '20px' }}>{teacher.emoji || '👨‍🏫'}</div>
-          <p style={{ fontSize: '32px', fontWeight: '900', margin: 0 }}>{teacher.name}</p>
-          <p style={{ fontSize: '24px', color: GOLD }}>{teacher.dept}</p>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative' }}>
+          <div style={{ fontSize: '130px', marginBottom: '15px', filter: 'drop-shadow(0 10px 20px rgba(0,0,0,0.3))' }}>
+            {teacher.emoji || '👨‍🏫'}
+          </div>
+          <p style={{ fontSize: '32px', fontWeight: '900', margin: 0, textTransform: 'uppercase' }}>
+            {teacher.name.replace('Profe ', '').replace('Miss ', '')}
+          </p>
+          <p style={{ fontSize: '24px', color: GOLD, fontWeight: '800', margin: 0, opacity: 0.9 }}>
+            {teacher.dept || 'Docente'}
+          </p>
         </div>
       </div>
 
       {/* Call to Action Footer */}
-      <p style={{ marginTop: '60px', fontSize: '32px', fontWeight: '700', opacity: 0.6 }}>
-        Encuentra tu match literario en: <span style={{ color: GOLD }}>bookmatch-bi.vercel.app</span>
-      </p>
+      <div style={{ 
+        marginTop: '60px', 
+        display: 'flex', 
+        flexDirection: 'column', 
+        alignItems: 'center', 
+        opacity: 0.7 
+      }}>
+        <p style={{ fontSize: '28px', fontWeight: '800', margin: 0 }}>
+          Descubre tu próxima lectura en
+        </p>
+        <p style={{ fontSize: '32px', fontWeight: '900', color: GOLD, margin: '4px 0 0 0' }}>
+          bookmatch-bi.vercel.app
+        </p>
+      </div>
     </div>
   );
 }
