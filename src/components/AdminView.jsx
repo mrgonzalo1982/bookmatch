@@ -176,12 +176,22 @@ function AdminView({ onBack }) {
   };
 
   const handlePurgeFirestore = async () => {
-    if (!window.confirm("¿Resetear toda la base de datos de libros?")) return;
+    if (!window.confirm("¿Limpiar datos falsos (profesores ficticios y contadores) de todos los libros en la nube?")) return;
     try {
       const catSnap = await getDocs(collection(db, 'catalog'));
-      await Promise.all(catSnap.docs.map(d => deleteDoc(doc(db, 'catalog', d.id))));
+      if (catSnap.empty) {
+        alert("El catálogo en la nube ya está vacío. No hay nada que limpiar.");
+        return;
+      }
+      await Promise.all(catSnap.docs.map(d => 
+        updateDoc(doc(db, 'catalog', d.id), { 
+          professors: [],
+          studentsMatched: deleteField()
+        })
+      ));
+      alert(`✅ ¡Listo! Se limpiaron ${catSnap.size} libros. Profesores falsos eliminados.`);
       fetchData();
-    } catch (e) { alert("Error al limpiar"); }
+    } catch (e) { alert("Error al limpiar: " + e.message); }
   };
 
   const filteredBooks = books.filter(b => 
