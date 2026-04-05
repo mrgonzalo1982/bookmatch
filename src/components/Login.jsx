@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Shield, AlertCircle } from 'lucide-react';
+import { Shield, AlertCircle, ChevronRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 function formatRut(raw) {
