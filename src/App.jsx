@@ -102,11 +102,10 @@ function App() {
     }
 
     // ── Known Teacher RUTs (seed list) ─────────────────────────────────────
-    // These RUTs are always treated as teachers. New teachers can be added
-    // via the Admin panel → Profesores tab.
+    // Only Gonzalo is pre-recognized. Other teachers must be added via Admin panel.
+    // Danixa will be added when she logs in for the first time through the Admin.
     const SEED_TEACHERS = {
       '150685478': { name: 'Profe Gonzalo', dept: 'Inglés' },
-      '186188225': { name: 'Miss Danixa',   dept: 'Lenguaje' },
     };
 
     // Step 1: Check Firestore for existing user
