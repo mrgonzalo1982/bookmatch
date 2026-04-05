@@ -12,7 +12,7 @@ export const ITEMS = [
     "genre": "Fantasía",
     "minNivel": 5,
     "maxNivel": 7,
-    "desc": "Una niña superdotada descubre que tiene poderes telequinéticos y los usa para enfrentar a sus crueles padres.",
+    "description": "Una niña superdotada descubre que tiene con poderes telequinéticos y los usa para enfrentar a sus crueles padres.",
     "image": "https://covers.openlibrary.org/b/id/12889769-L.jpg"
   },
   {
@@ -23,7 +23,7 @@ export const ITEMS = [
     "genre": "Fantasía",
     "minNivel": 5,
     "maxNivel": 7,
-    "desc": "Charlie Bucket gana un boleto dorado para visitar la fábrica más misteriosa del mundo.",
+    "description": "Charlie Bucket gana un boleto dorado para visitar la fábrica más misteriosa del mundo.",
     "image": "https://covers.openlibrary.org/b/id/12459564-L.jpg"
   },
   {
@@ -34,7 +34,7 @@ export const ITEMS = [
     "genre": "Fábula",
     "minNivel": 5,
     "maxNivel": 12,
-    "desc": "Un pequeño príncipe viaja de planeta en planeta descubriendo que lo esencial es invisible a los ojos.",
+    "description": "Un pequeño príncipe viaja de planeta en planeta descubriendo que lo esencial es invisible a los ojos.",
     "image": "https://covers.openlibrary.org/b/id/10708272-L.jpg"
   },
   {
@@ -45,7 +45,7 @@ export const ITEMS = [
     "genre": "Aventura",
     "minNivel": 5,
     "maxNivel": 7,
-    "desc": "Dorothy y su perro Totó son arrastrados por un tornado a la tierra mágica de Oz.",
+    "description": "Dorothy y su perro Totó son arrastrados por un tornado a la tierra mágica de Oz.",
     "image": "https://covers.openlibrary.org/b/id/552443-L.jpg"
   },
   {
@@ -56,7 +56,7 @@ export const ITEMS = [
     "genre": "Fantasía",
     "minNivel": 5,
     "maxNivel": 8,
-    "desc": "Cuatro hermanos descubren un mundo mágico a través de un armario ropero.",
+    "description": "Cuatro hermanos descubren un mundo mágico a través de un armario ropero.",
     "image": "https://covers.openlibrary.org/b/id/13963972-L.jpg"
   },
   {
@@ -67,7 +67,7 @@ export const ITEMS = [
     "genre": "Clásico",
     "minNivel": 5,
     "maxNivel": 8,
-    "desc": "Zezé, un niño travieso que descubre el dolor y se hace adulto prematuramente.",
+    "description": "Zezé, un niño travieso que descubre el dolor y se hace adulto prematuramente.",
     "image": "https://covers.openlibrary.org/b/id/1051713-L.jpg"
   },
   {
@@ -78,7 +78,7 @@ export const ITEMS = [
     "genre": "Aventura",
     "minNivel": 5,
     "maxNivel": 7,
-    "desc": "¡Mitad perro, mitad hombre, todo un héroe! Una novela gráfica divertidísima.",
+    "description": "¡Mitad perro, mitad hombre, todo un héroe! Una novela gráfica divertidísima.",
     "image": "https://placehold.co/400x600/A10D12/D4AF37.png?text=El%2BHombre%2BPerro"
   },
   {
@@ -89,7 +89,7 @@ export const ITEMS = [
     "genre": "Misterio",
     "minNivel": 5,
     "maxNivel": 8,
-    "desc": "El diario misterioso lleno de criaturas y secretos del pueblo de Gravity Falls.",
+    "description": "El diario misterioso lleno de criaturas y secretos del pueblo de Gravity Falls.",
     "image": "https://placehold.co/400x600/A10D12/D4AF37.png?text=Gravity%2BFalls%3A%2BDiario%2B3"
   },
   {
@@ -100,7 +100,7 @@ export const ITEMS = [
     "genre": "Fantasía",
     "minNivel": 6,
     "maxNivel": 10,
-    "desc": "Un niño huérfano descubre que es un mago y comienza su educación en Hogwarts.",
+    "description": "Un niño huérfano descubre que es un mago y comienza su educación en Hogwarts.",
     "image": "https://covers.openlibrary.org/b/id/15155833-L.jpg"
   },
   {
@@ -111,7 +111,7 @@ export const ITEMS = [
     "genre": "Aventura",
     "minNivel": 6,
     "maxNivel": 9,
-    "desc": "Un adolescente descubre que es hijo de Poseidón y debe recuperar el rayo de Zeus.",
+    "description": "Un adolescente descubre que es hijo de Poseidón y debe recuperar el rayo de Zeus.",
     "image": "https://covers.openlibrary.org/b/id/7239831-L.jpg"
   },
   {
@@ -122,7 +122,7 @@ export const ITEMS = [
     "genre": "Fantasía",
     "minNivel": 7,
     "maxNivel": 9,
-    "desc": "Una niña con el don de escuchar lucha contra los Hombres Grises que roban el tiempo.",
+    "description": "Una niña con el don de escuchar lucha contra los Hombres Grises que roban el tiempo.",
     "image": "https://covers.openlibrary.org/b/id/8574580-L.jpg"
   },
   {
@@ -133,7 +133,7 @@ export const ITEMS = [
     "genre": "Aventura",
     "minNivel": 7,
     "maxNivel": 9,
-    "desc": "Jim Hawkins encuentra un mapa del tesoro y zarpa en una aventura llena de peligros.",
+    "description": "Jim Hawkins encuentra un mapa del tesoro y zarpa en una aventura llena de peligros.",
     "image": "https://covers.openlibrary.org/b/id/13859660-L.jpg"
   },
   {
@@ -144,7 +144,7 @@ export const ITEMS = [
     "genre": "Fantasía",
     "minNivel": 7,
     "maxNivel": 12,
-    "desc": "Bilbo Bolsón es arrastrado a una aventura épica para recuperar un tesoro guardado por un dragón.",
+    "description": "Bilbo Bolsón es arrastrado a una aventura épica para recuperar un tesoro guardado por un dragón.",
     "image": "https://covers.openlibrary.org/b/id/8406766-L.jpg"
   },
   {
@@ -155,7 +155,7 @@ export const ITEMS = [
     "genre": "Clásico",
     "minNivel": 6,
     "maxNivel": 9,
-    "desc": "La amistad entre el hijo de un comandante nazi y un niño prisionero judío.",
+    "description": "La amistad entre el hijo de un comandante nazi y un niño prisionero judío.",
     "image": "https://covers.openlibrary.org/b/id/12720687-L.jpg"
   },
   {
@@ -166,7 +166,7 @@ export const ITEMS = [
     "genre": "Realismo",
     "minNivel": 5,
     "maxNivel": 9,
-    "desc": "La historia de August Pullman, un niño con una deformidad facial que asiste por primera vez a la escuela.",
+    "description": "La historia de August Pullman, un niño con una deformidad facial que asiste por primera vez a la escuela.",
     "image": "https://covers.openlibrary.org/b/id/8223160-L.jpg"
   },
   {
@@ -177,7 +177,7 @@ export const ITEMS = [
     "genre": "Realismo",
     "minNivel": 7,
     "maxNivel": 12,
-    "desc": "Una historia conmovedora sobre el acoso escolar y el poder de la empatía.",
+    "description": "Una historia conmovedora sobre el acoso escolar y el poder de la empatía.",
     "image": "https://covers.openlibrary.org/b/id/11171586-L.jpg"
   },
   {
@@ -188,7 +188,7 @@ export const ITEMS = [
     "genre": "Autobiografía",
     "minNivel": 8,
     "maxNivel": 12,
-    "desc": "El testimonio de esperanza de una niña judía durante el Holocausto.",
+    "description": "El testimonio de esperanza de una niña judía durante el Holocausto.",
     "image": "https://placehold.co/400x600/A10D12/D4AF37.png?text=El%2BDiario%2Bde%2BAna%2BFrank"
   },
   {
@@ -199,7 +199,7 @@ export const ITEMS = [
     "genre": "Aventura",
     "minNivel": 8,
     "maxNivel": 12,
-    "desc": "Un pastor viaja en busca de un tesoro y descubre el significado de su vida.",
+    "description": "Un pastor viaja en busca de un tesoro y descubre el significado de su vida.",
     "image": "https://covers.openlibrary.org/b/id/7414780-L.jpg"
   },
   {
@@ -210,7 +210,7 @@ export const ITEMS = [
     "genre": "Clásico",
     "minNivel": 8,
     "maxNivel": 12,
-    "desc": "La tragedia de amor más famosa entre dos familias rivales.",
+    "description": "La tragedia de amor más famosa entre dos familias rivales.",
     "image": "https://placehold.co/400x600/A10D12/D4AF37.png?text=Romeo%2By%2BJulieta"
   },
   {
@@ -221,7 +221,7 @@ export const ITEMS = [
     "genre": "Clásico",
     "minNivel": 9,
     "maxNivel": 12,
-    "desc": "Niños náufragos crean su propia sociedad, que degenera en violencia y caos.",
+    "description": "Niños náufragos crean su propia sociedad, que degenera en violencia y caos.",
     "image": "https://covers.openlibrary.org/b/id/8684447-L.jpg"
   },
   {
@@ -232,7 +232,7 @@ export const ITEMS = [
     "genre": "Realismo Mágico",
     "minNivel": 9,
     "maxNivel": 12,
-    "desc": "El relato de un crimen que todo el pueblo sabía que iba a ocurrir.",
+    "description": "El relato de un crimen que todo el pueblo sabía que iba a ocurrir.",
     "image": "https://placehold.co/400x600/A10D12/D4AF37.png?text=Cr%C3%B3nica%2Bde%2Buna%2BMuerte%2BAnunciada"
   },
   {
@@ -243,7 +243,7 @@ export const ITEMS = [
     "genre": "Clásico",
     "minNivel": 10,
     "maxNivel": 12,
-    "desc": "Gregor Samsa despierta convertido en un insecto gigante.",
+    "description": "Gregor Samsa despierta convertido en un insecto gigante.",
     "image": "https://covers.openlibrary.org/b/id/12820198-L.jpg"
   },
   {
@@ -254,7 +254,7 @@ export const ITEMS = [
     "genre": "Ciencia Ficción",
     "minNivel": 10,
     "maxNivel": 12,
-    "desc": "En un futuro distópico, el Gran Hermano lo vigila todo.",
+    "description": "En un futuro distópico, el Gran Hermano lo vigila todo.",
     "image": "https://covers.openlibrary.org/b/id/9267242-L.jpg"
   },
   {
@@ -265,7 +265,7 @@ export const ITEMS = [
     "genre": "Realismo Mágico",
     "minNivel": 10,
     "maxNivel": 12,
-    "desc": "La mítica historia de la familia Buendía en Macondo.",
+    "description": "La mítica historia de la familia Buendía en Macondo.",
     "image": "https://placehold.co/400x600/A10D12/D4AF37.png?text=Cien%2BA%C3%B1os%2Bde%2BSoledad"
   },
   {
@@ -276,7 +276,7 @@ export const ITEMS = [
     "genre": "Clásico",
     "minNivel": 10,
     "maxNivel": 12,
-    "desc": "Jay Gatsby organiza fiestas escandalosas para reconquistar a Daisy.",
+    "description": "Jay Gatsby organiza fiestas escandalosas para reconquistar a Daisy.",
     "image": "https://covers.openlibrary.org/b/id/10590366-L.jpg"
   },
   {
@@ -287,7 +287,7 @@ export const ITEMS = [
     "genre": "Clásico",
     "minNivel": 11,
     "maxNivel": 12,
-    "desc": "Un hidalgo se convierte en caballero andante por las tierras de España.",
+    "description": "Un hidalgo se convierte en caballero andante por las tierras de España.",
     "image": "https://covers.openlibrary.org/b/id/13172970-L.jpg"
   },
   {
@@ -298,7 +298,7 @@ export const ITEMS = [
     "genre": "Misterio",
     "minNivel": 10,
     "maxNivel": 12,
-    "desc": "Un pintor obsesivo relata el asesinato de la persona que comprendió su arte.",
+    "description": "Un pintor obsesivo relata el asesinato de la persona que comprendió su arte.",
     "image": "https://placehold.co/400x600/A10D12/D4AF37.png?text=El%2BT%C3%BAnel"
   },
   {
@@ -309,7 +309,7 @@ export const ITEMS = [
     "genre": "Ciencia Ficción",
     "minNivel": 10,
     "maxNivel": 12,
-    "desc": "Una sociedad futurista perfecta donde la libertad ha sido eliminada.",
+    "description": "Una sociedad futurista perfecta donde la libertad ha sido eliminada.",
     "image": "https://covers.openlibrary.org/b/id/8231823-L.jpg"
   },
   {
@@ -320,7 +320,7 @@ export const ITEMS = [
     "genre": "Ciencia Ficción",
     "minNivel": 9,
     "maxNivel": 12,
-    "desc": "Un bombero que quema libros comienza a cuestionar su realidad.",
+    "description": "Un bombero que quema libros comienza a cuestionar su realidad.",
     "image": "https://placehold.co/400x600/A10D12/D4AF37.png?text=Fahrenheit%2B451"
   },
   {
@@ -331,7 +331,7 @@ export const ITEMS = [
     "genre": "Misterio",
     "minNivel": 10,
     "maxNivel": 12,
-    "desc": "Un joven descubre un libro maldito en el Cementerio de los Libros Olvidados.",
+    "description": "Un joven descubre un libro maldito en el Cementerio de los Libros Olvidados.",
     "image": "https://covers.openlibrary.org/b/id/10107644-L.jpg"
   },
   {
@@ -342,7 +342,7 @@ export const ITEMS = [
     "genre": "Terror",
     "minNivel": 10,
     "maxNivel": 12,
-    "desc": "El origen del terror moderno: la criatura creada por Víctor Frankenstein.",
+    "description": "El origen del terror moderno: la criatura creada por Víctor Frankenstein.",
     "image": "https://covers.openlibrary.org/b/id/12356249-L.jpg"
   },
   {
@@ -353,7 +353,7 @@ export const ITEMS = [
     "genre": "Clásico",
     "minNivel": 10,
     "maxNivel": 12,
-    "desc": "Un joven intercambia su alma con un cuadro para permanecer joven.",
+    "description": "Un joven intercambia su alma con un cuadro para permanecer joven.",
     "image": "https://covers.openlibrary.org/b/id/14314858-L.jpg"
   },
   {
@@ -364,7 +364,7 @@ export const ITEMS = [
     "genre": "Fábula",
     "minNivel": 8,
     "maxNivel": 12,
-    "desc": "Un sistema igualitario animal que poco a poco se corrompe.",
+    "description": "Un sistema igualitario animal que poco a poco se corrompe.",
     "image": "https://covers.openlibrary.org/b/id/13712713-L.jpg"
   },
   {
@@ -375,7 +375,7 @@ export const ITEMS = [
     "genre": "Terror",
     "minNivel": 9,
     "maxNivel": 12,
-    "desc": "El abogado Jonathan Harker descubre la naturaleza del Conde Drácula.",
+    "description": "El abogado Jonathan Harker descubre la naturaleza del Conde Drácula.",
     "image": "https://placehold.co/400x600/A10D12/D4AF37.png?text=Dr%C3%A1cula"
   },
   {
@@ -386,7 +386,7 @@ export const ITEMS = [
     "genre": "Clásico",
     "minNivel": 8,
     "maxNivel": 12,
-    "desc": "Las inhumanas condiciones de los mineros del carbón en Chile.",
+    "description": "Las inhumanas condiciones de los mineros del carbón en Chile.",
     "image": "https://placehold.co/400x600/A10D12/D4AF37.png?text=Sub%2BTerra"
   },
   {
@@ -397,7 +397,7 @@ export const ITEMS = [
     "genre": "Romantasy",
     "minNivel": 8,
     "maxNivel": 12,
-    "desc": "Treinta y cinco chicas compiten por la corona. America Singer debe elegir entre el amor y el deber.",
+    "description": "Treinta y cinco chicas compiten por la corona. America Singer debe elegir entre el amor y el deber.",
     "image": "https://covers.openlibrary.org/b/id/7101900-L.jpg"
   },
   {
@@ -408,7 +408,7 @@ export const ITEMS = [
     "genre": "Romantasy",
     "minNivel": 9,
     "maxNivel": 12,
-    "desc": "Una cyborg en la Nueva Pekín futurista debe salvar el mundo de una plaga lunar.",
+    "description": "Una cyborg en la Nueva Pekín futurista debe salvar el mundo de una plaga lunar.",
     "image": "https://covers.openlibrary.org/b/id/6998634-L.jpg"
   },
   {
@@ -419,7 +419,7 @@ export const ITEMS = [
     "genre": "Romantasy",
     "minNivel": 9,
     "maxNivel": 12,
-    "desc": "Evangeline Fox viaja al Norte y hace un trato peligroso con el Príncipe de Corazones.",
+    "description": "Evangeline Fox viaja al Norte y hace un trato peligroso con el Príncipe de Corazones.",
     "image": "https://covers.openlibrary.org/b/id/11427092-L.jpg"
   },
   {
@@ -430,7 +430,7 @@ export const ITEMS = [
     "genre": "Ciencia Ficción",
     "minNivel": 7,
     "maxNivel": 12,
-    "desc": "Katniss Everdeen debe luchar por su vida en un reality show televisado.",
+    "description": "Katniss Everdeen debe luchar por su vida en un reality show televisado.",
     "image": "https://covers.openlibrary.org/b/id/12646537-L.jpg"
   },
   {
@@ -441,7 +441,7 @@ export const ITEMS = [
     "genre": "Romance",
     "minNivel": 8,
     "maxNivel": 12,
-    "desc": "Charlie y Nick descubren que su amistad se está convirtiendo en algo más. Una historia dulce y moderna.",
+    "description": "Charlie y Nick descubren que su amistad se está convirtiendo en algo más. Una historia dulce y moderna.",
     "image": "https://covers.openlibrary.org/b/id/9020805-L.jpg"
   },
   {
@@ -452,7 +452,7 @@ export const ITEMS = [
     "genre": "Fantasía",
     "minNivel": 8,
     "maxNivel": 12,
-    "desc": "Frodo Bolsón emprende la misión de destruir el Anillo Único.",
+    "description": "Frodo Bolsón emprende la misión de destruir el Anillo Único.",
     "image": "https://covers.openlibrary.org/b/id/14625765-L.jpg"
   }
 ];
