@@ -65,9 +65,10 @@ function App() {
           if (snap.exists()) {
             const userState = snap.data();
             if (userState.likes) setLikedItems(userState.likes);
-            if (userState.profile && userState.profile.genres && userState.profile.genres.length > 0) {
+            if (userState.profile?.genres?.length > 0) {
               setUserProfile(userState.profile);
-              setView(userState.role === 'admin' || userState.role === 'teacher' ? 'admin' : 'deck');
+              // Admin → admin panel. Teachers and students → deck
+              setView(userState.role === 'admin' ? 'admin' : 'deck');
             } else {
               setView('onboarding');
             }
@@ -127,9 +128,9 @@ function App() {
         localStorage.setItem('bm-user', JSON.stringify(teacherUser));
         localStorage.setItem('bm-active-rut', cleanRut);
         setUserProfile(userData.profile);
-        // Teachers land on deck (books) just like students.
-        // Admin panel is accessible via the Profile tab → "Panel Docente" button.
-        setView(userData.profile?.genres?.length > 0 ? 'deck' : 'onboarding');
+        setLikedItems(userData.likes || []); // ← FIX: load teacher likes
+        // Admin → admin panel. Teachers → deck (access panel from Profile tab)
+        setView(userData.role === 'admin' ? 'admin' : (userData.profile?.genres?.length > 0 ? 'deck' : 'onboarding'));
         return true;
       }
       
