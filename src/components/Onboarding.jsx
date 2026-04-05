@@ -277,16 +277,24 @@ function Onboarding({ user, onFinish }) {
                 })}
               </div>
 
-              {/* Manual entry */}
-              <div className="shrink-0">
-                <p className="text-xs text-gray-400 font-bold uppercase tracking-widest mb-2 text-center">— o escríbelo tú —</p>
-                <input
-                  type="text"
-                  value={customBook}
-                  onChange={e => { setCustomBook(e.target.value); setFavoriteBook(null); setSearch(''); }}
-                  placeholder="Nombre del libro o personaje..."
-                  className="w-full px-4 py-3.5 bg-white border-2 border-gray-100 focus:border-[#A80A0A] rounded-2xl outline-none text-sm font-bold text-gray-800 transition-all shadow-sm"
-                />
+              {/* Manual entry / Direct search option */}
+              <div className="shrink-0 pt-2">
+                {search.trim().length > 2 && filteredBooks.length === 0 && (
+                  <button
+                    onClick={() => { setCustomBook(search); setFavoriteBook(null); }}
+                    className={`w-full p-4 rounded-xl border-2 font-black transition-all text-sm
+                      ${customBook === search 
+                        ? 'border-[#A80A0A] bg-[#A80A0A] text-white shadow-lg shadow-red-900/20' 
+                        : 'border-[#A80A0A]/30 text-[#A80A0A] hover:bg-[#FFF0F0]'}`}
+                  >
+                    Usar "{search}" como mi libro favorito 📖
+                  </button>
+                )}
+                {search.trim().length === 0 && (
+                  <p className="text-xs text-gray-400 font-bold uppercase tracking-widest text-center mt-2">
+                    Si no está en el catálogo, escríbelo en el buscador.
+                  </p>
+                )}
               </div>
             </motion.div>
           )}

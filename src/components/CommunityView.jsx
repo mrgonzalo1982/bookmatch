@@ -90,16 +90,26 @@ function CommunityView({ user, likedIds, userProfile, allStudents, onShowTeacher
       favoriteBook: userProfile?.favoriteBook || null,
     };
 
+    const dbRaw = typeof window !== 'undefined' ? localStorage.getItem('bm-users-db') : null;
+    const db = dbRaw ? JSON.parse(dbRaw) : {};
+
     return allStudents
-      .filter(s => s.rut !== user.rut && canMatch(user.nivel, s.nivel))
+      .filter(s => {
+        if (s.rut === user.rut || !canMatch(user.nivel, s.nivel)) return false;
+        const cleanRut = s.rut.replace(/[^0-9kK]/gi, '').toLowerCase();
+        return db[cleanRut] && db[cleanRut].profile && db[cleanRut].likes;
+      })
       .map(s => {
-        const peerLikes = getPeerLikes(s.rut);
-        const peerProf = getPeerProfile(s.rut);
+        const cleanRut = s.rut.replace(/[^0-9kK]/gi, '').toLowerCase();
+        const peerData = db[cleanRut];
+        const peerLikes = (peerData.likes || []).map(li => li.id);
+        const peerProf = peerData.profile || { genres: [] };
+        
         const score = compatibilityScore(myProfile, peerLikes, peerProf);
         const commonIds = likedIds.filter(id => peerLikes.includes(id));
         const commonBooks = ITEMS.filter(item => commonIds.includes(item.id));
-        const commonGenres = (userProfile?.genres || []).filter(g => peerProf.genres.includes(g));
-        return { ...s, score, commonBooks, commonGenres };
+        const commonGenres = (myProfile.genres).filter(g => peerProf.genres.includes(g));
+        return { ...s, score, commonBooks, commonGenres, realEmoji: peerProf.emoji };
       })
       .filter(s => s.score > 0)
       .sort((a, b) => b.score - a.score)
