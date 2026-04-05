@@ -101,66 +101,48 @@ function App() {
       return true;
     }
 
-    // Teachers
-        const TEACHER_RUTS = ['150685478', '186188225']; // Gonzalo Andrés, Danixa Paola
-    if (TEACHER_RUTS.includes(cleanRut)) {
-       const isDanixa = cleanRut === '186188225';
-       const teacherUser = { 
-         rut: cleanRut, 
-         nombre: isDanixa ? 'Miss Danixa' : 'Profe Gonzalo', 
-         curso: 'Docente', 
-         role: 'teacher', 
-         avatar: '/umbral-shield.png' 
-       };
-       setUser(teacherUser);
-       localStorage.setItem('bm-user', JSON.stringify(teacherUser));
-       localStorage.setItem('bm-active-rut', cleanRut);
-       
-       const docRef = doc(db, 'users', cleanRut);
-       const snap = await getDoc(docRef);
-       
-       const profileData = snap.exists() ? snap.data().profile : null;
-       const genres = profileData?.genres || [];
-       
-       if (!snap.exists() || genres.length === 0) {
-         // Default profile for new teachers
-         await setDoc(docRef, { 
-           profile: { 
-             emoji: '📚', 
-             genres: [], 
-             dept: isDanixa ? 'Lenguaje' : 'Inglés' 
-           }, 
-           likes: [], 
-           role: 'teacher' 
-         }, { merge: true });
-         setView('onboarding');
-       } else {
-         setUserProfile(profileData);
-         setView('admin'); 
-       }
-       return true;
+    // Step 1: Check Firestore for existing user (Teachers or registered Students)
+    const docRef = doc(db, 'users', cleanRut);
+    const snap = await getDoc(docRef);
+    
+    if (snap.exists()) {
+      const userData = snap.data();
+      if (userData.role === 'teacher' || userData.role === 'admin') {
+        const teacherUser = { 
+          rut: cleanRut, 
+          nombre: userData.profile?.name || 'Docente Umbral', 
+          curso: 'Docente', 
+          role: userData.role, 
+          avatar: '/umbral-shield.png' 
+        };
+        setUser(teacherUser);
+        localStorage.setItem('bm-user', JSON.stringify(teacherUser));
+        localStorage.setItem('bm-active-rut', cleanRut);
+        setUserProfile(userData.profile);
+        setView('admin');
+        return true;
+      }
+      
+      // Registered Student
+      const studentMatch = STUDENTS.find(s => clean(s.rut) === cleanRut);
+      if (studentMatch) {
+         setUser(studentMatch);
+         localStorage.setItem('bm-user', JSON.stringify(studentMatch));
+         localStorage.setItem('bm-active-rut', cleanRut);
+         setUserProfile(userData.profile);
+         setLikedItems(userData.likes || []);
+         setView(userData.profile.genres?.length > 0 ? 'deck' : 'onboarding');
+         return true;
+      }
     }
 
+    // Step 2: Check Mock Students (New students logging in for the first time)
     const found = STUDENTS.find(s => clean(s.rut) === cleanRut);
     if (found) {
       setUser(found);
       localStorage.setItem('bm-user', JSON.stringify(found));
       localStorage.setItem('bm-active-rut', cleanRut);
-      
-      const docRef = doc(db, 'users', cleanRut);
-      const snap = await getDoc(docRef);
-      
-      const profileData = snap.exists() ? snap.data().profile : null;
-      const genres = profileData?.genres || [];
-
-      if (snap.exists() && profileData && genres.length > 0) {
-        const udata = snap.data();
-        setUserProfile(profileData);
-        setLikedItems(udata.likes || []);
-        setView('deck');
-      } else {
-        setView('onboarding');
-      }
+      setView('onboarding');
       return true;
     }
     return false;

@@ -1,46 +1,57 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { STUDENTS, ITEMS, GENRES } from '../data/mockData';
-import { Search, Plus, Download, Trash2, ChevronLeft, ShieldCheck, Star, Database } from 'lucide-react';
+import { Search, Plus, Download, Trash2, ChevronLeft, ShieldCheck, Star, Database, Users, BookOpen, User, Edit2, X, RotateCcw, Save, GraduationCap, Loader2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { db } from '../lib/firebase';
-import { doc, setDoc, collection, getDocs, updateDoc, deleteField } from 'firebase/firestore';
+import { doc, setDoc, collection, getDocs, updateDoc, deleteField, deleteDoc, getDoc } from 'firebase/firestore';
 
 function AdminView({ onBack }) {
+  const [activeTab, setActiveTab] = useState('books'); // 'books', 'teachers', 'students'
   const [search, setSearch] = useState('');
+  const [books, setBooks] = useState([]);
+  const [teachers, setTeachers] = useState([]);
+  const [students, setStudents] = useState([]);
   const [selectedCourse, setSelectedCourse] = useState(null);
-  const [showAddBook, setShowAddBook] = useState(false);
-  const [newBook, setNewBook] = useState({ title: '', author: '', description: '', genre: '', minNivel: 5, maxNivel: 12, image: '' });
   const [googleSearch, setGoogleSearch] = useState('');
   const [isSearching, setIsSearching] = useState(false);
-  const [activeProfiles, setActiveProfiles] = useState(0);
-  const [topLikes, setTopLikes] = useState([]);
   
-  // Fetch real metrics from Firestore
+  const [showBookModal, setShowBookModal] = useState(false);
+  const [editingBook, setEditingBook] = useState(null);
+  const [bookForm, setBookForm] = useState({ title: '', author: '', description: '', genre: '', minNivel: 5, maxNivel: 12, image: '' });
+  
+  const [showTeacherModal, setShowTeacherModal] = useState(false);
+  const [editingTeacher, setEditingTeacher] = useState(null);
+  const [teacherForm, setTeacherForm] = useState({ rut: '', name: '', dept: '' });
+
+  const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
-    const fetchMetrics = async () => {
-      const snap = await getDocs(collection(db, 'users'));
-      let active = 0;
-      const likesMap = {};
-      
-      snap.forEach(docSnap => {
-        const data = docSnap.data();
-        if (data.profile?.genres?.length > 0) active++;
-        if (data.likes) {
-          data.likes.forEach(item => {
-            likesMap[item.title] = (likesMap[item.title] || 0) + 1;
-          });
-        }
-      });
-      
-      setActiveProfiles(active);
-      const topArr = Object.entries(likesMap)
-        .sort((a,b) => b[1] - a[1])
-        .slice(0, 5);
-      setTopLikes(topArr);
-    };
-    fetchMetrics();
-  }, []);
-  
+    fetchData();
+  }, [activeTab]);
+
+  const fetchData = async () => {
+    setIsLoading(true);
+    try {
+      if (activeTab === 'books') {
+        const snap = await getDocs(collection(db, 'catalog'));
+        const list = snap.docs.map(d => ({ ...d.data(), id: d.id }));
+        setBooks(list);
+      } else if (activeTab === 'teachers') {
+        const snap = await getDocs(collection(db, 'users'));
+        const list = snap.docs
+          .map(d => ({ ...d.data(), id: d.id }))
+          .filter(u => u.role === 'teacher' || u.role === 'admin');
+        setTeachers(list);
+      } else if (activeTab === 'students') {
+        setStudents(STUDENTS);
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const handleGoogleSearch = async () => {
     if (!googleSearch.trim()) return;
     setIsSearching(true);
@@ -49,17 +60,17 @@ function AdminView({ onBack }) {
       const data = await res.json();
       if (data.items && data.items.length > 0) {
         const book = data.items[0].volumeInfo;
-        setNewBook({
+        setBookForm({
           title: book.title || '',
           author: book.authors ? book.authors.join(', ') : '',
           description: book.description ? book.description.substring(0, 300) + '...' : '',
-          genre: GENRES[0], // Default
+          genre: GENRES[0],
           minNivel: 5,
           maxNivel: 12,
           image: book.imageLinks?.thumbnail || 'https://images.unsplash.com/photo-1532012197267-da84d127e765?auto=format&fit=crop&q=80&w=400'
         });
       } else {
-        alert("No se encontraron libros con ese título.");
+        alert("No se encontraron libros.");
       }
     } catch (e) {
       console.error(e);
@@ -68,381 +79,305 @@ function AdminView({ onBack }) {
       setIsSearching(false);
     }
   };
-  
-  // Unique courses sorted (Basic mapping sort logic)
-  const courses = useMemo(() => {
-    const raw = Array.from(new Set(STUDENTS.map(s => s.curso)));
-    // Simple custom sort based on standard Chilean schooling (5 Básico -> 4 Medio)
-    const orderScore = (c) => {
-      let score = parseInt(c.charAt(0)) || 0;
-      if (c.includes('Básico')) score += 0;
-      else if (c.includes('Medio')) score += 10;
-      return score;
-    };
-    return raw.sort((a, b) => orderScore(a) - orderScore(b));
-  }, []);
-
-  const filteredStudents = useMemo(() => {
-    let source = STUDENTS;
-    if (selectedCourse) {
-      source = STUDENTS.filter(s => s.curso === selectedCourse);
-    }
-    
-    if (search.trim()) {
-      return STUDENTS.filter(s => 
-        (s.nombre.toLowerCase().includes(search.toLowerCase()) || s.rut.includes(search))
-      ).slice(0, 50);
-    }
-    
-    return source.slice(0, 70); // Performance cap
-  }, [search, selectedCourse]);
-
-  const handleResetProfile = (rut) => {
-    if (window.confirm(`¿Estás seguro de resetear el perfil de RUT ${rut}? Se borrarán sus gustos y libros favoritos.`)) {
-      alert(`Perfil ${rut} reseteado con éxito.`);
-    }
-  };
 
   const handleSaveBook = async (e) => {
     e.preventDefault();
-    const newId = 'custom-' + Date.now();
-    const bookToSave = {
-      id: newId,
-      type: 'libro',
-      title: newBook.title,
-      author: newBook.author,
-      description: newBook.description,
-      genre: newBook.genre || GENRES[0],
-      minNivel: Number(newBook.minNivel),
-      maxNivel: Number(newBook.maxNivel),
-      studentsMatched: 0,
-      image: newBook.image || 'https://images.unsplash.com/photo-1532012197267-da84d127e765?auto=format&fit=crop&q=80&w=400',
-      professors: []
-    };
-
-    // Save to Cloud Firestore
+    const id = editingBook || 'custom-' + Date.now();
+    const data = { ...bookForm, id, type: 'libro', genre: bookForm.genre || GENRES[0] };
+    
     try {
-      await setDoc(doc(db, 'catalog', newId), bookToSave);
-      // Live update memory for current session
-      ITEMS.push(bookToSave);
-      
-      setShowAddBook(false);
-      setNewBook({ title: '', author: '', description: '', genre: '', minNivel: 5, maxNivel: 12, image: '' });
-      setGoogleSearch('');
-      alert('¡Libro subido a la base de datos de BookMatch exitosamente!');
-    } catch(err) {
-      alert('Error en la conexión a la nube.');
-    }
+      await setDoc(doc(db, 'catalog', id.toString()), data);
+      setShowBookModal(false);
+      setEditingBook(null);
+      setBookForm({ title: '', author: '', description: '', genre: '', minNivel: 5, maxNivel: 12, image: '' });
+      fetchData();
+      alert('Libro guardado exitosamente');
+    } catch (err) { alert('Error al guardar libro'); }
+  };
+
+  const deleteBook = async (id) => {
+    if (!window.confirm("¿Eliminar este libro definitivamente?")) return;
+    try {
+      await deleteDoc(doc(db, 'catalog', id));
+      fetchData();
+    } catch (e) { alert("Error al borrar"); }
+  };
+
+  const handleSaveTeacher = async (e) => {
+    e.preventDefault();
+    const rut = teacherForm.rut.replace(/[^0-9kK]/gi, '').toLowerCase();
+    const data = { 
+      role: 'teacher', 
+      profile: { name: teacherForm.name, dept: teacherForm.dept, emoji: '📚', genres: [] },
+      likes: []
+    };
+    
+    try {
+      await setDoc(doc(db, 'users', rut), data, { merge: true });
+      setShowTeacherModal(false);
+      setEditingTeacher(null);
+      setTeacherForm({ rut: '', name: '', dept: '' });
+      fetchData();
+      alert('Profesor guardado exitosamente');
+    } catch (err) { alert('Error al guardar profesor'); }
+  };
+
+  const deleteTeacher = async (rut) => {
+    if (!window.confirm("¿Eliminar acceso de este profesor?")) return;
+    try {
+      await deleteDoc(doc(db, 'users', rut));
+      fetchData();
+    } catch (e) { alert("Error al borrar"); }
+  };
+
+  const deleteStudentData = async (rut) => {
+    if (!window.confirm("¿Borrar definitivamente los datos de este alumno?")) return;
+    const cleanRut = rut.replace(/[^0-9kK]/gi, '').toLowerCase();
+    try {
+      await deleteDoc(doc(db, 'users', cleanRut));
+      alert("Datos eliminados de Firestore");
+    } catch (e) { alert("Error al borrar"); }
+  };
+
+  const resetStudentProfile = async (rut) => {
+    if (!window.confirm("¿Resetear gustos de este alumno?")) return;
+    const cleanRut = rut.replace(/[^0-9kK]/gi, '').toLowerCase();
+    try {
+      await updateDoc(doc(db, 'users', cleanRut), { 
+        likes: [], 
+        'profile.genres': [], 
+        'profile.favoriteBook': deleteField() 
+      });
+      alert("Perfil reseteado");
+    } catch (e) { alert("Error al resetear"); }
   };
 
   const exportToExcel = async () => {
     try {
       const snap = await getDocs(collection(db, 'users'));
       let csvContent = "RUT Alumno\tNombre\tCurso\tID Libro\tTitulo Libro\tAutor\n";
-      let totalMatches = 0;
-
       snap.forEach(docSnap => {
         const u = docSnap.data();
-        if (u.role === 'student' && u.likes && u.likes.length > 0) {
-          // Find student name from global STUDENTS array based on rut
+        if (u.role === 'student' && u.likes?.length > 0) {
           const cleanRut = docSnap.id;
           const studentInfo = STUDENTS.find(s => s.rut.replace(/[^0-9kK]/gi, '').toLowerCase() === cleanRut);
-          const studentName = studentInfo ? studentInfo.nombre : 'Desconocido';
-          const studentCourse = studentInfo ? studentInfo.curso : 'Desconocido';
-
           u.likes.forEach(book => {
-            csvContent += `${cleanRut}\t${studentName}\t${studentCourse}\t${book.id}\t${book.title}\t${book.author}\n`;
-            totalMatches++;
+            csvContent += `${cleanRut}\t${studentInfo?.nombre || 'Desconocido'}\t${studentInfo?.curso || 'Desconocido'}\t${book.id}\t${book.title}\t${book.author}\n`;
           });
         }
       });
-
-      if (totalMatches === 0) {
-        alert("Aún no hay matches registrados por los alumnos en la base de datos.");
-        return;
-      }
-
-      // Add UTF-8 BOM for Excel to read accents correctly
       const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' });
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.setAttribute("href", url);
-      link.setAttribute("download", `BookMatch_Curauma_Matches.csv`);
-      document.body.appendChild(link);
+      link.setAttribute("download", `BookMatch_Data.csv`);
       link.click();
-      document.body.removeChild(link);
-
-    } catch (e) {
-      alert("Error exportando datos: " + e.message);
-    }
+    } catch (e) { alert("Error exportando"); }
   };
 
   const handlePurgeFirestore = async () => {
-    if (!window.confirm("¿Estás seguro de eliminar TODOS los profesores y likes ficticios de los libros? Esta acción limpiará el catálogo por completo (solo quedarán título, autor, etc).")) return;
-    
+    if (!window.confirm("¿Resetear toda la base de datos de libros?")) return;
     try {
       const catSnap = await getDocs(collection(db, 'catalog'));
-      const batchPromises = catSnap.docs.map(docSnap => 
-        updateDoc(doc(db, 'catalog', docSnap.id), { 
-          professors: [], 
-          studentsMatched: deleteField() 
-        })
-      );
-      await Promise.all(batchPromises);
-      alert("¡Base de Datos Limpia! Todos los profesores falsos han sido eliminados.");
-      window.location.reload();
-    } catch (e) {
-      alert("Error al limpiar: " + e.message);
-    }
+      await Promise.all(catSnap.docs.map(d => deleteDoc(doc(db, 'catalog', d.id))));
+      fetchData();
+    } catch (e) { alert("Error al limpiar"); }
   };
 
+  const filteredBooks = books.filter(b => 
+    b.title.toLowerCase().includes(search.toLowerCase()) || 
+    b.author.toLowerCase().includes(search.toLowerCase())
+  );
+
+  const courses = useMemo(() => Array.from(new Set(STUDENTS.map(s => s.curso))).sort(), []);
+
+  const filteredStudents = useMemo(() => {
+    let source = selectedCourse ? STUDENTS.filter(s => s.curso === selectedCourse) : STUDENTS;
+    if (search.trim()) {
+      return STUDENTS.filter(s => s.nombre.toLowerCase().includes(search.toLowerCase()) || s.rut.includes(search)).slice(0, 50);
+    }
+    return source.slice(0, 50);
+  }, [search, selectedCourse]);
+
   return (
-    <div className="flex-1 flex flex-col bg-white overflow-hidden">
-      {/* Header */}
-      <header className="px-6 py-5 shrink-0 shadow-lg relative overflow-hidden" 
-        style={{ background: `linear-gradient(135deg, #A80A0A 0%, #3a0000 100%)` }}>
-        
-        {/* Decorative elements */}
-        <div className="absolute top-[-20px] right-[-20px] w-24 h-24 bg-white/5 rounded-full blur-2xl" />
-        
-        <div className="flex items-center gap-4 mb-4 relative z-10">
-          <button onClick={onBack} className="p-2.5 bg-white/10 hover:bg-white/20 rounded-2xl transition-all active:scale-90">
-            <ChevronLeft size={20} className="text-white" />
+    <div className="flex-1 flex flex-col bg-[#F7F7F9] overflow-hidden">
+      <header className="px-6 py-4 bg-[#A80A0A] text-white shrink-0 flex items-center justify-between shadow-md">
+        <div className="flex items-center gap-3">
+          <button onClick={onBack} className="p-2 hover:bg-white/10 rounded-full transition-all">
+            <ChevronLeft size={20} />
           </button>
           <div>
-            <h1 className="text-xl font-black tracking-tighter text-white">Panel de Control</h1>
-            <p className="text-[10px] font-black text-blue-200/50 uppercase tracking-[0.2em]">Gestión Institucional</p>
-          </div>
-          <div className="ml-auto bg-[#FFD700] p-2 rounded-xl shadow-lg shadow-yellow-900/20">
-            <ShieldCheck className="text-[#A80A0A]" size={20} />
+            <h1 className="text-lg font-black tracking-tighter">EDITOR MAESTRO</h1>
+            <p className="text-[9px] font-bold text-white/50 uppercase tracking-widest">Gestión Institucional</p>
           </div>
         </div>
-
-        {/* Stats strip */}
-        <div className="grid grid-cols-2 gap-3 mt-4 relative z-10">
-          <div className="bg-white/10 backdrop-blur-md rounded-[20px] p-4 border border-white/10 shadow-inner">
-            <p className="text-2xl font-black text-white leading-none">{STUDENTS.length}</p>
-            <p className="text-[9px] font-black text-white/40 uppercase tracking-widest mt-1.5">Total Alumnos</p>
-          </div>
-          <div className="bg-white/10 backdrop-blur-md rounded-[20px] p-4 border border-white/10 shadow-inner">
-            <p className="text-2xl font-black text-white leading-none">{activeProfiles}</p>
-            <p className="text-[9px] font-black text-white/40 uppercase tracking-widest mt-1.5">Perfiles Activos</p>
-          </div>
+        <div className="flex gap-2">
+           <button onClick={exportToExcel} className="p-2.5 bg-white/10 hover:bg-white/20 rounded-xl transition-all" title="Exportar"><Download size={18} /></button>
+           <button onClick={handlePurgeFirestore} className="p-2.5 bg-white/10 hover:bg-white/20 rounded-xl transition-all text-yellow-300" title="Limpiar"><Database size={18} /></button>
         </div>
       </header>
 
-      {/* Content */}
-      <div className="flex-1 flex flex-col p-6 overflow-hidden bg-[#F7F7F9]">
-        <div className="flex gap-2 mb-6 shrink-0">
-          <div className="relative flex-1 group">
-            <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#A80A0A] transition-colors" />
-            <input
-              type="text"
-              value={search}
-              onChange={e => setSearch(e.target.value)}
-              placeholder="Buscar por nombre o RUT..."
-              className="w-full pl-12 pr-4 py-4 bg-white border-2 border-gray-100 focus:border-[#A80A0A] rounded-[22px] outline-none text-sm font-bold shadow-sm transition-all text-gray-800"
-            />
-          </div>
-          <button 
-            onClick={exportToExcel}
-            className="w-14 h-14 bg-emerald-600 text-white flex flex-col justify-center items-center rounded-[22px] shadow-lg flex-shrink-0 hover:bg-emerald-700 transition-all"
-            title="Exportar a Excel">
-            <Download size={22} className="mb-0.5" />
-            <span className="text-[8px] font-black uppercase tracking-widest leading-none">Datos</span>
+      <div className="flex px-4 pt-4 bg-white border-b border-gray-200 gap-1 overflow-x-auto no-scrollbar">
+        {[
+          { id: 'books', label: 'LIBROS', icon: BookOpen },
+          { id: 'teachers', label: 'PROFESORES', icon: User },
+          { id: 'students', label: 'ALUMNOS', icon: GraduationCap }
+        ].map(tab => (
+          <button
+            key={tab.id}
+            onClick={() => { setActiveTab(tab.id); setSearch(''); setSelectedCourse(null); }}
+            className={`flex items-center gap-2 px-5 py-3 rounded-t-2xl font-black text-[10px] tracking-widest transition-all ${
+              activeTab === tab.id ? 'bg-[#F7F7F9] text-[#A80A0A] border-t border-x border-gray-200' : 'text-gray-400 hover:text-gray-600'
+            }`}
+          >
+            <tab.icon size={14} />
+            {tab.label}
           </button>
-          <button 
-            onClick={() => setShowAddBook(true)}
-            className="w-12 h-12 bg-[#A80A0A] text-white flex justify-center items-center rounded-[18px] shadow-lg flex-shrink-0 hover:bg-[#8B0707] transition-all"
-            title="Añadir Libro">
-            <Plus size={20} />
-          </button>
-          <button 
-            onClick={handlePurgeFirestore}
-            className="w-12 h-12 bg-gray-800 text-white flex justify-center items-center rounded-[18px] shadow-lg flex-shrink-0 hover:bg-black transition-all"
-            title="Limpiar Base de Datos">
-            <Database size={20} />
-          </button>
+        ))}
+      </div>
+
+      <div className="p-4 bg-[#F7F7F9] flex gap-2">
+        <div className="relative flex-1 group">
+          <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+          <input
+            type="text"
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            placeholder={`Buscar por ${activeTab === 'books' ? 'título o autor' : 'nombre o RUT'}...`}
+            className="w-full pl-10 pr-4 py-3 bg-white border border-gray-200 rounded-xl outline-none text-sm font-bold shadow-sm focus:border-[#A80A0A]"
+          />
         </div>
-
-        {/* Conditional Breadcrumb inside Content */}
-        {selectedCourse && !search.trim() && (
-          <div className="flex items-center gap-2 mb-4 shrink-0">
-             <button onClick={() => setSelectedCourse(null)} className="px-3 py-1.5 bg-gray-200 text-gray-700 font-bold text-xs rounded-full hover:bg-gray-300">
-               ← Volver a Cursos
-             </button>
-             <h3 className="font-black text-gray-900 tracking-tighter text-lg">{selectedCourse}</h3>
-          </div>
+        {activeTab === 'books' && (
+          <button onClick={() => { setEditingBook(null); setBookForm({ title: '', author: '', description: '', genre: '', minNivel: 5, maxNivel: 12, image: '' }); setShowBookModal(true); }} className="bg-[#A80A0A] text-white px-4 rounded-xl shadow-lg hover:scale-105 active:scale-95 transition-all text-[10px] font-black uppercase tracking-widest">Añadir</button>
         )}
+        {activeTab === 'teachers' && (
+          <button onClick={() => { setEditingTeacher(null); setTeacherForm({ rut: '', name: '', dept: '' }); setShowTeacherModal(true); }} className="bg-blue-600 text-white px-4 rounded-xl shadow-lg hover:scale-105 active:scale-95 transition-all text-[10px] font-black uppercase tracking-widest">Nuevo Profe</button>
+        )}
+      </div>
 
-        <div className="flex-1 overflow-y-auto custom-scrollbar space-y-3 pb-10 pr-2">
-          
-          {/* View: Course Grid */}
-          {!selectedCourse && !search.trim() && (
-            <>
-              {topLikes.length > 0 && (
-                <div className="mb-6 bg-[#A80A0A] p-5 rounded-[22px] text-white shadow-xl relative overflow-hidden">
-                   <div className="relative z-10">
-                     <h3 className="font-black text-sm uppercase tracking-tighter mb-4 flex items-center gap-2">
-                       <Star size={16} fill="#FFD700" color="#FFD700" /> Top Tendencias del Colegio
-                     </h3>
-                     <div className="space-y-2.5">
-                       {topLikes.map(([title, count], i) => (
-                         <div key={i} className="flex items-center gap-3">
-                            <span className="text-[10px] font-black bg-white/20 px-2 py-0.5 rounded-full">{count} likes</span>
-                            <p className="text-xs font-bold truncate flex-1 opacity-90">{title}</p>
-                            <div className="h-1.5 bg-white/10 flex-1 rounded-full overflow-hidden">
-                              <div className="h-full bg-emerald-400" style={{ width: `${Math.min(100, (count/topLikes[0][1])*100)}%` }} />
-                            </div>
-                         </div>
-                       ))}
-                     </div>
-                   </div>
+      <div className="flex-1 overflow-y-auto px-4 pb-10 space-y-3 custom-scrollbar">
+        {isLoading ? (
+          <div className="flex flex-col items-center justify-center py-20 opacity-30">
+            <Loader2 size={32} className="animate-spin text-[#A80A0A] mb-2" />
+            <p className="font-black text-[10px] tracking-widest">CARGANDO DATOS...</p>
+          </div>
+        ) : (
+          <>
+            {activeTab === 'books' && filteredBooks.map(book => (
+              <div key={book.id} className="bg-white p-4 rounded-2xl border border-gray-100 flex items-center gap-4 shadow-sm hover:shadow-md transition-shadow">
+                <img src={book.image} className="w-16 h-20 object-cover rounded-lg shadow-sm" alt="" />
+                <div className="flex-1 min-w-0">
+                  <h3 className="font-black text-sm text-gray-900 truncate leading-tight uppercase tracking-tight">{book.title}</h3>
+                  <p className="text-[10px] font-bold text-gray-400 mt-0.5">{book.author}</p>
+                  <p className="text-[9px] font-black text-[#A80A0A] bg-red-50 inline-block px-2 py-0.5 rounded mt-2 uppercase tracking-widest">{book.genre}</p>
+                </div>
+                <div className="flex flex-col gap-2">
+                  <button onClick={() => { setEditingBook(book.id); setBookForm(book); setShowBookModal(true); }} className="p-2 bg-blue-50 text-blue-600 rounded-xl hover:bg-blue-100 transition-all"><Edit2 size={16} /></button>
+                  <button onClick={() => deleteBook(book.id)} className="p-2 bg-red-50 text-[#A80A0A] rounded-xl hover:bg-red-100 transition-all"><Trash2 size={16} /></button>
+                </div>
+              </div>
+            ))}
+
+            {activeTab === 'teachers' && teachers.map(teacher => (
+              <div key={teacher.id} className="bg-white p-4 rounded-2xl border border-gray-100 flex items-center justify-between shadow-sm">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center text-white font-black text-xl">{teacher.profile?.name?.charAt(0) || 'P'}</div>
+                  <div>
+                    <h3 className="font-black text-sm text-gray-900 leading-tight uppercase tracking-tight">{teacher.profile?.name || 'Profesor'}</h3>
+                    <p className="text-[9px] font-bold text-gray-400 mt-1 uppercase tracking-widest">{teacher.id}</p>
+                    <span className="text-[8px] font-black bg-blue-50 text-blue-600 px-2 py-0.5 rounded uppercase tracking-widest mt-1 inline-block">{teacher.profile?.dept || 'Sin Departamento'}</span>
+                  </div>
+                </div>
+                <div className="flex gap-2">
+                  <button onClick={() => { setEditingTeacher(teacher.id); setTeacherForm({ rut: teacher.id, name: teacher.profile?.name || '', dept: teacher.profile?.dept || '' }); setShowTeacherModal(true); }} className="p-2 bg-blue-50 text-blue-600 rounded-xl hover:bg-blue-100 transition-all"><Edit2 size={16} /></button>
+                  <button onClick={() => deleteTeacher(teacher.id)} className="p-2 bg-red-50 text-[#A80A0A] rounded-xl hover:bg-red-100 transition-all"><Trash2 size={16} /></button>
+                </div>
+              </div>
+            ))}
+
+            {activeTab === 'students' && (
+              <>
+                {!selectedCourse && !search.trim() && (
+                  <div className="grid grid-cols-2 gap-3">
+                    {courses.map(curso => (
+                      <button key={curso} onClick={() => setSelectedCourse(curso)} className="bg-white p-5 rounded-2xl border border-gray-100 text-left hover:border-blue-200 transition-all">
+                        <Users size={18} className="text-blue-600 mb-2" />
+                        <p className="font-black text-sm text-gray-900 uppercase tracking-tighter">{curso}</p>
+                      </button>
+                    ))}
+                  </div>
+                )}
+                {(selectedCourse || search.trim()) && (
+                  <div className="space-y-2">
+                    {selectedCourse && (
+                      <button onClick={() => setSelectedCourse(null)} className="mb-2 text-[10px] font-black text-blue-600 uppercase tracking-widest flex items-center gap-1">
+                        <ChevronLeft size={12} /> Volver a cursos
+                      </button>
+                    )}
+                    {filteredStudents.map(s => (
+                      <div key={s.rut} className="bg-white p-4 rounded-2xl border border-gray-100 flex items-center justify-between shadow-sm">
+                        <div className="min-w-0">
+                          <p className="font-black text-sm text-gray-900 truncate leading-tight uppercase tracking-tight">{s.nombre}</p>
+                          <p className="text-[9px] font-bold text-gray-400 mt-1 uppercase tracking-widest">{s.rut} • {s.curso}</p>
+                        </div>
+                        <div className="flex gap-2">
+                          <button onClick={() => resetStudentProfile(s.rut)} className="p-2 bg-orange-50 text-orange-600 rounded-xl" title="Resetear"><RotateCcw size={16} /></button>
+                          <button onClick={() => deleteStudentData(s.rut)} className="p-2 bg-red-50 text-[#A80A0A] rounded-xl" title="Borrar"><Trash2 size={16} /></button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </>
+            )}
+          </>
+        )}
+      </div>
+
+      <AnimatePresence>
+        {showBookModal && (
+          <div className="fixed inset-0 z-[100] flex flex-col justify-end bg-black/60 p-4">
+            <motion.div initial={{ y: 300 }} animate={{ y: 0 }} exit={{ y: 300 }} className="bg-white p-6 rounded-3xl shadow-2xl relative max-h-[90vh] overflow-y-auto custom-scrollbar">
+              <button onClick={() => setShowBookModal(false)} className="absolute top-4 right-4 p-2 bg-gray-100 rounded-full"><X size={18} /></button>
+              <h2 className="text-xl font-black tracking-tighter mb-6 uppercase italic leading-none text-gray-900">{editingBook ? 'EDITAR LIBRO' : 'AÑADIR LIBRO'}</h2>
+              {!editingBook && (
+                <div className="mb-6 flex gap-2">
+                  <input type="text" placeholder="Autollenar con Google Books..." value={googleSearch} onChange={e=>setGoogleSearch(e.target.value)} className="flex-1 p-3 bg-blue-50 border border-blue-100 rounded-xl text-sm font-bold outline-none" />
+                  <button onClick={handleGoogleSearch} disabled={isSearching} className="bg-blue-600 text-white px-4 rounded-xl font-black text-[10px] uppercase tracking-widest">{isSearching ? '...' : 'BUSCAR'}</button>
                 </div>
               )}
-              
-              <div className="grid grid-cols-2 gap-3">
-                {courses.map(curso => {
-                  const count = STUDENTS.filter(s => s.curso === curso).length;
-                  return (
-                    <button key={curso} onClick={() => setSelectedCourse(curso)}
-                      className="bg-white border border-gray-100 rounded-[22px] p-5 shadow-sm hover:shadow-md hover:border-[#A80A0A]/30 transition-all text-left flex flex-col items-start active:scale-95 group">
-                      <div className="w-10 h-10 bg-blue-50/50 rounded-2xl flex items-center justify-center text-[#A80A0A] mb-3 group-hover:bg-[#A80A0A] group-hover:text-white transition-all">
-                        <Users size={20} />
-                      </div>
-                      <p className="font-black text-gray-900 text-sm">{curso}</p>
-                      <p className="text-[10px] font-bold text-gray-400 mt-1 uppercase tracking-widest">{count} estudiantes</p>
-                    </button>
-                  );
-                })}
-              </div>
-            </>
-          )}
-
-          {/* View: Student List (Search or Selected Course) */}
-          {(selectedCourse || search.trim()) && filteredStudents.map(s => (
-            <motion.div 
-              initial={{ opacity: 0, y: 5 }}
-              animate={{ opacity: 1, y: 0 }}
-              key={s.rut} 
-              className="bg-white border border-gray-100 rounded-[22px] p-4 flex items-center justify-between shadow-sm hover:shadow-md transition-all"
-            >
-              <div className="flex-1 min-w-0">
-                <p className="font-black text-gray-900 text-sm truncate leading-tight">
-                  {s.nombre.split(' ').slice(-2).join(' ')}
-                </p>
-                <div className="flex items-center gap-2 mt-2">
-                  <span className="text-[9px] font-black text-gray-400 bg-gray-50 border border-gray-100 px-2 py-1 rounded-full leading-none tracking-widest uppercase">
-                    {s.rut}
-                  </span>
-                  <span className="text-[9px] font-black text-[#A80A0A] bg-blue-50/50 border border-blue-100 px-2 py-1 rounded-full leading-none uppercase tracking-widest">
-                    {s.curso}
-                  </span>
+              <form onSubmit={handleSaveBook} className="space-y-4">
+                <div><label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-2 mb-1 block">Título</label><input required value={bookForm.title} onChange={e=>setBookForm({...bookForm, title: e.target.value})} className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl font-bold text-sm outline-none focus:border-[#A80A0A]" /></div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div><label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-2 mb-1 block">Autor</label><input required value={bookForm.author} onChange={e=>setBookForm({...bookForm, author: e.target.value})} className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl font-bold text-sm outline-none focus:border-[#A80A0A]" /></div>
+                  <div><label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-2 mb-1 block">Género</label><select required value={bookForm.genre} onChange={e=>setBookForm({...bookForm, genre: e.target.value})} className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl font-bold text-sm outline-none focus:border-[#A80A0A]">{GENRES.map(g => <option key={g} value={g}>{g}</option>)}</select></div>
                 </div>
-              </div>
-              
-              <div className="flex items-center gap-2 shrink-0 ml-4">
-                <button 
-                  onClick={() => handleResetProfile(s.rut)}
-                  className="w-10 h-10 flex items-center justify-center text-orange-500 bg-orange-50 hover:bg-orange-100 rounded-2xl transition-all border border-orange-100 active:scale-90"
-                  title="Resetear Perfil"
-                >
-                  <RotateCcw size={16} strokeWidth={2.5} />
-                </button>
-                <button 
-                  onClick={() => alert('Función de borrado total solo disponible en versión producción.')}
-                  className="w-10 h-10 flex items-center justify-center text-[#A80A0A] bg-red-50 hover:bg-red-100 rounded-2xl transition-all border border-red-100 active:scale-90"
-                  title="Eliminar Registro"
-                >
-                  <Trash2 size={16} strokeWidth={2.5} />
-                </button>
-              </div>
-            </motion.div>
-          ))}
-          
-          {(selectedCourse || search.trim()) && filteredStudents.length === 0 && (
-            <div className="py-20 text-center">
-              <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Users size={24} className="text-gray-300" />
-              </div>
-              <p className="text-sm font-black text-gray-400 tracking-tighter">No se encontraron resultados</p>
-            </div>
-          )}
-        </div>
-      </div>
-      
-      {/* Bottom hint */}
-      <div className="px-6 py-4 bg-white border-t border-gray-100 shrink-0">
-        <div className="flex items-start gap-2">
-          <ShieldCheck size={12} className="text-[#A80A0A] mt-0.5" />
-          <p className="text-[9px] text-gray-400 font-bold leading-relaxed uppercase tracking-widest">
-            Acceso administrativo restringido • Datos locales simulados
-          </p>
-        </div>
-      </div>
-
-      {/* Add Book Modal */}
-      <AnimatePresence>
-        {showAddBook && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-50 flex flex-col justify-end bg-black/60 p-4">
-            <motion.div initial={{ y: 300, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 300, opacity: 0 }} className="bg-white p-6 rounded-3xl shadow-2xl relative">
-              <button onClick={() => setShowAddBook(false)} className="absolute top-4 right-4 text-gray-400 hover:text-red-500 bg-gray-100 p-2 rounded-full">
-                <X size={18} />
-              </button>
-              <h2 className="text-lg font-black tracking-tighter text-gray-900 flex items-center gap-2 mb-4">
-                <BookOpen size={20} className="text-[#A80A0A]" /> Añadir Libro al Catálogo
-              </h2>
-              
-              <div className="mb-4 space-y-2">
-                <p className="text-[10px] font-black uppercase text-gray-400 tracking-widest">Autollenado Inteligente</p>
-                <div className="flex gap-2">
-                  <input 
-                    type="text" 
-                    placeholder="Escribe título para prellenar..." 
-                    value={googleSearch}
-                    onChange={e => setGoogleSearch(e.target.value)}
-                    className="flex-1 p-3 bg-blue-50 border border-blue-100 rounded-xl font-bold text-sm outline-none focus:border-blue-400"
-                  />
-                  <button 
-                    type="button"
-                    onClick={handleGoogleSearch}
-                    disabled={isSearching}
-                    className="bg-blue-600 text-white px-4 rounded-xl font-black text-[10px] uppercase tracking-widest active:scale-95 transition-all disabled:opacity-50"
-                  >
-                    {isSearching ? '...' : 'Buscar'}
-                  </button>
+                <div><label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-2 mb-1 block">Descripción</label><textarea required value={bookForm.description} onChange={e=>setBookForm({...bookForm, description: e.target.value})} rows={3} className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium outline-none focus:border-[#A80A0A]" /></div>
+                <div className="grid grid-cols-2 gap-4">
+                   <div><label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-2 mb-1 block">Nivel Mín</label><input type="number" value={bookForm.minNivel} onChange={e=>setBookForm({...bookForm, minNivel: Number(e.target.value)})} className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl font-bold text-sm" /></div>
+                   <div><label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-2 mb-1 block">Nivel Máx</label><input type="number" value={bookForm.maxNivel} onChange={e=>setBookForm({...bookForm, maxNivel: Number(e.target.value)})} className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl font-bold text-sm" /></div>
                 </div>
-              </div>
-
-              <form onSubmit={handleSaveBook} className="space-y-3">
-                <input required type="text" placeholder="Título del libro" value={newBook.title} onChange={e => setNewBook({...newBook, title: e.target.value})} className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl font-bold text-sm outline-none focus:border-[#A80A0A]" />
-                <input required type="text" placeholder="Autor" value={newBook.author} onChange={e => setNewBook({...newBook, author: e.target.value})} className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl font-bold text-sm outline-none focus:border-[#A80A0A]" />
-                <textarea required placeholder="Resumen o sinopsis breve" value={newBook.description} onChange={e => setNewBook({...newBook, description: e.target.value})} className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl text-xs font-medium outline-none focus:border-[#A80A0A]" rows={3} />
-                
-                <select required value={newBook.genre} onChange={e => setNewBook({...newBook, genre: e.target.value})} className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl font-bold text-sm outline-none focus:border-[#A80A0A]">
-                  <option value="" disabled>Seleccionar Género</option>
-                  {GENRES.map(g => <option key={g} value={g}>{g}</option>)}
-                </select>
-                
-                <div className="flex gap-3">
-                  <div className="flex-1">
-                    <span className="text-[10px] uppercase font-bold text-gray-400 ml-2">Nivel Mínimo</span>
-                    <input type="number" min={5} max={12} value={newBook.minNivel} onChange={e => setNewBook({...newBook, minNivel: e.target.value})} className="w-full mt-1 p-3 bg-gray-50 border border-gray-200 rounded-xl font-bold text-sm outline-none focus:border-[#A80A0A]" />
-                  </div>
-                  <div className="flex-1">
-                    <span className="text-[10px] uppercase font-bold text-gray-400 ml-2">Nivel Máximo</span>
-                    <input type="number" min={5} max={12} value={newBook.maxNivel} onChange={e => setNewBook({...newBook, maxNivel: e.target.value})} className="w-full mt-1 p-3 bg-gray-50 border border-gray-200 rounded-xl font-bold text-sm outline-none focus:border-[#A80A0A]" />
-                  </div>
-                </div>
-
-                <div className="pt-2">
-                  <button type="submit" className="w-full bg-[#A80A0A] hover:bg-[#8B0707] text-white p-4 rounded-2xl font-black uppercase tracking-widest text-xs transition-all shadow-lg active:scale-95">
-                    Guardar Libro
-                  </button>
-                </div>
+                <button type="submit" className="w-full bg-[#A80A0A] text-white p-5 rounded-2xl font-black uppercase tracking-widest text-xs shadow-lg active:scale-95 transition-all mt-4">GUARDAR CAMBIOS</button>
               </form>
             </motion.div>
-          </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {showTeacherModal && (
+          <div className="fixed inset-0 z-[100] flex flex-col justify-end bg-black/60 p-4">
+            <motion.div initial={{ y: 300 }} animate={{ y: 0 }} exit={{ y: 300 }} className="bg-white p-6 rounded-3xl shadow-2xl relative">
+              <button onClick={() => setShowTeacherModal(false)} className="absolute top-4 right-4 p-2 bg-gray-100 rounded-full"><X size={18} /></button>
+              <h2 className="text-xl font-black tracking-tighter mb-6 uppercase italic leading-none text-gray-900">{editingTeacher ? 'EDITAR PROFESOR' : 'AÑADIR PROFESOR'}</h2>
+              <form onSubmit={handleSaveTeacher} className="space-y-4">
+                <div><label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-2 mb-1 block">RUT del Profesor</label><input required disabled={!!editingTeacher} value={teacherForm.rut} onChange={e=>setTeacherForm({...teacherForm, rut: e.target.value})} placeholder="Ej: 12345678-9" className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl font-bold text-sm outline-none focus:border-blue-600 disabled:opacity-50" /></div>
+                <div><label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-2 mb-1 block">Nombre Completo</label><input required value={teacherForm.name} onChange={e=>setTeacherForm({...teacherForm, name: e.target.value})} placeholder="Ej: Miss Danixa Paola" className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl font-bold text-sm outline-none focus:border-blue-600" /></div>
+                <div><label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-2 mb-1 block">Departamento</label><input required value={teacherForm.dept} onChange={e=>setTeacherForm({...teacherForm, dept: e.target.value})} placeholder="Ej: Lenguaje / Inglés / Matemáticas" className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl font-bold text-sm outline-none focus:border-blue-600" /></div>
+                <button type="submit" className="w-full bg-blue-600 text-white p-5 rounded-2xl font-black uppercase tracking-widest text-xs shadow-lg active:scale-95 transition-all mt-4">AUTORIZAR DOCENTE</button>
+              </form>
+            </motion.div>
+          </div>
         )}
       </AnimatePresence>
     </div>
