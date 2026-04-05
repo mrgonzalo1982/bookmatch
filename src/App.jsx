@@ -5,6 +5,7 @@ import Onboarding from './components/Onboarding';
 import MatchDeck from './components/MatchDeck';
 import MatchList from './components/MatchList';
 import CommunityView from './components/CommunityView';
+import AdminView from './components/AdminView';
 import { BookOpen, Heart, Users, User, LogOut, GraduationCap, Star } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -16,16 +17,19 @@ const NAV = [
   { id: 'profile',   label: 'Perfil',     Icon: User },
 ];
 
-// Navy / brand palette
+// Institutional palette (Colegio Umbral)
 const RED  = '#A80A0A';
-const NAVY = '#0E2A5C';
+const BLUE = '#154996'; // Standard institutional blue
 const GOLD = '#FFCC00';
+const BG   = '#F7F7F9';
 
 function App() {
   const [user, setUser]             = useState(null);
   const [view, setView]             = useState('login');
   const [likedItems, setLikedItems] = useState([]);
   const [userProfile, setUserProfile] = useState(null);
+  const [selectedTeacher, setSelectedTeacher] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   // ── Restore session ──────────────────────────────────────────────────────────
   useEffect(() => {
@@ -102,10 +106,19 @@ function App() {
   const renderView = () => {
     switch (view) {
       case 'deck':
-        return <MatchDeck key="deck" user={user} likedIds={likedIds} userProfile={userProfile} onMatch={handleMatch} />;
+        return (
+          <MatchDeck
+            key="deck"
+            user={user}
+            likedIds={likedIds}
+            userProfile={userProfile}
+            onMatch={handleMatch}
+            onShowTeacher={setSelectedTeacher}
+          />
+        );
 
       case 'matches':
-        return <MatchList key="matches" matches={likedItems} setView={setView} />;
+        return <MatchList key="matches" matches={likedItems} setView={setView} onShowTeacher={setSelectedTeacher} />;
 
       case 'community':
         return (
@@ -115,14 +128,18 @@ function App() {
             likedIds={likedIds}
             userProfile={userProfile}
             allStudents={STUDENTS}
+            onShowTeacher={setSelectedTeacher}
           />
         );
+      
+      case 'admin':
+        return <AdminView key="admin" onBack={() => setView('profile')} />;
 
       case 'profile':
         return (
           <div key="profile" className="flex-1 overflow-y-auto" style={{ scrollbarWidth: 'none' }}>
             {/* Profile hero */}
-            <div className="pb-10 px-6 pt-10" style={{ background: `linear-gradient(160deg, ${NAVY} 0%, #1a3a72 100%)` }}>
+            <div className="pb-10 px-6 pt-10" style={{ background: `linear-gradient(160deg, ${BLUE} 0%, #1a5ab5 100%)` }}>
               <div className="flex flex-col items-center">
                 <div className="relative mb-4">
                   <div className="w-28 h-28 rounded-3xl overflow-hidden bg-white/10 border-4 border-white/20 shadow-2xl">
@@ -138,6 +155,11 @@ function App() {
                 </h2>
                 <p className="font-bold text-xs uppercase tracking-widest mt-1" style={{ color: GOLD }}>{user.curso}</p>
                 <p className="text-white/40 font-mono text-xs mt-1">{user.rut}</p>
+                {user.role === 'admin' && (
+                  <button onClick={() => setView('admin')} className="mt-4 bg-white/20 hover:bg-white/30 text-white px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all">
+                    Panel Admin
+                  </button>
+                )}
               </div>
 
               {/* Stats inside hero */}
@@ -190,7 +212,7 @@ function App() {
                   <div className="flex flex-wrap gap-2">
                     {userProfile.genres.map(g => (
                       <span key={g} className="text-xs font-black px-3 py-1 rounded-full"
-                        style={{ background: '#EEF2FF', color: NAVY }}>{g}</span>
+                        style={{ background: '#EEF2FF', color: BLUE }}>{g}</span>
                     ))}
                   </div>
                 </div>
@@ -209,7 +231,7 @@ function App() {
                       </div>
                       <div>
                         <p className="font-black text-gray-900 text-sm leading-tight">{userProfile.favoriteBookObj.title}</p>
-                        <p className="text-xs font-bold" style={{ color: NAVY }}>{userProfile.favoriteBookObj.author}</p>
+                        <p className="text-xs font-bold" style={{ color: BLUE }}>{userProfile.favoriteBookObj.author}</p>
                       </div>
                     </div>
                   ) : (
@@ -229,7 +251,7 @@ function App() {
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="text-xs font-black text-gray-800 truncate">{book.title}</p>
-                        <p className="text-[10px] font-bold truncate" style={{ color: NAVY }}>{book.author}</p>
+                        <p className="text-[10px] font-bold truncate" style={{ color: BLUE }}>{book.author}</p>
                       </div>
                     </div>
                   ))}
@@ -250,18 +272,17 @@ function App() {
 
   return (
     <div className="min-h-screen flex flex-col max-w-md mx-auto relative overflow-hidden shadow-2xl"
-      style={{ height: '100dvh', fontFamily: 'Poppins, sans-serif', background: '#F2F4F8' }}>
+      style={{ height: '100dvh', fontFamily: 'Poppins, sans-serif', background: BG }}>
 
-      {/* ── Header (dark navy) ─────────────────────────────────────────────── */}
+      {/* ── Header (Institutional Blue) ─────────────────────────────────────────────── */}
       <header className="px-5 py-3 flex items-center justify-between shrink-0 z-10"
-        style={{ background: NAVY }}>
+        style={{ background: BLUE }}>
 
         {/* Avatar */}
         <button onClick={() => setView('profile')}
           className={`transition-all duration-200 ${view === 'profile' ? 'scale-90 opacity-80' : ''}`}>
-          <div className="w-9 h-9 rounded-full overflow-hidden border-2 border-white/20">
-            <img src={user.avatar} alt="" className="w-full h-full object-cover p-0.5"
-              onError={e => { e.target.style.display = 'none'; }} />
+          <div className="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center text-xl border border-white/20">
+            {userProfile?.emoji || '👤'}
           </div>
         </button>
 
@@ -296,9 +317,9 @@ function App() {
         </AnimatePresence>
       </main>
 
-      {/* ── Bottom Nav (dark navy) ─────────────────────────────────────────── */}
+      {/* ── Bottom Nav (Institutional Blue) ─────────────────────────────────────────── */}
       <nav className="px-4 py-2 flex justify-around items-center shrink-0 z-10 border-t border-white/10"
-        style={{ background: NAVY }}>
+        style={{ background: BLUE }}>
         {NAV.map(({ id, label, Icon }) => {
           const active = view === id;
           return (
@@ -327,6 +348,17 @@ function App() {
           );
         })}
       </nav>
+
+      {/* Global Teacher Modal */}
+      <AnimatePresence>
+        {selectedTeacher && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center pointer-events-none">
+            <div className="pointer-events-auto w-full h-full max-w-md">
+              <CommunityView.TeacherModal teacher={selectedTeacher} onClose={() => setSelectedTeacher(null)} />
+            </div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

@@ -3,7 +3,7 @@ import { motion, AnimatePresence, useMotionValue, useTransform } from 'framer-mo
 import { ITEMS } from '../data/mockData';
 import { Heart, X, Bookmark, ChevronRight, BookOpen, Users } from 'lucide-react';
 
-function MatchDeck({ user, likedIds, userProfile, onMatch }) {
+function MatchDeck({ user, likedIds, userProfile, onMatch, onShowTeacher }) {
   const [discardedIds, setDiscardedIds] = useState([]);
   const [showMatchModal, setShowMatchModal] = useState(false);
   const [swipeAction, setSwipeAction] = useState(null); // 'left' | 'right'
@@ -90,9 +90,10 @@ function MatchDeck({ user, likedIds, userProfile, onMatch }) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="absolute inset-0 z-50 backdrop-blur-2xl flex flex-col items-center justify-center p-8 text-white text-center"
-            style={{ background: 'linear-gradient(160deg, #0E2A5C 0%, #1a3a72 50%, #2d1010 100%)' }}
+            className="absolute inset-0 z-50 backdrop-blur-xl flex flex-col items-center p-8 text-white text-center"
+            style={{ background: 'linear-gradient(160deg, #154996 0%, #1a5ab5 50%, #A80A0A 100%)' }}
           >
+            <div className="flex-1 w-full max-w-sm flex flex-col items-center justify-center overflow-y-auto custom-scrollbar pt-10 pb-20">
             {/* Animated heart */}
             <motion.div
               initial={{ scale: 0.3 }}
@@ -140,24 +141,25 @@ function MatchDeck({ user, likedIds, userProfile, onMatch }) {
               className="space-y-3 w-full max-w-sm mb-8"
             >
               {item.professors?.map((prof, i) => (
-                <div
+                <button
                   key={i}
-                  className="bg-white/10 p-4 rounded-2xl flex items-center gap-4 border border-white/20 hover:bg-white/20 transition-all group"
+                  onClick={() => onShowTeacher(prof)}
+                  className="w-full bg-white/10 p-4 rounded-2xl flex items-center gap-4 border border-white/20 hover:bg-white/20 transition-all group"
                 >
                   <div 
                     className="w-14 h-14 rounded-xl flex items-center justify-center font-black text-xl border-2 border-white/30 shadow-lg group-hover:rotate-6 transition-transform shrink-0"
-                    style={{ background: 'linear-gradient(135deg, #154996, #1a5ab5)' }}
+                    style={{ background: 'linear-gradient(135deg, #FFCC00, #E0B300)', color: '#A80A0A' }}
                   >
                     {prof.name.replace('Profe ', '').replace('Miss ', '').replace('Tía ', '').charAt(0)}
                   </div>
                   <div className="text-left flex-1">
                     <p className="font-black text-lg leading-tight">{prof.name}</p>
-                    <p className="text-xs font-bold text-blue-300 uppercase tracking-widest">{prof.dept}</p>
+                    <p className="text-xs font-bold text-white/70 uppercase tracking-widest">{prof.dept}</p>
                   </div>
-                  <div className="bg-white/15 p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div className="bg-white/15 p-2 rounded-full opacity-60 group-hover:opacity-100 transition-opacity">
                     <ChevronRight size={14} />
                   </div>
-                </div>
+                </button>
               ))}
             </motion.div>
 
@@ -179,10 +181,11 @@ function MatchDeck({ user, likedIds, userProfile, onMatch }) {
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.8 }}
               onClick={handleMatchContinue}
-              className="text-[#0E2A5C] bg-white px-10 py-5 rounded-2xl font-black text-xl shadow-2xl hover:scale-105 active:scale-95 transition-all w-full max-w-sm"
+              className="text-[#154996] bg-white px-10 py-5 rounded-2xl font-black text-xl shadow-2xl hover:scale-105 active:scale-95 transition-all w-full max-w-sm mt-auto"
             >
               ¡Sigue Explorando! →
             </motion.button>
+</div>
           </motion.div>
         )}
       </AnimatePresence>

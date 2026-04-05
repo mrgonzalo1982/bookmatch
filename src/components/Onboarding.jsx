@@ -4,7 +4,8 @@ import { GENRES, ITEMS } from '../data/mockData';
 import { Check, ChevronRight, BookOpen, Heart, Sparkles, Search } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const STEPS = ['bienvenida', 'generos', 'libro', 'listo'];
+const STEPS = ['bienvenida', 'emoji', 'generos', 'libro', 'listo'];
+const STUDENT_EMOJIS = ['🤓', '😎', '🧐', '🤠', '🤡', '🤖', '👾', '🦸', '🧙', '🧜', '🥷', '🧑‍💻', '🦄', '🐯', '🦊', '🎨', '🚀', '⚽'];
 
 function Onboarding({ user, onFinish }) {
   const [step, setStep] = useState(0);
@@ -12,6 +13,7 @@ function Onboarding({ user, onFinish }) {
   const [favoriteBook, setFavoriteBook] = useState(null);
   const [customBook, setCustomBook] = useState('');
   const [search, setSearch] = useState('');
+  const [selectedEmoji, setSelectedEmoji] = useState(null);
 
   const firstName = (() => {
     const parts = user?.nombre?.split(' ') || [];
@@ -32,6 +34,7 @@ function Onboarding({ user, onFinish }) {
       genres: selectedGenres,
       favoriteBook: favoriteBook?.title || customBook || null,
       favoriteBookObj: favoriteBook || null,
+      emoji: selectedEmoji || '👤',
     });
   };
 
@@ -43,6 +46,7 @@ function Onboarding({ user, onFinish }) {
 
   const canAdvance = [
     true,                            // bienvenida: always
+    selectedEmoji !== null,          // emoji: must pick one
     selectedGenres.length >= 1,      // géneros: at least 1
     favoriteBook || customBook.trim().length > 2, // libro: picked or typed
     true                             // listo: always
@@ -117,8 +121,44 @@ function Onboarding({ user, onFinish }) {
             </motion.div>
           )}
 
-          {/* ─── PASO 1: Géneros ─── */}
+          {/* ─── PASO 1: Escoge tu Emoji ─── */}
           {step === 1 && (
+            <motion.div
+              key="emoji"
+              variants={variants} initial="enter" animate="center" exit="exit"
+              transition={{ duration: 0.25 }}
+              className="flex-1 flex flex-col"
+            >
+              <h2 className="text-3xl font-black text-gray-900 tracking-tighter mb-1">
+                ¿Cómo te ves hoy?
+              </h2>
+              <p className="text-gray-400 font-medium text-sm mb-6">
+                Este emoji será tu imagen de perfil en BookMatch.
+              </p>
+
+              <div className="flex-1 overflow-y-auto custom-scrollbar">
+                <div className="grid grid-cols-4 gap-4 pb-4">
+                  {STUDENT_EMOJIS.map(emoji => {
+                    const selected = selectedEmoji === emoji;
+                    return (
+                      <button
+                        key={emoji}
+                        onClick={() => setSelectedEmoji(emoji)}
+                        className={`aspect-square rounded-3xl flex items-center justify-center text-3xl transition-all duration-200 border-2
+                          ${selected ? 'bg-white shadow-lg scale-110' : 'bg-gray-50 border-transparent grayscale-[0.5] hover:grayscale-0'}`}
+                        style={selected ? { borderColor: '#A80A0A' } : {}}
+                      >
+                        {emoji}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            </motion.div>
+          )}
+
+          {/* ─── PASO 2: Géneros ─── */}
+          {step === 2 && (
             <motion.div
               key="generos"
               variants={variants} initial="enter" animate="center" exit="exit"
@@ -174,8 +214,8 @@ function Onboarding({ user, onFinish }) {
             </motion.div>
           )}
 
-          {/* ─── PASO 2: Libro Favorito ─── */}
-          {step === 2 && (
+          {/* ─── PASO 3: Libro Favorito ─── */}
+          {step === 3 && (
             <motion.div
               key="libro"
               variants={variants} initial="enter" animate="center" exit="exit"
@@ -251,8 +291,8 @@ function Onboarding({ user, onFinish }) {
             </motion.div>
           )}
 
-          {/* ─── PASO 3: Listo ─── */}
-          {step === 3 && (
+          {/* ─── PASO 4: Listo ─── */}
+          {step === 4 && (
             <motion.div
               key="listo"
               variants={variants} initial="enter" animate="center" exit="exit"
@@ -277,12 +317,17 @@ function Onboarding({ user, onFinish }) {
 
               {/* Summary card */}
               <div className="bg-white rounded-3xl p-5 shadow-sm border border-gray-100 w-full text-left space-y-4">
-                <div>
-                  <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Géneros favoritos</p>
-                  <div className="flex flex-wrap gap-1.5">
-                    {selectedGenres.map(g => (
-                      <span key={g} className="text-xs font-black px-2.5 py-1 rounded-full" style={{ background: '#FFF0F0', color: '#A80A0A' }}>{g}</span>
-                    ))}
+                <div className="flex gap-4">
+                  <div className="w-14 h-14 rounded-2xl bg-gray-50 flex items-center justify-center text-3xl border border-gray-100 shadow-sm">
+                    {selectedEmoji}
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Géneros favoritos</p>
+                    <div className="flex flex-wrap gap-1.5">
+                      {selectedGenres.map(g => (
+                        <span key={g} className="text-xs font-black px-2.5 py-1 rounded-full" style={{ background: '#FFF0F0', color: '#A80A0A' }}>{g}</span>
+                      ))}
+                    </div>
                   </div>
                 </div>
                 {(favoriteBook || customBook) && (
@@ -317,16 +362,16 @@ function Onboarding({ user, onFinish }) {
             onClick={() => setStep(s => s + 1)}
             disabled={!canAdvance}
             className="w-full text-white py-5 rounded-2xl font-black text-lg shadow-lg disabled:opacity-40 active:scale-95 transition-all flex items-center justify-center gap-2 group"
-            style={{ background: canAdvance ? 'linear-gradient(135deg, #A80A0A, #C91010)' : '#9ca3af', boxShadow: canAdvance ? '0 8px 24px rgba(168,10,10,0.3)' : 'none' }}
+            style={{ background: canAdvance ? 'linear-gradient(135deg, #154996, #A80A0A)' : '#9ca3af', boxShadow: canAdvance ? '0 8px 24px rgba(21,73,150,0.3)' : 'none' }}
           >
-            {step === 0 ? 'Empezar' : 'Continuar'}
+            {step === 0 ? 'Empezar' : step === STEPS.length - 2 ? 'Continuar' : 'Siguiente'}
             <ChevronRight size={20} className={canAdvance ? 'group-hover:translate-x-1 transition-transform' : ''} />
           </button>
         ) : (
           <button
             onClick={handleFinish}
             className="w-full text-white py-5 rounded-2xl font-black text-lg shadow-xl active:scale-95 transition-all flex items-center justify-center gap-2"
-            style={{ background: 'linear-gradient(135deg, #A80A0A, #154996)', boxShadow: '0 8px 24px rgba(168,10,10,0.3)' }}
+            style={{ background: 'linear-gradient(135deg, #154996, #A80A0A)', boxShadow: '0 8px 24px rgba(21,73,150,0.3)' }}
           >
             <BookOpen size={20} />
             ¡Descubrir Libros!

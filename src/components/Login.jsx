@@ -58,15 +58,20 @@ function Login({ onLogin }) {
           <h1 className="text-4xl font-black text-white tracking-tighter">BookMatch</h1>
           <p className="text-white/50 text-sm font-medium mt-1.5 tracking-wide">Colegio Umbral de Curauma</p>
         </div>
-
         {/* Form card */}
-        <div className="bg-white/95 backdrop-blur rounded-3xl p-7 shadow-2xl">
-          <h2 className="text-lg font-black tracking-tight mb-1" style={{ color: NAVY }}>
-            Accede con tu RUT
-          </h2>
-          <p className="text-gray-400 text-sm mb-6">
-            Ingresa tu número de RUT para entrar a tu perfil lector.
-          </p>
+        <div className="bg-white/95 backdrop-blur rounded-3xl p-7 shadow-2xl relative mt-12">
+          <div className="absolute -top-12 left-1/2 -translate-x-1/2 w-24 h-24 bg-white rounded-3xl shadow-2xl flex items-center justify-center p-4 border border-gray-50">
+            <img src="/umbral-shield.png" alt="Umbral" className="w-full h-auto" />
+          </div>
+
+          <div className="text-center mb-10 mt-8">
+            <h1 className="text-4xl font-black text-gray-900 tracking-tighter mb-2">BookMatch</h1>
+            <div className="flex items-center justify-center gap-2">
+              <span className="h-px w-8 bg-gray-200"></span>
+              <p className="text-xs font-black text-[#A80A0A] uppercase tracking-widest">Comunidad Lectora</p>
+              <span className="h-px w-8 bg-gray-200"></span>
+            </div>
+          </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>

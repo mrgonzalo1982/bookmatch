@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Bookmark, Heart, Star, BookOpen, X, Copy, Check } from 'lucide-react';
 
-function MatchList({ matches, setView }) {
+function MatchList({ matches, setView, onShowTeacher }) {
   const [showLoanList, setShowLoanList] = useState(false);
   const [copied, setCopied] = useState(false);
 
@@ -41,16 +41,16 @@ function MatchList({ matches, setView }) {
                   <span className="text-2xl font-black text-indigo-200 w-8 text-center shrink-0">{i + 1}</span>
                   <div className="flex-1 min-w-0">
                     <p className="font-black text-gray-900 text-sm truncate">{m.title}</p>
-                    <p className="text-xs text-indigo-500 font-bold truncate">{m.author}</p>
+                    <p className="text-xs text-[#154996] font-bold truncate">{m.author}</p>
                   </div>
-                  <span className="text-[10px] bg-indigo-100 text-indigo-600 px-2 py-0.5 rounded-full font-black uppercase tracking-tighter shrink-0">{m.genre}</span>
+                  <span className="text-[10px] bg-blue-50 text-[#154996] px-2 py-0.5 rounded-full font-black uppercase tracking-tighter shrink-0">{m.genre}</span>
                 </div>
               ))}
             </div>
             <div className="p-6 border-t border-gray-100">
               <button
                 onClick={handleCopyLoan}
-                className="w-full bg-indigo-600 text-white py-4 rounded-2xl font-black flex items-center justify-center gap-3 active:scale-95 transition-all shadow-lg"
+                className="w-full bg-[#154996] text-white py-4 rounded-2xl font-black flex items-center justify-center gap-3 active:scale-95 transition-all shadow-lg"
               >
                 {copied ? <Check size={18} /> : <Copy size={18} />}
                 {copied ? '¡Copiado!' : 'Copiar Lista'}
@@ -66,7 +66,7 @@ function MatchList({ matches, setView }) {
           <h2 className="text-3xl font-black text-gray-900 tracking-tighter">Mis Matches</h2>
           <p className="text-xs text-gray-400 font-medium mt-0.5">Tu biblioteca personal</p>
         </div>
-        <span className="text-xs font-black text-indigo-400 uppercase tracking-widest">{matches.length} libro{matches.length !== 1 ? 's' : ''}</span>
+        <span className="text-xs font-black text-[#154996] uppercase tracking-widest">{matches.length} libro{matches.length !== 1 ? 's' : ''}</span>
       </div>
 
       {/* Content */}
@@ -104,13 +104,13 @@ function MatchList({ matches, setView }) {
                 </div>
                 <div className="p-3 flex-1 flex flex-col">
                   <h3 className="font-black text-xs text-gray-900 line-clamp-2 leading-tight mb-1">{match.title}</h3>
-                  <p className="text-[10px] font-bold text-indigo-400 uppercase tracking-tighter truncate">{match.author}</p>
+                  <p className="text-[10px] font-bold text-[#154996] uppercase tracking-tighter truncate">{match.author}</p>
                   <div className="mt-auto pt-2 border-t border-gray-50 flex items-center justify-between">
-                    <div className="flex -space-x-1.5">
+                    <div className="flex -space-x-1.5 pointer-events-auto">
                       {match.professors?.slice(0, 2).map((p, i) => (
-                        <div key={i} title={p.name} className="w-6 h-6 rounded-full bg-indigo-600 border-2 border-white flex items-center justify-center text-[8px] font-black text-white shadow-sm">
+                        <button key={i} title={p.name} onClick={() => onShowTeacher(p)} className="w-6 h-6 rounded-full bg-[#154996] border-2 border-white flex items-center justify-center text-[8px] font-black text-white shadow-sm hover:scale-110 active:scale-90 transition-transform">
                           {p.name.replace('Profe ', '').replace('Miss ', '').replace('Tía ', '').charAt(0)}
-                        </div>
+                        </button>
                       ))}
                     </div>
                     <div className="bg-pink-50 text-pink-500 p-1 rounded-lg">
@@ -125,18 +125,18 @@ function MatchList({ matches, setView }) {
       )}
 
       {/* Bottom Actions */}
-      <div className="absolute bottom-0 inset-x-0 p-5 bg-gradient-to-t from-[#F8F9FD] via-[#F8F9FD]/95 to-transparent z-10 space-y-3">
+      <div className="absolute bottom-0 inset-x-0 p-5 bg-gradient-to-t from-[#F7F7F9] via-[#F7F7F9]/95 to-transparent z-10 space-y-3">
         {matches.length > 0 && (
           <button
             onClick={() => setShowLoanList(true)}
-            className="w-full bg-white text-indigo-700 py-4 rounded-2xl font-black border-2 border-indigo-100 shadow-md flex items-center justify-center gap-2 active:scale-95 transition-all text-sm"
+            className="w-full bg-white text-[#154996] py-4 rounded-2xl font-black border-2 border-blue-100 shadow-md flex items-center justify-center gap-2 active:scale-95 transition-all text-sm"
           >
             <BookOpen size={16} /> Lista para Biblioteca
           </button>
         )}
         <button
           onClick={() => setView('deck')}
-          className="w-full bg-indigo-600 text-white py-4 rounded-2xl font-black shadow-xl flex items-center justify-center gap-2 active:scale-95 transition-all text-sm"
+          className="w-full bg-[#A80A0A] text-white py-4 rounded-2xl font-black shadow-xl flex items-center justify-center gap-2 active:scale-95 transition-all text-sm"
         >
           <Star size={16} fill="currentColor" />
           Descubrir más lecturas

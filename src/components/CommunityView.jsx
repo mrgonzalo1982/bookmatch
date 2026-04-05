@@ -4,7 +4,7 @@ import { ITEMS, TEACHERS, canMatch, getPeerLikes, getPeerProfile, compatibilityS
 import { Users, X, BookOpen, Star, ChevronRight, Sparkles } from 'lucide-react';
 
 // ── Teacher Detail Modal ──────────────────────────────────────────────────────
-function TeacherModal({ teacher, onClose }) {
+export function TeacherModal({ teacher, onClose }) {
   const books = ITEMS.filter(item => teacher.recommendedIds.includes(item.id));
 
   return (
@@ -70,8 +70,7 @@ function TeacherModal({ teacher, onClose }) {
 }
 
 // ── Main CommunityView ────────────────────────────────────────────────────────
-function CommunityView({ user, likedIds, userProfile, allStudents }) {
-  const [selectedTeacher, setSelectedTeacher] = useState(null);
+function CommunityView({ user, likedIds, userProfile, allStudents, onShowTeacher }) {
 
   // Filter teachers that teach this level
   const myTeachers = useMemo(() => {
@@ -120,7 +119,7 @@ function CommunityView({ user, likedIds, userProfile, allStudents }) {
         <div className="pt-5 pb-3">
           <div className="flex items-center justify-between px-5 mb-4">
             <h2 className="text-xl font-black text-gray-900 tracking-tighter">Profesores</h2>
-            <span className="text-[10px] font-black text-indigo-400 uppercase tracking-widest">{myTeachers.length} disponibles</span>
+            <span className="text-[10px] font-black text-blue-500 uppercase tracking-widest">{myTeachers.length} disponibles</span>
           </div>
 
           {/* Horizontal scroll of teacher cards */}
@@ -134,7 +133,7 @@ function CommunityView({ user, likedIds, userProfile, allStudents }) {
               return (
                 <button
                   key={teacher.id}
-                  onClick={() => setSelectedTeacher(teacher)}
+                  onClick={() => onShowTeacher(teacher)}
                   className={`shrink-0 w-36 rounded-3xl p-4 flex flex-col items-center text-center transition-all active:scale-95 border
                     ${hasMatch
                       ? 'bg-white border-[#154996] shadow-md'
@@ -257,4 +256,5 @@ function CommunityView({ user, likedIds, userProfile, allStudents }) {
   );
 }
 
+CommunityView.TeacherModal = TeacherModal;
 export default CommunityView;
