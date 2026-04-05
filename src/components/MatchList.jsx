@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Bookmark, Heart, Star, BookOpen, X, Copy, Check, Share2, Loader2 } from 'lucide-react';
+import { Bookmark, Star, BookOpen, X, Copy, Check, Share2, Loader2 } from 'lucide-react';
 import html2canvas from 'html2canvas';
 import { MatchStoryCard } from './MatchStoryCard';
 
@@ -23,7 +23,7 @@ function MatchList({ user, matches, setView, onShowTeacher, allTeachers }) {
     setIsGenerating(match.id);
     
     const teacherName = profs.length > 0 ? profs[0].name : 'un docente';
-    const text = `¡Tengo un match con "${match.title}" en BookMatch Umbral! 📚✨ Recomendado por ${teacherName}. #BookMatchUmbral`;
+    const text = `¡Tengo una coincidencia lectora con "${match.title}" en BookMatch Umbral! 📚✨ Recomendado por ${teacherName}. #BookMatchUmbral`;
     
     try {
       // Wait for React to render the hidden card (it will be rendered because isGenerating === match.id)
@@ -110,10 +110,10 @@ function MatchList({ user, matches, setView, onShowTeacher, allTeachers }) {
       {/* Header */}
       <div className="px-5 pt-5 pb-3 flex items-end justify-between shrink-0">
         <div>
-          <h2 className="text-3xl font-black text-gray-900 tracking-tighter">Mis Matches</h2>
+          <h2 className="text-3xl font-black text-gray-900 tracking-tighter">Mis Lecturas</h2>
           <p className="text-xs text-gray-400 font-medium mt-0.5">Tu biblioteca personal</p>
         </div>
-        <span className="text-xs font-black uppercase tracking-widest" style={{ color: '#A80A0A' }}>{matches.length} libro{matches.length !== 1 ? 's' : ''}</span>
+        <span className="text-xs font-black uppercase tracking-widest" style={{ color: '#A80A0A' }}>{matches.length} coincidencia{matches.length !== 1 ? 's' : ''}</span>
       </div>
 
       {/* Content */}
@@ -165,7 +165,7 @@ function MatchList({ user, matches, setView, onShowTeacher, allTeachers }) {
                             title={p.name} 
                             onClick={(e) => { e.stopPropagation(); onShowTeacher(p); }} 
                             className="w-6 h-6 rounded-full border-2 border-white flex items-center justify-center text-[10px] shadow-sm hover:scale-110 transition-transform"
-                            style={{ background: '#A10D12' }}
+                            style={{ background: '#FFD700' }}
                           >
                             {p.emoji || '👨‍🏫'}
                           </button>
@@ -173,6 +173,9 @@ function MatchList({ user, matches, setView, onShowTeacher, allTeachers }) {
                       }
                     </div>
                     <div className="flex items-center gap-1">
+                      <div className="bg-yellow-50 text-[#A10D12] p-1 rounded-lg mr-1">
+                        <Star size={12} fill="#FFD700" strokeWidth={1} />
+                      </div>
                       <button 
                         onClick={(e) => { 
                           e.stopPropagation(); 

@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence, useMotionValue, useTransform } from 'framer-motion';
 import { ITEMS } from '../data/mockData';
-import { Heart, X, Bookmark, ChevronRight, BookOpen, Users, Loader2, Share2, Download } from 'lucide-react';
+import { Star, X, Bookmark, ChevronRight, BookOpen, Users, Loader2, Share2, Download, Heart } from 'lucide-react';
 import { db } from '../lib/firebase';
 import { collection, doc, updateDoc, arrayUnion } from 'firebase/firestore';
 import html2canvas from 'html2canvas';
@@ -52,7 +52,7 @@ function MatchDeck({ user, likedIds, userProfile, onMatch, onShowTeacher, allTea
     setIsSharing(true);
 
     const firstTeacher = matchingTeachers[0];
-    const text = `¡Tengo un match con "${item.title}" en BookMatch Umbral! 📚✨ Recomendado por ${firstTeacher.name}. #BookMatchUmbral`;
+    const text = `¡Tengo una coincidencia lectora con "${item.title}" en BookMatch Umbral! 📚✨ Recomendado por ${firstTeacher.name}. #BookMatchUmbral`;
     
     try {
       // 1. Generate image from hidden card
@@ -156,24 +156,24 @@ function MatchDeck({ user, likedIds, userProfile, onMatch, onShowTeacher, allTea
             style={{ background: 'radial-gradient(circle at center, #A80A0A 0%, #3a0000 60%, #050505 100%)' }}
           >
             <div className="flex-1 w-full max-w-sm flex flex-col items-center overflow-y-auto custom-scrollbar pt-20 pb-20">
-            {/* Animated heart */}
+            {/* Animated star */}
             <motion.div
               initial={{ scale: 0.3 }}
               animate={{ scale: 1 }}
               transition={{ type: 'spring', stiffness: 260, damping: 15 }}
               className="relative mb-8"
             >
-              <Heart size={110} className="text-white fill-white drop-shadow-[0_0_30px_rgba(255,255,255,0.6)]" />
+              <Star size={110} className="text-[#FFD700] fill-[#FFD700] drop-shadow-[0_0_30px_rgba(255,215,0,0.6)]" />
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                <Bookmark size={36} className="text-white" fill="currentColor" />
+                <Bookmark size={36} className="text-[#A80A0A]" fill="currentColor" />
               </div>
               <motion.div
                 initial={{ rotate: 0, opacity: 0 }}
                 animate={{ rotate: 12, opacity: 1 }}
                 transition={{ delay: 0.3 }}
-                className="absolute -top-4 -right-14 bg-[#FFD700] text-black px-4 py-1.5 rounded-full font-black text-xs uppercase tracking-tight shadow-xl border-4 border-white animate-bounce"
+                className="absolute -top-4 -right-14 bg-white text-[#A80A0A] px-4 py-1.5 rounded-full font-black text-xs uppercase tracking-tight shadow-xl border-4 border-[#FFD700] animate-bounce"
               >
-                ¡Match!
+                ¡COINCIDENCIA!
               </motion.div>
             </motion.div>
 
@@ -295,7 +295,7 @@ function MatchDeck({ user, likedIds, userProfile, onMatch, onShowTeacher, allTea
           >
             {/* Like / Nope Labels */}
             <motion.div style={{ opacity: likeOpacity }} className="absolute top-8 right-6 z-20 rotate-[20deg]">
-              <div className="border-4 border-[#A80A0A] text-[#A80A0A] px-4 py-1.5 rounded-xl font-black text-2xl tracking-tight">ME GUSTA</div>
+              <div className="border-4 border-[#FFD700] text-[#FFD700] px-4 py-1.5 rounded-xl font-black text-2xl tracking-tight bg-black/10 backdrop-blur-sm">LO QUIERO</div>
             </motion.div>
             <motion.div style={{ opacity: nopeOpacity }} className="absolute top-8 left-6 z-20 -rotate-[20deg]">
               <div className="border-4 border-gray-400 text-gray-400 px-4 py-1.5 rounded-xl font-black text-2xl tracking-tight">PASO</div>
@@ -368,10 +368,10 @@ function MatchDeck({ user, likedIds, userProfile, onMatch, onShowTeacher, allTea
         </button>
         <button
           onClick={() => handleSwipe('right')}
-            className="w-20 h-20 rounded-full shadow-xl flex items-center justify-center text-white border-2 border-white/50 transition-all active:scale-90"
-            style={{ background: 'linear-gradient(135deg, #A80A0A, #8a0a0e)', boxShadow: '0 8px 24px rgba(211,15,21,0.4)' }}
+            className="w-20 h-20 rounded-full shadow-xl flex items-center justify-center text-white border-2 border-white/50 transition-all active:scale-95"
+            style={{ background: 'linear-gradient(135deg, #FFD700, #E0B300)', color: '#A80A0A', boxShadow: '0 8px 24px rgba(255,215,0,0.4)' }}
         >
-          <Heart size={36} fill="currentColor" strokeWidth={0} />
+          <Star size={36} fill="currentColor" strokeWidth={0} />
         </button>
       </div>
     </div>

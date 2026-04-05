@@ -49,7 +49,7 @@ export function MatchStoryCard({ book, teacher, user, innerRef }) {
         boxShadow: '0 20px 40px rgba(0,0,0,0.4)',
         border: '8px solid white'
       }}>
-        ¡MATCH LITERARIO!
+        ¡COINCIDENCIA LECTORA!
       </div>
 
       {/* Book Cover Container */}
@@ -118,8 +118,8 @@ export function MatchStoryCard({ book, teacher, user, innerRef }) {
           <p style={{ fontSize: '24px', color: GOLD }}>Alumno</p>
         </div>
 
-        {/* Big Heart */}
-        <div style={{ fontSize: '100px', color: GOLD }}>❤️</div>
+        {/* Big Star */}
+        <div style={{ fontSize: '120px', color: GOLD, filter: 'drop-shadow(0 0 20px rgba(255,215,0,0.5))' }}>⭐</div>
 
         {/* Teacher */}
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>

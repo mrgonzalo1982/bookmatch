@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ITEMS, STUDENTS, canMatch, compatibilityScore } from '../data/mockData';
-import { Users, X, BookOpen, Star, Sparkles, Heart, Loader2 } from 'lucide-react';
+import { Users, X, BookOpen, Star, Sparkles, Heart, Loader2, Bookmark } from 'lucide-react';
 import { db } from '../lib/firebase';
 import { collection, getDocs } from 'firebase/firestore';
 
@@ -57,7 +57,7 @@ export function TeacherModal({ teacher, onClose }) {
           {/* Recommended Books = teacher's real likes */}
           <div>
             <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4 flex items-center gap-1.5">
-              <Heart size={10} fill={RED} color={RED} />
+              <Star size={10} fill={GOLD} color={GOLD} />
               Lecturas que recomienda ({books.length})
             </p>
             {books.length === 0 ? (
@@ -223,8 +223,8 @@ function CommunityView({ user, likedIds, userProfile, allStudents, onShowTeacher
                     <p className="font-black text-xs text-gray-900 leading-tight">{teacher.name}</p>
                     <p className="text-[9px] font-bold mt-0.5 leading-tight" style={{ color: RED }}>{teacher.dept}</p>
                     {hasMatch && (
-                      <span className="mt-2 text-[8px] font-black px-2 py-0.5 rounded-full" style={{ background: '#FFF0F0', color: RED }}>
-                        {matchingBooks.length} libro{matchingBooks.length > 1 ? 's' : ''} en común
+                      <span className="mt-2 text-[8px] font-black px-2 py-0.5 rounded-full" style={{ background: '#FFF7E6', color: '#D48806' }}>
+                         ⭐ {matchingBooks.length} coincidencia{matchingBooks.length > 1 ? 's' : ''}
                       </span>
                     )}
                   </button>
@@ -240,7 +240,7 @@ function CommunityView({ user, likedIds, userProfile, allStudents, onShowTeacher
         {/* ── Community / Peers Section ── */}
         <div className="px-5 pt-3 pb-24">
           <div className="flex items-end justify-between mb-4">
-            <h2 className="text-xl font-black text-gray-900 tracking-tighter">Almas Gemelas</h2>
+            <h2 className="text-xl font-black text-gray-900 tracking-tighter">Lectores Compatibles</h2>
             {peers.length > 0 && (
               <span className="text-[10px] font-black uppercase tracking-widest" style={{ color: RED }}>{peers.length} coincidencias</span>
             )}
@@ -249,12 +249,12 @@ function CommunityView({ user, likedIds, userProfile, allStudents, onShowTeacher
           {peers.length === 0 ? (
             <div className="flex flex-col items-center py-10 text-center">
               <div className="w-20 h-20 bg-blue-50 rounded-full flex items-center justify-center mb-4">
-                <Sparkles size={36} style={{ color: RED }} strokeWidth={1.5} opacity={0.3} />
+                <Users size={36} style={{ color: BLUE }} strokeWidth={1.5} opacity={0.3} />
               </div>
               <p className="text-sm font-black text-gray-400 max-w-[200px]">
                 {(userProfile?.genres?.length || 0) > 0
-                  ? 'Da Me Gusta a libros para descubrir almas gemelas.'
-                  : 'Completa tu perfil y da Me Gusta a libros para conectar.'}
+                  ? 'Guarda libros en tu biblioteca para descubrir compañeros de lectura.'
+                  : 'Completa tu perfil y guarda libros para conectar con otros lectores.'}
               </p>
             </div>
           ) : (
@@ -303,14 +303,14 @@ function CommunityView({ user, likedIds, userProfile, allStudents, onShowTeacher
                         <circle cx="18" cy="18" r="15.9" fill="none" stroke="#e0e7ff" strokeWidth="3" />
                         <circle
                           cx="18" cy="18" r="15.9" fill="none"
-                          stroke={peer.score >= 70 ? RED : peer.score >= 40 ? RED : '#fca5a5'}
+                          stroke={peer.score >= 70 ? BLUE : peer.score >= 40 ? BLUE : '#94a3b8'}
                           strokeWidth="3"
                           strokeDasharray={`${peer.score} 100`}
                           strokeLinecap="round"
                         />
                       </svg>
                       <div className="absolute inset-0 flex items-center justify-center">
-                        <span className="text-xs font-black" style={{ color: RED }}>{peer.score}%</span>
+                        <span className="text-xs font-black" style={{ color: BLUE }}>{peer.score}%</span>
                       </div>
                     </div>
                     <span className="text-[9px] text-gray-400 font-bold mt-0.5">Compat.</span>
