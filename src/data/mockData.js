@@ -137,7 +137,7 @@ export const ITEMS = [
     "image": "https://covers.openlibrary.org/b/id/13859660-L.jpg"
   },
   {
-    "id": 9,
+    "id": 140,
     "type": "libro",
     "title": "El Hobbit",
     "author": "J.R.R. Tolkien",
@@ -148,7 +148,7 @@ export const ITEMS = [
     "image": "https://covers.openlibrary.org/b/id/8406766-L.jpg"
   },
   {
-    "id": 102,
+    "id": 151,
     "type": "libro",
     "title": "El Niño con el Pijama de Rayas",
     "author": "John Boyne",
@@ -335,6 +335,17 @@ export const ITEMS = [
     "image": "https://covers.openlibrary.org/b/id/10107644-L.jpg"
   },
   {
+    "id": 106,
+    "type": "libro",
+    "title": "Cuentos de Amor de Locura y de Muerte",
+    "author": "Horacio Quiroga",
+    "genre": "Terror",
+    "minNivel": 9,
+    "maxNivel": 12,
+    "description": "Relatos donde la selva, la locura humana y lo macabro toman el protagonismo de forma cruda.",
+    "image": "https://covers.openlibrary.org/b/id/99816-L.jpg"
+  },
+  {
     "id": 109,
     "type": "libro",
     "title": "Frankenstein",
@@ -344,6 +355,17 @@ export const ITEMS = [
     "maxNivel": 12,
     "description": "El origen del terror moderno: la criatura creada por Víctor Frankenstein.",
     "image": "https://covers.openlibrary.org/b/id/12356249-L.jpg"
+  },
+  {
+    "id": 110,
+    "type": "libro",
+    "title": "Orgullo y Prejuicio",
+    "author": "Jane Austen",
+    "genre": "Romance",
+    "minNivel": 9,
+    "maxNivel": 12,
+    "description": "La compleja relación entre Elizabeth Bennet y el Sr. Darcy navegando por las convenciones sociales de su siglo.",
+    "image": "https://covers.openlibrary.org/b/id/13574150-L.jpg"
   },
   {
     "id": 111,
@@ -379,6 +401,17 @@ export const ITEMS = [
     "image": "https://placehold.co/400x600/A10D12/D4AF37.png?text=Dr%C3%A1cula"
   },
   {
+    "id": 114,
+    "type": "libro",
+    "title": "La Odisea",
+    "author": "Homero",
+    "genre": "Aventura",
+    "minNivel": 9,
+    "maxNivel": 12,
+    "description": "El épico y accidentado viaje de Odiseo tratando de retornar a su patria tras la Guerra de Troya.",
+    "image": "https://covers.openlibrary.org/b/id/5081963-L.jpg"
+  },
+  {
     "id": 116,
     "type": "libro",
     "title": "Sub Terra",
@@ -388,6 +421,17 @@ export const ITEMS = [
     "maxNivel": 12,
     "description": "Las inhumanas condiciones de los mineros del carbón en Chile.",
     "image": "https://placehold.co/400x600/A10D12/D4AF37.png?text=Sub%2BTerra"
+  },
+  {
+    "id": 118,
+    "type": "libro",
+    "title": "El Visitante",
+    "author": "Stephen King",
+    "genre": "Misterio",
+    "minNivel": 11,
+    "maxNivel": 12,
+    "description": "Un horrendo asesinato involucra a un querido profesor local, pero huellas digitales y hechos desafían toda explicación.",
+    "image": "https://covers.openlibrary.org/b/id/11412999-L.jpg"
   },
   {
     "id": 401,
@@ -436,13 +480,35 @@ export const ITEMS = [
   {
     "id": 120,
     "type": "libro",
-    "title": "La Comunidad del Anillo",
+    "title": "El Señor de los Anillos: La Comunidad del Anillo",
     "author": "J.R.R. Tolkien",
     "genre": "Fantasía",
     "minNivel": 8,
     "maxNivel": 12,
-    "description": "Frodo Bolsón emprende la misión de destruir el Anillo Único.",
+    "description": "Frodo Bolsón emprende la misión de destruir el Anillo Único con la ayuda de la Comunidad.",
     "image": "https://covers.openlibrary.org/b/id/14625765-L.jpg"
+  },
+  {
+    "id": 121,
+    "type": "libro",
+    "title": "El Señor de los Anillos: Las Dos Torres",
+    "author": "J.R.R. Tolkien",
+    "genre": "Fantasía",
+    "minNivel": 8,
+    "maxNivel": 12,
+    "description": "La Comunidad se divide mientras Frodo y Sam continúan hacia Mordor y los otros luchan contra Saruman.",
+    "image": "https://covers.openlibrary.org/b/id/14627564-L.jpg"
+  },
+  {
+    "id": 122,
+    "type": "libro",
+    "title": "El Señor de los Anillos: El Retorno del Rey",
+    "author": "J.R.R. Tolkien",
+    "genre": "Fantasía",
+    "minNivel": 8,
+    "maxNivel": 12,
+    "description": "La batalla final por la Tierra Media comienza mientras Frodo se acerca al Monte del Destino.",
+    "image": "https://covers.openlibrary.org/b/id/14627062-L.jpg"
   },
   {
     "id": 601,
@@ -608,6 +674,336 @@ export const ITEMS = [
     "maxNivel": 12,
     "description": "Relatos realistas que exploran la vida social y minera del Chile del siglo XX.",
     "image": "https://placehold.co/400x600/A10D12/D4AF37.png?text=Sub%2BSole"
+  },
+  {
+    "id": 701,
+    "type": "libro",
+    "title": "La Ilíada",
+    "author": "Homero",
+    "genre": "Clásico",
+    "minNivel": 9,
+    "maxNivel": 12,
+    "description": "El relato de la furia de Aquiles y los eventos del décimo año de la Guerra de Troya.",
+    "image": "https://covers.openlibrary.org/b/id/12889078-L.jpg"
+  },
+  {
+    "id": 702,
+    "type": "libro",
+    "title": "Edipo Rey",
+    "author": "Sófocles",
+    "genre": "Clásico",
+    "minNivel": 10,
+    "maxNivel": 12,
+    "description": "La tragedia griega definitiva sobre el destino inevitable y la búsqueda de la verdad.",
+    "image": "https://covers.openlibrary.org/b/id/11149457-L.jpg"
+  },
+  {
+    "id": 703,
+    "type": "libro",
+    "title": "Antígona",
+    "author": "Sófocles",
+    "genre": "Clásico",
+    "minNivel": 10,
+    "maxNivel": 12,
+    "description": "El dilema moral entre las leyes divinas y las leyes de los hombres en una Tebas dividida.",
+    "image": "https://covers.openlibrary.org/b/id/12711762-L.jpg"
+  },
+  {
+    "id": 704,
+    "type": "libro",
+    "title": "Cantar de Mio Cid",
+    "author": "Anónimo",
+    "genre": "Clásico",
+    "minNivel": 9,
+    "maxNivel": 12,
+    "description": "La mayor gesta de la épica castellana que narra el honor y las hazañas de Rodrigo Díaz de Vivar.",
+    "image": "https://covers.openlibrary.org/b/id/9643444-L.jpg"
+  },
+  {
+    "id": 705,
+    "type": "libro",
+    "title": "La Celestina",
+    "author": "Fernando de Rojas",
+    "genre": "Clásico",
+    "minNivel": 10,
+    "maxNivel": 12,
+    "description": "La tragicomedia de Calisto y Melibea, mediada por la astuta y codiciosa alcahueta Celestina.",
+    "image": "https://covers.openlibrary.org/b/id/12866956-L.jpg"
+  },
+  {
+    "id": 706,
+    "type": "libro",
+    "title": "El Príncipe",
+    "author": "Nicolás Maquiavelo",
+    "genre": "Clásico",
+    "minNivel": 11,
+    "maxNivel": 12,
+    "description": "El tratado político fundamental sobre el poder, la estrategia y la naturaleza humana.",
+    "image": "https://covers.openlibrary.org/b/id/13251212-L.jpg"
+  },
+  {
+    "id": 707,
+    "type": "libro",
+    "title": "Hamlet",
+    "author": "William Shakespeare",
+    "genre": "Clásico",
+    "minNivel": 10,
+    "maxNivel": 12,
+    "description": "La tragedia del príncipe de Dinamarca sobre la duda, la venganza y la corrupción del alma.",
+    "image": "https://covers.openlibrary.org/b/id/12443026-L.jpg"
+  },
+  {
+    "id": 708,
+    "type": "libro",
+    "title": "Macbeth",
+    "author": "William Shakespeare",
+    "genre": "Clásico",
+    "minNivel": 10,
+    "maxNivel": 12,
+    "description": "La ambición desmedida arrastra a un valiente guerrero hacia la traición y la locura.",
+    "image": "https://covers.openlibrary.org/b/id/11202862-L.jpg"
+  },
+  {
+    "id": 709,
+    "type": "libro",
+    "title": "Lazarillo de Tormes",
+    "author": "Anónimo",
+    "genre": "Clásico",
+    "minNivel": 8,
+    "maxNivel": 11,
+    "description": "El inicio de la novela picaresca española: las desventuras de un niño que sirve a varios amos.",
+    "image": "https://covers.openlibrary.org/b/id/9091873-L.jpg"
+  },
+  {
+    "id": 710,
+    "type": "libro",
+    "title": "La Amortajada",
+    "author": "María Luisa Bombal",
+    "genre": "Clásico",
+    "minNivel": 11,
+    "maxNivel": 12,
+    "description": "Una mujer muerta repasa su vida y sus amores mientras es velada por sus seres cercanos.",
+    "image": "https://placehold.co/400x600/A10D12/D4AF37.png?text=La%2BAmortajada"
+  },
+  {
+    "id": 711,
+    "type": "libro",
+    "title": "Altazor",
+    "author": "Vicente Huidobro",
+    "genre": "Clásico",
+    "minNivel": 10,
+    "maxNivel": 12,
+    "description": "Un viaje en paracaídas literario que rompe el lenguaje para crear una nueva realidad poética.",
+    "image": "https://placehold.co/400x600/A10D12/D4AF37.png?text=Altazor"
+  },
+  {
+    "id": 712,
+    "type": "libro",
+    "title": "Poemas y Antipoemas",
+    "author": "Nicanor Parra",
+    "genre": "Clásico",
+    "minNivel": 9,
+    "maxNivel": 12,
+    "description": "La obra que revolucionó la poesía hispana con humor cotidiano y crítica social.",
+    "image": "https://placehold.co/400x600/A10D12/D4AF37.png?text=Poemas%2By%2BAntipoemas"
+  },
+  {
+    "id": 713,
+    "type": "libro",
+    "title": "Martín Rivas",
+    "author": "Alberto Blest Gana",
+    "genre": "Clásico",
+    "minNivel": 10,
+    "maxNivel": 12,
+    "description": "La gran novela social chilena sobre el amor y las barreras de clase en el Santiago del siglo XIX.",
+    "image": "https://covers.openlibrary.org/b/id/10534246-L.jpg"
+  },
+  {
+    "id": 714,
+    "type": "libro",
+    "title": "Gracia y el Forastero",
+    "author": "Guillermo Blanco",
+    "genre": "Romance",
+    "minNivel": 9,
+    "maxNivel": 11,
+    "description": "Una historia de amor juvenil marcada por la tragedia y las diferencias sociales en Chile.",
+    "image": "https://placehold.co/400x600/A10D12/D4AF37.png?text=Gracia%2By%2BEl%2BForastero"
+  },
+  {
+    "id": 715,
+    "type": "libro",
+    "title": "La Ciudad y los Perros",
+    "author": "Mario Vargas Llosa",
+    "genre": "Clásico",
+    "minNivel": 10,
+    "maxNivel": 12,
+    "description": "La violencia y la camaradería en un colegio militar de Lima vista por un grupo de cadetes.",
+    "image": "https://covers.openlibrary.org/b/id/12836262-L.jpg"
+  },
+  {
+    "id": 716,
+    "type": "libro",
+    "title": "Bodas de Sangre",
+    "author": "Federico García Lorca",
+    "genre": "Clásico",
+    "minNivel": 10,
+    "maxNivel": 12,
+    "description": "La pasión desatada y la tragedia rural en una de las cumbres del teatro español.",
+    "image": "https://covers.openlibrary.org/b/id/11139403-L.jpg"
+  },
+  {
+    "id": 717,
+    "type": "libro",
+    "title": "La Casa de Bernarda Alba",
+    "author": "Federico García Lorca",
+    "genre": "Clásico",
+    "minNivel": 10,
+    "maxNivel": 12,
+    "description": "El drama de una madre autoritaria que impone un luto riguroso a sus cinco hijas.",
+    "image": "https://covers.openlibrary.org/b/id/12889218-L.jpg"
+  },
+  {
+    "id": 718,
+    "type": "libro",
+    "title": "El Juego de Ender",
+    "author": "Orson Scott Card",
+    "genre": "Ciencia Ficción",
+    "minNivel": 8,
+    "maxNivel": 12,
+    "description": "Un niño prodigio es entrenado en una academia militar espacial para salvar la Tierra.",
+    "image": "https://covers.openlibrary.org/b/id/10292857-L.jpg"
+  },
+  {
+    "id": 719,
+    "type": "libro",
+    "title": "Crónicas Marcianas",
+    "author": "Ray Bradbury",
+    "genre": "Ciencia Ficción",
+    "minNivel": 8,
+    "maxNivel": 12,
+    "description": "Relatos poéticos sobre la colonización de Marte y el destino de la humanidad.",
+    "image": "https://covers.openlibrary.org/b/id/12716301-L.jpg"
+  },
+  {
+    "id": 720,
+    "type": "libro",
+    "title": "El Nombre de la Rosa",
+    "author": "Umberto Eco",
+    "genre": "Misterio",
+    "minNivel": 11,
+    "maxNivel": 12,
+    "description": "Un fraile franciscano investiga una serie de crímenes misteriosos en una abadía medieval.",
+    "image": "https://covers.openlibrary.org/b/id/13838279-L.jpg"
+  },
+  {
+    "id": 721,
+    "type": "libro",
+    "title": "El Perfume",
+    "author": "Patrick Süskind",
+    "genre": "Terror",
+    "minNivel": 11,
+    "maxNivel": 12,
+    "description": "La obsesión de Jean-Baptiste Grenouille por crear el aroma definitivo a través del crimen.",
+    "image": "https://covers.openlibrary.org/b/id/13175865-L.jpg"
+  },
+  {
+    "id": 722,
+    "type": "libro",
+    "title": "Ensayo sobre la Ceguera",
+    "author": "José Saramago",
+    "genre": "Clásico",
+    "minNivel": 11,
+    "maxNivel": 12,
+    "description": "Una epidemia de 'ceguera blanca' pone a prueba los límites de la civilización.",
+    "image": "https://covers.openlibrary.org/b/id/8617887-L.jpg"
+  },
+  {
+    "id": 723,
+    "type": "libro",
+    "title": "Siddhartha",
+    "author": "Hermann Hesse",
+    "genre": "Clásico",
+    "minNivel": 10,
+    "maxNivel": 12,
+    "description": "La búsqueda espiritual de un joven indio hacia la iluminación y la paz interior.",
+    "image": "https://covers.openlibrary.org/b/id/12836371-L.jpg"
+  },
+  {
+    "id": 724,
+    "type": "libro",
+    "title": "El Extranjero",
+    "author": "Albert Camus",
+    "genre": "Clásico",
+    "minNivel": 11,
+    "maxNivel": 12,
+    "description": "La indiferencia y el absurdo existencial de un hombre ante la vida y la muerte.",
+    "image": "https://covers.openlibrary.org/b/id/13241517-L.jpg"
+  },
+  {
+    "id": 725,
+    "type": "libro",
+    "title": "Moby Dick",
+    "author": "Herman Melville",
+    "genre": "Aventura",
+    "minNivel": 9,
+    "maxNivel": 12,
+    "description": "La obsesiva persecución del capitán Ahab contra la gran ballena blanca.",
+    "image": "https://covers.openlibrary.org/b/id/12834164-L.jpg"
+  },
+  {
+    "id": 726,
+    "type": "libro",
+    "title": "Los Miserables",
+    "author": "Victor Hugo",
+    "genre": "Clásico",
+    "minNivel": 11,
+    "maxNivel": 12,
+    "description": "La lucha de Jean Valjean por la redención en una Francia convulsionada.",
+    "image": "https://covers.openlibrary.org/b/id/12628464-L.jpg"
+  },
+  {
+    "id": 727,
+    "type": "libro",
+    "title": "El Jardín Secreto",
+    "author": "Frances Hodgson Burnett",
+    "genre": "Fantasía",
+    "minNivel": 5,
+    "maxNivel": 8,
+    "description": "Mary Lennox descubre un jardín abandonado que cambiará su vida y la de sus primos.",
+    "image": "https://covers.openlibrary.org/b/id/10708269-L.jpg"
+  },
+  {
+    "id": 728,
+    "type": "libro",
+    "title": "Alicia en el País de las Maravillas",
+    "author": "Lewis Carroll",
+    "genre": "Fantasía",
+    "minNivel": 5,
+    "maxNivel": 9,
+    "description": "Alicia cae por una madriguera hacia un mundo lleno de lógica absurda y maravillas.",
+    "image": "https://covers.openlibrary.org/b/id/12918805-L.jpg"
+  },
+  {
+    "id": 729,
+    "type": "libro",
+    "title": "La Historia Interminable",
+    "author": "Michael Ende",
+    "genre": "Fantasía",
+    "minNivel": 6,
+    "maxNivel": 10,
+    "description": "Bastian se convierte en parte de la historia de Fantasía mientras la Nada avanza.",
+    "image": "https://covers.openlibrary.org/b/id/8230232-L.jpg"
+  },
+  {
+    "id": 730,
+    "type": "libro",
+    "title": "Casa de Muñecas",
+    "author": "Henrik Ibsen",
+    "genre": "Clásico",
+    "minNivel": 10,
+    "maxNivel": 12,
+    "description": "Nora Helmer lucha por su independencia y dignidad en una sociedad restrictiva.",
+    "image": "https://covers.openlibrary.org/b/id/8381591-L.jpg"
   }
 ];
 
@@ -617,11 +1013,12 @@ export const TEACHERS = [
     id: 'prof-1',
     rut: '150685478',
     name: 'Gonzalo Andrés',
-    dept: 'Inglés / Staff',
-    bio: 'Apasionado por la ciencia ficción y los clásicos. Busco conectar la literatura con la modernidad.',
+    shortName: 'Profe Gonzalo',
+    dept: 'Computación',
+    bio: 'Profesor de especialidades. Le apasionan los clásicos universales y busca siempre innovar en el aula.',
     emoji: '🤖',
     email: 'gonzalo@colegioumbral.cl',
-    recommendedIds: [1, 3, 9, 18, 612, 602, 615],
+    recommendedIds: [1, 5, 8, 14, 18, 3, 9, 15, 16, 19, 21, 23, 25, 118, 103],
     genre: 'Ciencia Ficción',
     nivelMin: 5, nivelMax: 12,
   },
@@ -629,12 +1026,13 @@ export const TEACHERS = [
     id: 'prof-2',
     rut: '186188225',
     name: 'Danixa Paola',
-    dept: 'Lenguaje / Staff',
-    bio: 'Especialista en narrativa contemporánea y juvenil. ¡Amo ayudar a los alumnos a encontrar su próxima aventura!',
+    shortName: 'Miss Danixa',
+    dept: 'Historia',
+    bio: 'Apasionada por la historia universal y la narrativa histórica, incentivando a sus alumnos a entender el pasado mediante buenas lecturas.',
     emoji: '🌍',
     email: 'dpaola@colegioumbral.cl',
-    recommendedIds: [302, 401, 105, 402, 610, 608, 613],
-    genre: 'Romantasy',
+    recommendedIds: [8, 12, 16, 21, 14, 20, 22, 115, 112, 119],
+    genre: 'Autobiografía',
     nivelMin: 5, nivelMax: 12,
   }
 ];
