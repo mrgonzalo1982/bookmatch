@@ -26,8 +26,17 @@
 
 @layer utilities {
   .custom-scrollbar::-webkit-scrollbar {
-    width: 0px;
-    height: 0px;
+    width: 6px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #E5E7EB;
+    border-radius: 10px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #A80A0A;
   }
   /* Gradient utilities for Umbral branding */
   .umbral-gradient {
