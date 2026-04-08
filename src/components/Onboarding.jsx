@@ -121,7 +121,7 @@ function Onboarding({ user, onFinish }) {
       </div>
 
       {/* Step Content */}
-      <div className="flex-1 flex flex-col overflow-hidden px-6 pb-6">
+      <div className="flex-1 flex flex-col overflow-hidden min-h-0 px-6 pb-6">
         <AnimatePresence mode="wait">
 
           {/* ─── PASO 0: Bienvenida ─── */}
@@ -170,7 +170,7 @@ function Onboarding({ user, onFinish }) {
               key="emoji"
               variants={variants} initial="enter" animate="center" exit="exit"
               transition={{ duration: 0.25 }}
-              className="flex-1 flex flex-col"
+              className="flex-1 flex flex-col min-h-0"
             >
               <h2 className="text-3xl font-black text-gray-900 tracking-tighter mb-1">
                 ¿Cómo te ves hoy?
@@ -206,7 +206,7 @@ function Onboarding({ user, onFinish }) {
               key="generos"
               variants={variants} initial="enter" animate="center" exit="exit"
               transition={{ duration: 0.25 }}
-              className="flex-1 flex flex-col"
+              className="flex-1 flex flex-col min-h-0"
             >
               <h2 className="text-3xl font-black text-gray-900 tracking-tighter mb-1">
                 ¿Qué te gusta leer?
