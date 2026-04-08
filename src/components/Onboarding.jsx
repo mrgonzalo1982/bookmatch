@@ -24,34 +24,57 @@ function Onboarding({ user, onFinish }) {
     setIsSearching(true);
     setHasSearchedWeb(false);
     try {
+      // 1. Try Google Books first
       const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(search)}&maxResults=5`);
       const data = await res.json();
+      
+      let results = [];
       if (data.items) {
-        const results = data.items.map(item => {
+        results = data.items.map(item => {
           let thumb = item.volumeInfo.imageLinks?.thumbnail || 'https://images.unsplash.com/photo-1543002588-bfa74002ed7e?auto=format&fit=crop&q=80&w=200';
-          // Force HTTPS to avoid Mixed Content block
           thumb = thumb.replace('http://', 'https://');
-          
           return {
             id: `google-${item.id}`,
             title: item.volumeInfo.title,
             author: item.volumeInfo.authors?.join(', ') || 'Autor desconocido',
+            description: item.volumeInfo.description || '',
             image: thumb,
             genre: 'Externo',
             isGoogle: true
           };
         });
-        setGoogleResults(results);
-        // Scroll to results after a small delay to let DOM update
+      }
+
+      // 2. Fallback to OpenLibrary if no Google results
+      if (results.length === 0) {
+        try {
+          const olRes = await fetch(`https://openlibrary.org/search.json?q=${encodeURIComponent(search)}&limit=5`);
+          const olData = await olRes.json();
+          if (olData.docs) {
+            results = olData.docs.map(doc => ({
+              id: `ol-${doc.key.split('/').pop()}`,
+              title: doc.title,
+              author: doc.author_name?.join(', ') || 'Autor desconocido',
+              description: '', // Desc is not in search.json
+              image: doc.cover_i ? `https://covers.openlibrary.org/b/id/${doc.cover_i}-L.jpg` : 'https://placehold.co/400x600/A10D12/D4AF37.png?text=Sin%2BCarátula',
+              genre: 'Externo (OL)',
+              isGoogle: true
+            }));
+          }
+        } catch (olErr) {
+          console.warn("OpenLibrary fallback failed", olErr);
+        }
+      }
+
+      setGoogleResults(results);
+      if (results.length > 0) {
         setTimeout(() => {
           resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }, 100);
-      } else {
-        setGoogleResults([]);
       }
       setHasSearchedWeb(true);
     } catch (e) {
-      console.warn("Google Books search failed", e);
+      console.warn("Web search failed", e);
       alert("No pudimos conectar con la web. Revisa tu conexión.");
     } finally {
       setIsSearching(false);

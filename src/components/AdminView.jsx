@@ -56,8 +56,10 @@ function AdminView({ onBack }) {
     if (!googleSearch.trim()) return;
     setIsSearching(true);
     try {
+      // 1. Try Google Books first
       const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(googleSearch)}`);
       const data = await res.json();
+      
       if (data.items && data.items.length > 0) {
         const book = data.items[0].volumeInfo;
         setBookForm({
@@ -67,14 +69,44 @@ function AdminView({ onBack }) {
           genre: GENRES[0],
           minNivel: 5,
           maxNivel: 12,
-          image: book.imageLinks?.thumbnail || 'https://images.unsplash.com/photo-1532012197267-da84d127e765?auto=format&fit=crop&q=80&w=400'
+          image: book.imageLinks?.thumbnail || 'https://images.unsplash.com/photo-1543002588-bfa74002ed7e?auto=format&fit=crop&q=80&w=400'
         });
       } else {
-        alert("No se encontraron libros.");
+        // 2. Fallback to OpenLibrary
+        const olRes = await fetch(`https://openlibrary.org/search.json?q=${encodeURIComponent(googleSearch)}&limit=1`);
+        const olData = await olRes.json();
+        
+        if (olData.docs && olData.docs.length > 0) {
+          const doc = olData.docs[0];
+          let olDescription = '';
+          
+          // Try to fetch description from the "Work" key
+          try {
+            const workRes = await fetch(`https://openlibrary.org${doc.key}.json`);
+            const workData = await workRes.json();
+            if (workData.description) {
+              olDescription = typeof workData.description === 'string' 
+                ? workData.description 
+                : workData.description.value;
+            }
+          } catch (e) { console.warn("OL Work fetch failed", e); }
+
+          setBookForm({
+            title: doc.title || '',
+            author: doc.author_name ? doc.author_name.join(', ') : '',
+            description: olDescription ? olDescription.substring(0, 300) + '...' : 'Descripción no disponible en OpenLibrary.',
+            genre: GENRES[0],
+            minNivel: 5,
+            maxNivel: 12,
+            image: doc.cover_i ? `https://covers.openlibrary.org/b/id/${doc.cover_i}-L.jpg` : 'https://placehold.co/400x600/A10D12/D4AF37.png?text=Sin%2BCarátula'
+          });
+        } else {
+          alert("No se encontraron libros en ninguna fuente.");
+        }
       }
     } catch (e) {
       console.error(e);
-      alert("Error buscando en Google Books.");
+      alert("Error en la búsqueda web.");
     } finally {
       setIsSearching(false);
     }
