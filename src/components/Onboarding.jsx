@@ -5,7 +5,7 @@ import { Check, ChevronRight, BookOpen, Heart, Sparkles, Search } from 'lucide-r
 import { motion, AnimatePresence } from 'framer-motion';
 
 const STEPS = ['bienvenida', 'emoji', 'generos', 'libro', 'listo'];
-const STUDENT_EMOJIS = ['🤓', '😎', '🧐', '🤠', '🤡', '🤖', '👾', '🦸', '🧙', '🧜', '🥷', '🧑‍💻', '🦄', '🐯', '🦊', '🎨', '🚀', '⚽'];
+const STUDENT_EMOJIS = ['🤓', '😎', '🧐', '🤠', '🤡', '🤖', '👾', '🦸', '🧙', '🧜', '🥷', '🧑‍💻', '🦄', '🐯', '🦊', '🎨', '🚀', '⚽', '🏀', '🛹', '🎸', '🎧', '🎮', '📸', '🍕', '🍦', '🍩', '🍔', '🌮', '🥰', '🤩', '🫠', '🤨', '😴', '🥳', '👻', '💀', '👽', '🦖', '🐉', '🐙', '🦋', '🐢', '🌈', '✨', '🪐', '💎', '🔥'];
 
 function Onboarding({ user, onFinish }) {
   const [step, setStep] = useState(0);
