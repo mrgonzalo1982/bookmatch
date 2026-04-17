@@ -184,6 +184,23 @@ function CommunityView({ user, likedIds, userProfile, allStudents, onShowTeacher
     }).filter(Boolean);
   }, [firestoreDb]);
 
+  // Compute users sharing the same favorite book
+  const favoriteBookTwins = useMemo(() => {
+    if (!userProfile?.favoriteBookObj) return [];
+    const myFavId = userProfile.favoriteBookObj.id;
+    
+    const clean = rut => rut.replace(/[^0-9kK]/gi, '').toLowerCase();
+    
+    return Object.entries(firestoreDb).map(([cr, peerData]) => {
+      if (cr === clean(user.rut)) return null; // Don't include self
+      if (peerData.profile?.favoriteBookObj?.id === myFavId) {
+         const student = allStudents.find(s => clean(s.rut) === cr);
+         return student ? { ...student, realEmoji: peerData.profile.emoji } : null;
+      }
+      return null;
+    }).filter(Boolean);
+  }, [userProfile, firestoreDb, allStudents, user]);
+
   if (isLoading) {
     return (
       <div className="flex-1 flex flex-col items-center justify-center opacity-40">
@@ -292,6 +309,34 @@ function CommunityView({ user, likedIds, userProfile, allStudents, onShowTeacher
               ))}
             </div>
             
+            <div className="mx-5 border-t border-gray-100 my-4" />
+          </div>
+        )}
+
+        {/* ── Favorite Book Twins Section ── */}
+        {favoriteBookTwins.length > 0 && (
+          <div className="pt-3 pb-3">
+            <div className="flex items-center justify-between px-5 mb-4">
+              <h2 className="text-xl font-black text-gray-900 tracking-tighter flex items-center gap-2">
+                <Bookmark size={20} className="text-[#A80A0A] fill-[#A80A0A]" /> 
+                Fans de tu Libro Cabecera
+              </h2>
+            </div>
+            
+            <div className="mx-5 bg-indigo-50 border border-indigo-100 rounded-3xl p-4 shadow-sm mb-4">
+              <p className="text-xs font-bold text-indigo-900 mb-3">
+                 Tienen a <span className="font-black italic">"{userProfile.favoriteBookObj.title}"</span> como libro de su vida:
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {favoriteBookTwins.map((twin, idx) => (
+                  <div key={idx} className="bg-white border border-indigo-100 rounded-full py-1.5 px-3 flex items-center gap-2 shadow-sm">
+                    <span className="text-base">{twin.realEmoji || '👤'}</span>
+                    <span className="text-xs font-black text-indigo-900">{twin.nombre.split(' ')[0]} {twin.nombre.split(' ')[1]}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
             <div className="mx-5 border-t border-gray-100 my-4" />
           </div>
         )}
