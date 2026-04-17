@@ -215,8 +215,8 @@ function MatchDeck({ user, likedIds, userProfile, onMatch, onShowTeacher, allTea
                     {prof.emoji || prof.name.charAt(0)}
                   </div>
                   <div className="text-left flex-1">
-                    <p className="font-black text-lg leading-tight">{prof.name}</p>
-                    <p className="text-xs font-bold text-white/70 uppercase tracking-widest">{prof.dept}</p>
+                    <p className="font-black text-xl leading-tight text-[#FFD700] uppercase">{prof.name}</p>
+                    <p className="text-xs font-bold text-white/80 uppercase tracking-widest">{prof.dept}</p>
                   </div>
                   <div className="bg-white/15 p-2 rounded-full opacity-60 group-hover:opacity-100 transition-opacity">
                     <ChevronRight size={14} />

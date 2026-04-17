@@ -54,11 +54,27 @@ export function MatchStoryCard({ book, teacher, user, innerRef }) {
         fontSize: '44px',
         fontWeight: '900',
         textTransform: 'uppercase',
-        marginBottom: '60px',
+        marginBottom: '40px',
         letterSpacing: '1px',
         border: '6px solid white'
       }}>
         ¡COINCIDENCIA LECTORA!
+      </div>
+
+      {/* Contextual Message - MOVED UP */}
+      <div style={{ 
+        textAlign: 'center', 
+        marginBottom: '60px', 
+        padding: '30px 50px',
+        background: 'rgba(212, 175, 55, 0.1)',
+        borderRadius: '20px',
+        border: '2px solid rgba(212, 175, 55, 0.3)',
+        boxShadow: '0 10px 30px rgba(0,0,0,0.5)'
+      }}>
+        <p style={{ fontSize: '32px', fontWeight: '700', color: 'white', margin: 0, lineHeight: '1.4' }}>
+          ¡<span style={{ color: GOLD, fontWeight: '900', fontSize: '44px', textTransform: 'uppercase' }}>{userName}</span> y <span style={{ color: GOLD, fontWeight: '900', fontSize: '44px', textTransform: 'uppercase' }}>{teacherName}</span><br />
+          tienen los mismos gustos lectores! ⭐
+        </p>
       </div>
 
       {/* Book Cover */}
@@ -106,22 +122,7 @@ export function MatchStoryCard({ book, teacher, user, innerRef }) {
         </p>
       </div>
 
-      {/* Contextual Message - FIXED SPACE */}
-      <div style={{ 
-        textAlign: 'center', 
-        marginBottom: '80px', 
-        padding: '20px 40px',
-        background: 'rgba(255,255,255,0.05)',
-        borderRadius: '20px',
-        border: '1px solid rgba(255,255,255,0.1)'
-      }}>
-        <p style={{ fontSize: '32px', fontWeight: '700', color: GOLD, margin: 0 }}>
-          ¡{userName} y {teacherName} tienen
-        </p>
-        <p style={{ fontSize: '32px', fontWeight: '700', color: 'white', margin: 0 }}>
-          los mismos gustos lectores! ⭐
-        </p>
-      </div>
+
 
       {/* Match Avatars Section - SIMPLIFIED FOR HTML2CANVAS VISIBILITY */}
       <div style={{
@@ -139,8 +140,8 @@ export function MatchStoryCard({ book, teacher, user, innerRef }) {
         {/* User */}
         <div style={{ textAlign: 'center' }}>
           <div style={{ fontSize: '120px', marginBottom: '15px' }}>{user.profile?.emoji || '👤'}</div>
-          <p style={{ fontSize: '36px', fontWeight: '900', textTransform: 'uppercase', marginBottom: '5px' }}>{userName}</p>
-          <div style={{ fontSize: '24px', fontWeight: '800', color: GOLD }}>{userRoleLabel}</div>
+          <p style={{ fontSize: '42px', fontWeight: '900', color: GOLD, textTransform: 'uppercase', marginBottom: '5px' }}>{userName}</p>
+          <div style={{ fontSize: '26px', fontWeight: '800', color: 'white', opacity: 0.8 }}>{userRoleLabel}</div>
         </div>
 
         {/* Connector Star */}
@@ -149,8 +150,8 @@ export function MatchStoryCard({ book, teacher, user, innerRef }) {
         {/* Teacher */}
         <div style={{ textAlign: 'center' }}>
           <div style={{ fontSize: '120px', marginBottom: '15px' }}>{teacher.emoji || '👨‍🏫'}</div>
-          <p style={{ fontSize: '36px', fontWeight: '900', textTransform: 'uppercase', marginBottom: '5px' }}>{teacherName}</p>
-          <div style={{ fontSize: '24px', fontWeight: '800', color: GOLD }}>{teacher.dept || 'Docente'}</div>
+          <p style={{ fontSize: '42px', fontWeight: '900', color: GOLD, textTransform: 'uppercase', marginBottom: '5px' }}>{teacherName}</p>
+          <div style={{ fontSize: '26px', fontWeight: '800', color: 'white', opacity: 0.8 }}>{teacher.dept || 'Docente'}</div>
         </div>
       </div>
 

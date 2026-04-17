@@ -1045,8 +1045,10 @@ export const GENRES = [
 
 // ─── Matching Rules ───────────────────────────────────────────────────────────
 export const canMatch = (userNivel, peerNivel) => {
-  if (userNivel <= 9) return peerNivel === userNivel;
-  return peerNivel >= 10 && peerNivel <= 12;
+  const u = Number(userNivel);
+  const p = Number(peerNivel);
+  if (u <= 9) return p === u;
+  return p >= 10 && p <= 12;
 };
 
 // ─── Deterministic Peer Logic (for student souls) ──────────────────────────────

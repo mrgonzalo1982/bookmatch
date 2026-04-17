@@ -52,11 +52,15 @@ const ALL_BOOKS = [
   { id: 24, type: 'libro', title: 'Un Mundo Feliz', author: 'Aldous Huxley', genre: 'Ciencia Ficción', minNivel: 10, maxNivel: 12, description: 'Una sociedad futurista perfecta donde la libertad ha sido eliminada.' },
   { id: 103, type: 'libro', title: 'Fahrenheit 451', author: 'Ray Bradbury', genre: 'Ciencia Ficción', minNivel: 9, maxNivel: 12, description: 'Un bombero que quema libros comienza a cuestionar su realidad.' },
   { id: 104, type: 'libro', title: 'La Sombra del Viento', author: 'Carlos Ruiz Zafón', genre: 'Misterio', minNivel: 10, maxNivel: 12, description: 'Un joven descubre un libro maldito en el Cementerio de los Libros Olvidados.' },
+  { id: 106, type: 'libro', title: 'Cuentos de Amor de Locura y de Muerte', author: 'Horacio Quiroga', genre: 'Terror', minNivel: 9, maxNivel: 12, description: 'Relatos donde la selva, la locura humana y lo macabro toman el protagonismo de forma cruda.' },
   { id: 109, type: 'libro', title: 'Frankenstein', author: 'Mary Shelley', genre: 'Terror', minNivel: 10, maxNivel: 12, description: 'El origen del terror moderno: la criatura creada por Víctor Frankenstein.' },
+  { id: 110, type: 'libro', title: 'Orgullo y Prejuicio', author: 'Jane Austen', genre: 'Romance', minNivel: 9, maxNivel: 12, description: 'La compleja relación entre Elizabeth Bennet y el Sr. Darcy navegando por las convenciones sociales de su siglo.' },
   { id: 111, type: 'libro', title: 'El Retrato de Dorian Gray', author: 'Oscar Wilde', genre: 'Clásico', minNivel: 10, maxNivel: 12, description: 'Un joven intercambia su alma con un cuadro para permanecer joven.' },
   { id: 112, type: 'libro', title: 'Rebelión en la Granja', author: 'George Orwell', genre: 'Fábula', minNivel: 8, maxNivel: 12, description: 'Un sistema igualitario animal que poco a poco se corrompe.' },
   { id: 113, type: 'libro', title: 'Drácula', author: 'Bram Stoker', genre: 'Terror', minNivel: 9, maxNivel: 12, description: 'El abogado Jonathan Harker descubre la naturaleza del Conde Drácula.' },
+  { id: 114, type: 'libro', title: 'La Odisea', author: 'Homero', genre: 'Aventura', minNivel: 9, maxNivel: 12, description: 'El épico y accidentado viaje de Odiseo tratando de retornar a su patria tras la Guerra de Troya.' },
   { id: 116, type: 'libro', title: 'Sub Terra', author: 'Baldomero Lillo', genre: 'Clásico', minNivel: 8, maxNivel: 12, description: 'Las inhumanas condiciones de los mineros del carbón en Chile.' },
+  { id: 118, type: 'libro', title: 'El Visitante', author: 'Stephen King', genre: 'Misterio', minNivel: 11, maxNivel: 12, description: 'Un horrendo asesinato involucra a un querido profesor local, pero huellas digitales y hechos desafían toda explicación.' },
   
   // Romantasy (ATP)
   { id: 401, type: 'libro', title: 'La Selección', author: 'Kiera Cass', genre: 'Romantasy', minNivel: 8, maxNivel: 12, description: 'Treinta y cinco chicas compiten por la corona. America Singer debe elegir entre el amor y el deber.' },
@@ -65,7 +69,9 @@ const ALL_BOOKS = [
   
   // Sagas Populres
   { id: 105, type: 'libro', title: 'Los Juegos del Hambre', author: 'Suzanne Collins', genre: 'Ciencia Ficción', minNivel: 7, maxNivel: 12, description: 'Katniss Everdeen debe luchar por su vida en un reality show televisado.' },
-  { id: 120, type: 'libro', title: 'La Comunidad del Anillo', author: 'J.R.R. Tolkien', genre: 'Fantasía', minNivel: 8, maxNivel: 12, description: 'Frodo Bolsón emprende la misión de destruir el Anillo Único.' },
+  { id: 120, type: 'libro', title: 'El Señor de los Anillos: La Comunidad del Anillo', author: 'J.R.R. Tolkien', genre: 'Fantasía', minNivel: 8, maxNivel: 12, description: 'Frodo Bolsón emprende la misión de destruir el Anillo Único con la ayuda de la Comunidad.' },
+  { id: 121, type: 'libro', title: 'El Señor de los Anillos: Las Dos Torres', author: 'J.R.R. Tolkien', genre: 'Fantasía', minNivel: 8, maxNivel: 12, description: 'La Comunidad se divide mientras Frodo y Sam continúan hacia Mordor y los otros luchan contra Saruman.' },
+  { id: 122, type: 'libro', title: 'El Señor de los Anillos: El Retorno del Rey', author: 'J.R.R. Tolkien', genre: 'Fantasía', minNivel: 8, maxNivel: 12, description: 'La batalla final por la Tierra Media comienza mientras Frodo se acerca al Monte del Destino.' },
 
   // Nuevas Sugerencias (Tendencias Chile)
   { id: 601, type: 'libro', title: 'Papelucho', author: 'Marcela Paz', genre: 'Aventura', minNivel: 5, maxNivel: 7, description: 'Las divertidas e ingeniosas memorias de un niño chileno que ve el mundo de una forma única.' },
