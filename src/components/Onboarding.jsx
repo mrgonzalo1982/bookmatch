@@ -501,7 +501,7 @@ function Onboarding({ user, userProfile, onFinish }) {
         {step > 0 && (
           <button
             onClick={() => setStep(s => s - 1)}
-            className="w-full text-center text-sm text-gray-400 font-bold mt-3 py-2 hover:text-gray-600 transition-colors"
+            className="w-full mt-3 bg-white border-2 border-gray-200 text-gray-500 py-4 rounded-2xl font-black text-lg hover:border-[#A80A0A] hover:text-[#A80A0A] active:scale-95 transition-all shadow-sm flex items-center justify-center"
           >
             ← Volver
           </button>
