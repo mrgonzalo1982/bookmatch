@@ -7,13 +7,13 @@ import { motion, AnimatePresence } from 'framer-motion';
 const STEPS = ['bienvenida', 'emoji', 'generos', 'libro', 'listo'];
 const STUDENT_EMOJIS = ['🤓', '😎', '🧐', '🤠', '🤡', '🤖', '👾', '🦸', '🧙', '🧜', '🥷', '🧑‍💻', '🦄', '🐯', '🦊', '🎨', '🚀', '⚽', '🏀', '🛹', '🎸', '🎧', '🎮', '📸', '🍕', '🍦', '🍩', '🍔', '🌮', '🥰', '🤩', '🫠', '🤨', '😴', '🥳', '👻', '💀', '👽', '🦖', '🐉', '🐙', '🦋', '🐢', '🌈', '✨', '🪐', '💎', '🔥'];
 
-function Onboarding({ user, onFinish }) {
-  const [step, setStep] = useState(0);
-  const [selectedGenres, setSelectedGenres] = useState([]);
-  const [favoriteBook, setFavoriteBook] = useState(null);
-  const [customBook, setCustomBook] = useState('');
+function Onboarding({ user, userProfile, onFinish }) {
+  const [step, setStep] = useState(userProfile ? 1 : 0);
+  const [selectedGenres, setSelectedGenres] = useState(userProfile?.genres || []);
+  const [favoriteBook, setFavoriteBook] = useState(userProfile?.favoriteBookObj || null);
+  const [customBook, setCustomBook] = useState(userProfile?.favoriteBook && !userProfile?.favoriteBookObj ? userProfile.favoriteBook : '');
   const [search, setSearch] = useState('');
-  const [selectedEmoji, setSelectedEmoji] = useState(null);
+  const [selectedEmoji, setSelectedEmoji] = useState(userProfile?.emoji || null);
   const [googleResults, setGoogleResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
   const [hasSearchedWeb, setHasSearchedWeb] = useState(false);
@@ -498,7 +498,7 @@ function Onboarding({ user, onFinish }) {
             ¡Descubrir Libros!
           </button>
         )}
-        {step > 0 && step < STEPS.length - 1 && (
+        {step > 0 && (
           <button
             onClick={() => setStep(s => s - 1)}
             className="w-full text-center text-sm text-gray-400 font-bold mt-3 py-2 hover:text-gray-600 transition-colors"

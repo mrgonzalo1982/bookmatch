@@ -165,6 +165,25 @@ function CommunityView({ user, likedIds, userProfile, allStudents, onShowTeacher
       .slice(0, 15);
   }, [user, likedIds, userProfile, allStudents, firestoreDb]);
 
+  // Compute Top 10 Books
+  const topBooks = useMemo(() => {
+    const counts = {};
+    Object.values(firestoreDb).forEach(userData => {
+      if (userData.likes && Array.isArray(userData.likes)) {
+        userData.likes.forEach(like => {
+          counts[like.id] = (counts[like.id] || 0) + 1;
+        });
+      }
+    });
+
+    const sortedIds = Object.keys(counts).sort((a, b) => counts[b] - counts[a]).slice(0, 10);
+    return sortedIds.map((id, index) => {
+      const item = ITEMS.find(i => String(i.id) === String(id));
+      if (!item) return null;
+      return { ...item, count: counts[id], rank: index + 1 };
+    }).filter(Boolean);
+  }, [firestoreDb]);
+
   if (isLoading) {
     return (
       <div className="flex-1 flex flex-col items-center justify-center opacity-40">
@@ -238,6 +257,44 @@ function CommunityView({ user, likedIds, userProfile, allStudents, onShowTeacher
 
         {/* ── Divider ── */}
         <div className="mx-5 border-t border-gray-100 my-2" />
+
+        {/* ── Top 10 Section ── */}
+        {topBooks.length > 0 && (
+          <div className="pt-3 pb-3">
+            <div className="flex items-center justify-between px-5 mb-4">
+              <h2 className="text-xl font-black text-gray-900 tracking-tighter flex items-center gap-2">
+                <Star size={20} className="text-[#FFD700] fill-[#FFD700]" /> 
+                Top 10 Colegio
+              </h2>
+            </div>
+            
+            <div className="flex gap-4 px-5 pb-2 overflow-x-auto custom-scrollbar">
+              {topBooks.map(book => (
+                <div key={book.id} className="shrink-0 w-28 flex flex-col items-center relative">
+                  <div className="absolute -top-3 -left-2 z-10 w-8 h-8 rounded-full flex items-center justify-center font-black text-xs shadow-lg border-2 border-white"
+                       style={{ 
+                         background: book.rank === 1 ? '#FFD700' : book.rank === 2 ? '#C0C0C0' : book.rank === 3 ? '#CD7F32' : '#F3F4F6',
+                         color: book.rank <= 3 ? '#fff' : '#6B7280',
+                         textShadow: book.rank <= 3 ? '0 1px 2px rgba(0,0,0,0.3)' : 'none'
+                       }}>
+                    {book.rank}
+                  </div>
+                  <div className="w-full h-40 rounded-2xl overflow-hidden bg-gray-100 shadow-sm border border-gray-100 relative group">
+                    <img src={book.image} alt={book.title} className="w-full h-full object-cover" />
+                    <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 to-transparent p-2 pt-6">
+                      <p className="text-white text-[10px] font-black leading-tight truncate">{book.title}</p>
+                    </div>
+                  </div>
+                  <p className="text-[10px] font-bold text-gray-400 mt-2 flex items-center gap-1">
+                    <Heart size={10} fill="#A80A0A" color="#A80A0A" /> {book.count} favs 
+                  </p>
+                </div>
+              ))}
+            </div>
+            
+            <div className="mx-5 border-t border-gray-100 my-4" />
+          </div>
+        )}
 
         {/* ── Community / Peers Section ── */}
         <div className="px-5 pt-3 pb-24">

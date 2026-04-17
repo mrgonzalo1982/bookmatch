@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { STUDENTS } from './data/mockData';
+import TEACHERS from './data/teachers.json';
 import Login from './components/Login';
 import Onboarding from './components/Onboarding';
 import MatchDeck from './components/MatchDeck';
@@ -197,6 +198,24 @@ function App() {
       return true;
     }
 
+    // Step 2.5: New teachers from the master Excel list
+    const parsedTeacher = TEACHERS.find(t => clean(t.rut) === cleanRut);
+    if (parsedTeacher) {
+      const seedData = {
+        role: 'teacher',
+        profile: { name: parsedTeacher.nombre, dept: 'Docente', emoji: '📚', genres: [] },
+        likes: []
+      };
+      await setDoc(docRef, seedData, { merge: true });
+      const teacherUser = { rut: cleanRut, nombre: parsedTeacher.nombre, curso: 'Docente', role: 'teacher', avatar: '/umbral-shield.png' };
+      setUser(teacherUser);
+      localStorage.setItem('bm-user', JSON.stringify(teacherUser));
+      localStorage.setItem('bm-active-rut', cleanRut);
+      setUserProfile(seedData.profile);
+      setView('onboarding');
+      return true;
+    }
+
     // Step 3: New student logging in for the first time
     const found = STUDENTS.find(s => clean(s.rut) === cleanRut);
     if (found) {
@@ -260,7 +279,7 @@ function App() {
      );
   }
   if (!user || view === 'login')   return <Login onLogin={handleLogin} />;
-  if (view === 'onboarding')       return <Onboarding user={user} onFinish={handleFinishOnboarding} />;
+  if (view === 'onboarding')       return <Onboarding user={user} userProfile={userProfile} onFinish={handleFinishOnboarding} />;
 
   const likedIds = likedItems.map(i => i.id);
 

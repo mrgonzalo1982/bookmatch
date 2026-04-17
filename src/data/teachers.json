@@ -1,0 +1,404 @@
+[
+  {
+    "nombre": "Miss Javiera Acuña",
+    "rut": "19.542.537-K",
+    "role": "teacher",
+    "curso": "Docente"
+  },
+  {
+    "nombre": "Miss María Aguilera",
+    "rut": "17.881.552-0",
+    "role": "teacher",
+    "curso": "Docente"
+  },
+  {
+    "nombre": "Miss Rocío Altamirano",
+    "rut": "19.963.493-3",
+    "role": "teacher",
+    "curso": "Docente"
+  },
+  {
+    "nombre": "Miss Milenka Araya",
+    "rut": "20.478.026-9",
+    "role": "teacher",
+    "curso": "Docente"
+  },
+  {
+    "nombre": "Miss Nicole Arias",
+    "rut": "18.457.613-9",
+    "role": "teacher",
+    "curso": "Docente"
+  },
+  {
+    "nombre": "Mr. David Arnao",
+    "rut": "17.633.087-2",
+    "role": "teacher",
+    "curso": "Docente"
+  },
+  {
+    "nombre": "Miss Valentina Barros",
+    "rut": "17.792.032-0",
+    "role": "teacher",
+    "curso": "Docente"
+  },
+  {
+    "nombre": "Miss Danixa Briones",
+    "rut": "18.618.822-5",
+    "role": "teacher",
+    "curso": "Docente"
+  },
+  {
+    "nombre": "Miss Lilian Buvinic",
+    "rut": "20.294.392-6",
+    "role": "teacher",
+    "curso": "Docente"
+  },
+  {
+    "nombre": "Miss Javiera Caris",
+    "rut": "19.176.590-7",
+    "role": "teacher",
+    "curso": "Docente"
+  },
+  {
+    "nombre": "Mr. Joshua Concha",
+    "rut": "19.329.176-7",
+    "role": "teacher",
+    "curso": "Docente"
+  },
+  {
+    "nombre": "Miss Valentina Cornejo",
+    "rut": "20.095.833-0",
+    "role": "teacher",
+    "curso": "Docente"
+  },
+  {
+    "nombre": "Mr. Jesús Cortes",
+    "rut": "19.615.469-8",
+    "role": "teacher",
+    "curso": "Docente"
+  },
+  {
+    "nombre": "Miss Carla Díaz",
+    "rut": "19.327.145-6",
+    "role": "teacher",
+    "curso": "Docente"
+  },
+  {
+    "nombre": "Miss Sarah Donoso",
+    "rut": "19.457.290-5",
+    "role": "teacher",
+    "curso": "Docente"
+  },
+  {
+    "nombre": "Miss Carolina Farías",
+    "rut": "12.626.789-4",
+    "role": "teacher",
+    "curso": "Docente"
+  },
+  {
+    "nombre": "Mr. Gonzalo Flores",
+    "rut": "15.068.547-8",
+    "role": "teacher",
+    "curso": "Docente"
+  },
+  {
+    "nombre": "Mr. Cristian Fuentes",
+    "rut": "17.471.976-4",
+    "role": "teacher",
+    "curso": "Docente"
+  },
+  {
+    "nombre": "Miss María ISabel Fuentes",
+    "rut": "19.449.162-K",
+    "role": "teacher",
+    "curso": "Docente"
+  },
+  {
+    "nombre": "Miss Diana Godoy",
+    "rut": "17.472.713-9",
+    "role": "teacher",
+    "curso": "Docente"
+  },
+  {
+    "nombre": "Miss Kattia González",
+    "rut": "18.488.370-8",
+    "role": "teacher",
+    "curso": "Docente"
+  },
+  {
+    "nombre": "Miss Constanza Gutierrez",
+    "rut": "20.184.938-1",
+    "role": "teacher",
+    "curso": "Docente"
+  },
+  {
+    "nombre": "Mr. Roberto Guzmán",
+    "rut": "16.122.229-1",
+    "role": "teacher",
+    "curso": "Docente"
+  },
+  {
+    "nombre": "Miss Jimena Hernández",
+    "rut": "19.327.408-0",
+    "role": "teacher",
+    "curso": "Docente"
+  },
+  {
+    "nombre": "Miss Andrea Herrera",
+    "rut": "12.225.270-1",
+    "role": "teacher",
+    "curso": "Docente"
+  },
+  {
+    "nombre": "Mr. Paulo Herrera",
+    "rut": "14.568.503-6",
+    "role": "teacher",
+    "curso": "Docente"
+  },
+  {
+    "nombre": "Miss Ivón Hevia",
+    "rut": "18.617.828-9",
+    "role": "teacher",
+    "curso": "Docente"
+  },
+  {
+    "nombre": "Miss Romina Hostolaza",
+    "rut": "16.556.552-5",
+    "role": "teacher",
+    "curso": "Docente"
+  },
+  {
+    "nombre": "Miss Tania Ibar",
+    "rut": "15.718.464-4",
+    "role": "teacher",
+    "curso": "Docente"
+  },
+  {
+    "nombre": "Miss Sharon Jara",
+    "rut": "19.823.212-2",
+    "role": "teacher",
+    "curso": "Docente"
+  },
+  {
+    "nombre": "Miss Johanna Jorquera",
+    "rut": "16.483.665-7",
+    "role": "teacher",
+    "curso": "Docente"
+  },
+  {
+    "nombre": "Miss Lorena Lara",
+    "rut": "14.376.231-9",
+    "role": "teacher",
+    "curso": "Docente"
+  },
+  {
+    "nombre": "Mr. José Lebel",
+    "rut": "16.301.123-9",
+    "role": "teacher",
+    "curso": "Docente"
+  },
+  {
+    "nombre": "Miss Daniela Legua",
+    "rut": "15.048.541-K",
+    "role": "teacher",
+    "curso": "Docente"
+  },
+  {
+    "nombre": "Miss Javiera Lizama",
+    "rut": "20.014.001-K",
+    "role": "teacher",
+    "curso": "Docente"
+  },
+  {
+    "nombre": "Mr. Luis Lucero",
+    "rut": "19.325.967-7",
+    "role": "teacher",
+    "curso": "Docente"
+  },
+  {
+    "nombre": "Miss Constanza Madariaga",
+    "rut": "17.619.795-1",
+    "role": "teacher",
+    "curso": "Docente"
+  },
+  {
+    "nombre": "Mr. Gina Malbrán",
+    "rut": "17.479.041-8",
+    "role": "teacher",
+    "curso": "Docente"
+  },
+  {
+    "nombre": "Miss Antonia Marín",
+    "rut": "20.126.825-7",
+    "role": "teacher",
+    "curso": "Docente"
+  },
+  {
+    "nombre": "Miss Fernanda Marín",
+    "rut": "20.175.744-4",
+    "role": "teacher",
+    "curso": "Docente"
+  },
+  {
+    "nombre": "Mr. Andrés Miranda",
+    "rut": "9.516.764-0",
+    "role": "teacher",
+    "curso": "Docente"
+  },
+  {
+    "nombre": "Miss María Mohor",
+    "rut": "11.767.478-9",
+    "role": "teacher",
+    "curso": "Docente"
+  },
+  {
+    "nombre": "Miss Claudia Navarro",
+    "rut": "14.484.027-5",
+    "role": "teacher",
+    "curso": "Docente"
+  },
+  {
+    "nombre": "Mr. Mauricio Palacios",
+    "rut": "15.094.539-9",
+    "role": "teacher",
+    "curso": "Docente"
+  },
+  {
+    "nombre": "Miss Marcela Palacios",
+    "rut": "14.252.404-K",
+    "role": "teacher",
+    "curso": "Docente"
+  },
+  {
+    "nombre": "Miss Verónica Palacios",
+    "rut": "9.826.862-6",
+    "role": "teacher",
+    "curso": "Docente"
+  },
+  {
+    "nombre": "Miss Carolina Palacios",
+    "rut": "15.718.932-8",
+    "role": "teacher",
+    "curso": "Docente"
+  },
+  {
+    "nombre": "Miss Danitza Pérez",
+    "rut": "10.164.373-5",
+    "role": "teacher",
+    "curso": "Docente"
+  },
+  {
+    "nombre": "Mr. Claudio Pérez",
+    "rut": "12.221.851-1",
+    "role": "teacher",
+    "curso": "Docente"
+  },
+  {
+    "nombre": "Miss Karla Pérez",
+    "rut": "16.289.244-4",
+    "role": "teacher",
+    "curso": "Docente"
+  },
+  {
+    "nombre": "Miss Noelia Pizarro",
+    "rut": "20.175.638-3",
+    "role": "teacher",
+    "curso": "Docente"
+  },
+  {
+    "nombre": "Miss Carolina Plaza",
+    "rut": "19.013.186-6",
+    "role": "teacher",
+    "curso": "Docente"
+  },
+  {
+    "nombre": "Miss Fabiola Prado",
+    "rut": "12.801.162-5",
+    "role": "teacher",
+    "curso": "Docente"
+  },
+  {
+    "nombre": "Miss Carla Ramírez",
+    "rut": "16.536.252-7",
+    "role": "teacher",
+    "curso": "Docente"
+  },
+  {
+    "nombre": "Miss Javiera Rodríguez",
+    "rut": "18.380.062-0",
+    "role": "teacher",
+    "curso": "Docente"
+  },
+  {
+    "nombre": "Mr. Alex Romero",
+    "rut": "12.880.233-9",
+    "role": "teacher",
+    "curso": "Docente"
+  },
+  {
+    "nombre": "Miss Constanza San",
+    "rut": "20.181.607-6",
+    "role": "teacher",
+    "curso": "Docente"
+  },
+  {
+    "nombre": "Mr. Felipe Sánchez",
+    "rut": "15.335.013-2",
+    "role": "teacher",
+    "curso": "Docente"
+  },
+  {
+    "nombre": "Miss Edith Sepúlveda",
+    "rut": "15.114.009-2",
+    "role": "teacher",
+    "curso": "Docente"
+  },
+  {
+    "nombre": "Miss Katherine Sepúlveda",
+    "rut": "17.160.387-0",
+    "role": "teacher",
+    "curso": "Docente"
+  },
+  {
+    "nombre": "Mr. Oliver Tapia",
+    "rut": "15.063.434-2",
+    "role": "teacher",
+    "curso": "Docente"
+  },
+  {
+    "nombre": "Miss Heysi Torres",
+    "rut": "19.395.233-K",
+    "role": "teacher",
+    "curso": "Docente"
+  },
+  {
+    "nombre": "Miss Katherine Ulloa",
+    "rut": "18.581.031-3",
+    "role": "teacher",
+    "curso": "Docente"
+  },
+  {
+    "nombre": "Mr. Christian Urriaga",
+    "rut": "18.916.133-6",
+    "role": "teacher",
+    "curso": "Docente"
+  },
+  {
+    "nombre": "Miss María Urrutia",
+    "rut": "10.414.043-2",
+    "role": "teacher",
+    "curso": "Docente"
+  },
+  {
+    "nombre": "Miss Gloria Velozo",
+    "rut": "16.486.309-3",
+    "role": "teacher",
+    "curso": "Docente"
+  },
+  {
+    "nombre": "Miss Acsa Villalón",
+    "rut": "18.269.699-4",
+    "role": "teacher",
+    "curso": "Docente"
+  }
+]
