@@ -271,106 +271,87 @@ function MatchDeck({ user, likedIds, userProfile, onMatch, onShowTeacher, allTea
       {/* ── L A Y E R   A: Swipe Deck ── */}
       <div className="flex-1 relative flex flex-col min-h-0 perspective-1000">
         <AnimatePresence>
-          {deck.slice(0, 3).reverse().map((currentItem, reversedIndex, arr) => {
-            const isTop = reversedIndex === arr.length - 1; // 0th item in deck is last in reversed array
-            const deckIndex = arr.length - 1 - reversedIndex; // 0 for the top, 1 for the middle, 2 for the bottom
-            
-            // Re-calculate teachers for background cards so the UI doesn't look empty
-            const currentMatchingTeachers = allTeachers.filter(t => (t.likes || []).some(l => String(l.id) === String(currentItem.id)));
+          <motion.div
+            key={item.id}
+            style={{ x, rotate, touchAction: 'pan-y' }}
+            drag="x"
+            dragConstraints={{ left: 0, right: 0 }}
+            dragElastic={0.9}
+            onDragEnd={(_, info) => {
+              if (info.offset.x > 100) handleSwipe('right');
+              else if (info.offset.x < -100) handleSwipe('left');
+              else x.set(0);
+            }}
+            animate={
+              swipeAction === 'left'
+                ? { x: -500, rotate: -25, opacity: 0 }
+                : swipeAction === 'right'
+                ? { x: 500, rotate: 25, opacity: 0 }
+                : { x: 0, rotate: 0, opacity: 1 }
+            }
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            transition={{ duration: 0.3 }}
+            className="absolute inset-0 w-full bg-white rounded-[2.5rem] shadow-[0_25px_50px_-12px_rgba(0,0,0,0.15)] overflow-hidden flex flex-col border border-gray-100 cursor-grab active:cursor-grabbing"
+          >
+            {/* Like / Nope Labels */}
+            <motion.div style={{ opacity: likeOpacity }} className="absolute top-8 right-6 z-20 rotate-[20deg]">
+              <div className="border-4 border-[#FFD700] text-[#FFD700] px-4 py-1.5 rounded-xl font-black text-2xl tracking-tight bg-black/10 backdrop-blur-sm">LO QUIERO</div>
+            </motion.div>
+            <motion.div style={{ opacity: nopeOpacity }} className="absolute top-8 left-6 z-20 -rotate-[20deg]">
+              <div className="border-4 border-gray-400 text-gray-400 px-4 py-1.5 rounded-xl font-black text-2xl tracking-tight">PASO</div>
+            </motion.div>
 
-            return (
-              <motion.div
-                key={currentItem.id}
-                style={{
-                  x: isTop ? x : 0, 
-                  rotate: isTop ? rotate : 0, 
-                  touchAction: isTop ? 'none' : 'auto',
-                  zIndex: isTop ? 10 : 10 - deckIndex
-                }}
-                drag={isTop ? "x" : false}
-                dragConstraints={{ left: 0, right: 0 }}
-                dragElastic={0.9}
-                onDragEnd={isTop ? (_, info) => {
-                  if (info.offset.x > 100) handleSwipe('right');
-                  else if (info.offset.x < -100) handleSwipe('left');
-                  else x.set(0);
-                } : undefined}
-                animate={
-                  isTop && swipeAction === 'left'
-                    ? { x: -500, rotate: -25, opacity: 0 }
-                    : isTop && swipeAction === 'right'
-                    ? { x: 500, rotate: 25, opacity: 0 }
-                    : { x: 0, rotate: 0, opacity: 1, scale: 1 - (deckIndex * 0.05), y: deckIndex * 15 }
-                }
-                initial={{ opacity: 0, scale: 0.95, y: 20 }}
-                transition={{ duration: 0.3 }}
-                className={`absolute inset-0 w-full bg-white rounded-[2.5rem] shadow-[0_25px_50px_-12px_rgba(0,0,0,0.15)] overflow-hidden flex flex-col border border-gray-100 ${isTop ? 'cursor-grab active:cursor-grabbing' : ''}`}
-              >
-                {/* Like / Nope Labels (Only on top card) */}
-                {isTop && (
-                  <>
-                    <motion.div style={{ opacity: likeOpacity }} className="absolute top-8 right-6 z-20 rotate-[20deg]">
-                      <div className="border-4 border-[#FFD700] text-[#FFD700] px-4 py-1.5 rounded-xl font-black text-2xl tracking-tight bg-black/10 backdrop-blur-sm">LO QUIERO</div>
-                    </motion.div>
-                    <motion.div style={{ opacity: nopeOpacity }} className="absolute top-8 left-6 z-20 -rotate-[20deg]">
-                      <div className="border-4 border-gray-400 text-gray-400 px-4 py-1.5 rounded-xl font-black text-2xl tracking-tight">PASO</div>
-                    </motion.div>
-                  </>
-                )}
+            {/* Cover Image */}
+            <div className="h-[55%] relative overflow-hidden shrink-0 group">
+              <img
+                src={item.image}
+                alt={item.title}
+                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+              />
+              {/* Type badge */}
+              <div className="absolute top-4 left-4">
+                <span className="bg-[#A80A0A]/90 backdrop-blur-md text-white px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest flex items-center gap-1.5 shadow-lg">
+                  <Bookmark size={10} fill="currentColor" /> {item.type}
+                </span>
+              </div>
+              {/* Title overlay */}
+              <div className="absolute bottom-0 inset-x-0 p-6 bg-gradient-to-t from-gray-900 via-gray-900/50 to-transparent text-white">
+                <h2 className="text-3xl font-black leading-tight tracking-tighter mb-1">{item.title}</h2>
+                <p className="text-base font-bold text-blue-100 opacity-90">{item.author}</p>
+              </div>
+            </div>
 
-                {/* Cover Image */}
-                <div className="h-[55%] relative overflow-hidden shrink-0 group">
-                  <img
-                    src={currentItem.image}
-                    alt={currentItem.title}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 pointer-events-none"
-                  />
-                  {/* Type badge */}
-                  <div className="absolute top-4 left-4">
-                    <span className="bg-[#A80A0A]/90 backdrop-blur-md text-white px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest flex items-center gap-1.5 shadow-lg">
-                      <Bookmark size={10} fill="currentColor" /> {currentItem.type}
-                    </span>
-                  </div>
-                  {/* Title overlay */}
-                  <div className="absolute bottom-0 inset-x-0 p-6 bg-gradient-to-t from-gray-900 via-gray-900/50 to-transparent text-white">
-                    <h2 className="text-3xl font-black leading-tight tracking-tighter mb-1">{currentItem.title}</h2>
-                    <p className="text-base font-bold text-blue-100 opacity-90">{currentItem.author}</p>
-                  </div>
-                </div>
-
-                {/* Content */}
-                <div className="flex-1 p-6 overflow-y-auto custom-scrollbar flex flex-col gap-4 bg-white pointer-events-none">
-                  <span className="inline-block px-3 py-1 rounded-lg text-xs font-black uppercase tracking-widest border self-start"
-                        style={{ background: '#FFF0F0', color: '#A80A0A', borderColor: '#FECACA' }}>
-                    {currentItem.genre}
-                  </span>
-                  <p className="text-gray-500 leading-relaxed font-medium italic text-sm">
-                    "{currentItem.description}"
-                  </p>
-                  {/* Professor hint */}
-                  <div className="flex items-center gap-2 mt-auto pt-3 border-t border-gray-50">
-                    <div className="flex -space-x-2">
-                      {currentMatchingTeachers.map((p) => (
-                        <div
-                          key={p.id}
-                          className="w-8 h-8 rounded-full border-2 border-white flex items-center justify-center text-lg shadow-sm"
-                          style={{ background: '#A80A0A' }}
-                        >
-                          {p.emoji || '👨‍🏫'}
-                        </div>
-                      ))}
+            {/* Content */}
+            <div className="flex-1 p-6 overflow-y-auto custom-scrollbar flex flex-col gap-4">
+              <span className="inline-block px-3 py-1 rounded-lg text-xs font-black uppercase tracking-widest border self-start"
+                    style={{ background: '#FFF0F0', color: '#A80A0A', borderColor: '#FECACA' }}>
+                {item.genre}
+              </span>
+              <p className="text-gray-500 leading-relaxed font-medium italic text-sm">
+                "{item.description}"
+              </p>
+              {/* Professor hint */}
+              <div className="flex items-center gap-2 mt-auto pt-3 border-t border-gray-50">
+                <div className="flex -space-x-2">
+                  {matchingTeachers.map((p, i) => (
+                    <div
+                      key={p.id}
+                      className="w-8 h-8 rounded-full border-2 border-white flex items-center justify-center text-lg shadow-sm"
+                      style={{ background: '#A80A0A' }}
+                    >
+                      {p.emoji || '👨‍🏫'}
                     </div>
-                    <p className="text-xs text-gray-400 font-medium">
-                      {currentMatchingTeachers.length === 0 
-                        ? 'Sé el primero en recomendarlo' 
-                        : `${currentMatchingTeachers.length} profe${currentMatchingTeachers.length !== 1 ? 's' : ''} lo recomienda${currentMatchingTeachers.length !== 1 ? 'n' : ''}`
-                      }
-                    </p>
-                  </div>
+                  ))}
                 </div>
-              </motion.div>
-            );
-          })}
+                <p className="text-xs text-gray-400 font-medium">
+                  {matchingTeachers.length === 0 
+                    ? 'Sé el primero en recomendarlo' 
+                    : `${matchingTeachers.length} profe${matchingTeachers.length !== 1 ? 's' : ''} lo recomienda${matchingTeachers.length !== 1 ? 'n' : ''}`
+                  }
+                </p>
+              </div>
+            </div>
+          </motion.div>
         </AnimatePresence>
       </div>
 
