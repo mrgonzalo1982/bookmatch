@@ -25,6 +25,7 @@ function AdminView({ onBack }) {
 
   const [isLoading, setIsLoading] = useState(true);
   const [stats, setStats] = useState({ totalMatches: 0, activeStudents: 0, topTwins: [] });
+  const [stats, setStats] = useState({ totalMatches: 0, activeStudents: 0, topTwins: [] });
 
   useEffect(() => {
     fetchData();
@@ -43,7 +44,31 @@ function AdminView({ onBack }) {
           .map(d => ({ ...d.data(), id: d.id }))
           .filter(u => u.role === 'teacher' || u.role === 'admin');
         setTeachers(list);
-      } else if (activeTab === 'students') {
+      } else if (activeTab === 'students' || activeTab === 'stats') {
+        const snap = await getDocs(collection(db, 'users'));
+        const studentDocs = snap.docs.filter(d => d.data().role === 'student' || !d.data().role);
+        
+        if (activeTab === 'stats') {
+          let total = 0;
+          const studentsWithLikes = studentDocs.map(d => ({ id: d.id, likes: d.data().likes || [], profile: d.data().profile })).filter(s => s.likes.length > 0);
+          studentsWithLikes.forEach(s => total += s.likes.length);
+
+          const twins = [];
+          for (let i = 0; i < studentsWithLikes.length; i++) {
+            for (let j = i + 1; j < studentsWithLikes.length; j++) {
+              const s1 = studentsWithLikes[i];
+              const s2 = studentsWithLikes[j];
+              const common = s1.likes.filter(l1 => s2.likes.some(l2 => l2.id === l1.id));
+              if (common.length > 0) {
+                const name1 = STUDENTS.find(st => st.rut.replace(/[^0-9kK]/gi, '').toLowerCase() === s1.id)?.nombre || s1.id;
+                const name2 = STUDENTS.find(st => st.rut.replace(/[^0-9kK]/gi, '').toLowerCase() === s2.id)?.nombre || s2.id;
+                twins.push({ s1: name1, s2: name2, common: common.length, books: common.map(c => c.title) });
+              }
+            }
+          }
+          twins.sort((a,b) => b.common - a.common);
+          setStats({ totalMatches: total, activeStudents: studentsWithLikes.length, topTwins: twins.slice(0, 15) });
+        }
         setStudents(STUDENTS);
       }
     } catch (e) {
@@ -264,7 +289,8 @@ function AdminView({ onBack }) {
         {[
           { id: 'books', label: 'LIBROS', icon: BookOpen },
           { id: 'teachers', label: 'PROFESORES', icon: User },
-          { id: 'students', label: 'ALUMNOS', icon: GraduationCap }
+          { id: 'students', label: 'ALUMNOS', icon: GraduationCap },
+          { id: 'stats', label: 'ESTADÍSTICAS', icon: BarChart3 }
         ].map(tab => (
           <button
             key={tab.id}
@@ -428,4 +454,6 @@ function AdminView({ onBack }) {
 }
 
 export default AdminView;
+
+
 
