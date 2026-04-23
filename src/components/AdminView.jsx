@@ -419,6 +419,72 @@ function AdminView({ onBack }) {
                 )}
               </>
             )}
+
+                        {activeTab === 'stats' && (
+              <div className="space-y-6">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm">
+                    <Activity size={20} className="text-red-500 mb-2" />
+                    <p className="text-2xl font-black text-gray-900">{stats.totalMatches}</p>
+                    <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Total Interacciones</p>
+                  </div>
+                  <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm">
+                    <Users size={20} className="text-blue-500 mb-2" />
+                    <p className="text-2xl font-black text-gray-900">{stats.activeStudents}</p>
+                    <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Usuarios Participando</p>
+                  </div>
+                </div>
+
+                <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm">
+                  <h3 className="font-black text-sm text-gray-900 uppercase tracking-tighter mb-4 flex items-center gap-2">
+                    <BookOpen size={16} className="text-emerald-500" /> Libros más deseados
+                  </h3>
+                  <div className="space-y-3">
+                    {stats.popularBooks?.map((book, i) => (
+                      <div key={i} className="flex items-center justify-between">
+                        <span className="text-xs font-bold text-gray-700 truncate max-w-[70%]">{book.title}</span>
+                        <div className="flex items-center gap-2">
+                          <div className="w-24 h-2 bg-gray-100 rounded-full overflow-hidden">
+                            <div className="h-full bg-emerald-400" style={{ width: (stats.activeStudents > 0 ? (book.count / stats.activeStudents) * 100 : 0) + '%' }}></div>
+                          </div>
+                          <span className="text-[10px] font-black text-emerald-600">{book.count}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm">
+                  <h3 className="font-black text-sm text-gray-900 uppercase tracking-tighter mb-4 flex items-center gap-2">
+                    <Heart size={16} className="text-red-500 fill-red-500" /> TOP Conexiones Estudiantiles
+                  </h3>
+                  {stats.topTwins?.length === 0 ? (
+                    <p className="text-xs text-gray-400 italic">No hay matches compartidos todavía.</p>
+                  ) : (
+                    <div className="space-y-4">
+                      {stats.topTwins?.map((twin, i) => (
+                        <div key={i} className="flex flex-col gap-2 p-3 bg-gray-50 rounded-2xl border border-gray-100">
+                           <div className="flex justify-between items-center">
+                              <span className="text-[10px] font-black text-gray-900 uppercase truncate max-w-[35%]">{twin.s1}</span>
+                              <div className="flex-1 flex flex-col items-center gap-0.5">
+                                <span className="text-[8px] font-black text-gray-400 text-center">{twin.score}% Compat.</span>
+                                <div className="w-full flex items-center justify-center gap-1">
+                                  <div className="h-px bg-gray-200 flex-1"></div>
+                                  <div className="bg-white px-2 py-0.5 rounded-full border border-gray-100 text-[9px] font-black text-red-500 shadow-sm">
+                                    {twin.common} ??
+                                  </div>
+                                  <div className="h-px bg-gray-200 flex-1"></div>
+                                </div>
+                              </div>
+                              <span className="text-[10px] font-black text-gray-900 uppercase truncate max-w-[35%] text-right">{twin.s2}</span>
+                           </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
           </>
         )}
       </div>
@@ -474,6 +540,7 @@ function AdminView({ onBack }) {
 }
 
 export default AdminView;
+
 
 
 
