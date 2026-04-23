@@ -310,7 +310,7 @@ function AdminView({ onBack }) {
           { id: 'books', label: 'LIBROS', icon: BookOpen },
           { id: 'teachers', label: 'PROFESORES', icon: User },
           { id: 'students', label: 'ALUMNOS', icon: GraduationCap },
-          { id: 'stats', label: 'ESTADÍSTICAS', icon: BarChart3 }
+          { id: 'stats', label: 'ESTADISTICAS', icon: BarChart3 }
         ].map(tab => (
           <button
             key={tab.id}
@@ -474,6 +474,7 @@ function AdminView({ onBack }) {
 }
 
 export default AdminView;
+
 
 
 
