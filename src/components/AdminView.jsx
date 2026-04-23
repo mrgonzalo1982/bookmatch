@@ -48,26 +48,46 @@ function AdminView({ onBack }) {
         const snap = await getDocs(collection(db, 'users'));
         const studentDocs = snap.docs.filter(d => d.data().role === 'student' || !d.data().role);
         
-        if (activeTab === 'stats') {
+                if (activeTab === 'stats') {
           let total = 0;
-          const studentsWithLikes = studentDocs.map(d => ({ id: d.id, likes: d.data().likes || [], profile: d.data().profile })).filter(s => s.likes.length > 0);
+          const studentsWithLikes = studentDocs.map(d => ({ 
+            id: d.id, 
+            likes: d.data().likes || [], 
+            profile: d.data().profile 
+          })).filter(s => s.likes.length > 0);
+          
           studentsWithLikes.forEach(s => total += s.likes.length);
 
+          // Calculate average compatibility and top matches
           const twins = [];
-          for (let i = 0; i < studentsWithLikes.length; i++) {
-            for (let j = i + 1; j < studentsWithLikes.length; j++) {
-              const s1 = studentsWithLikes[i];
-              const s2 = studentsWithLikes[j];
-              const common = s1.likes.filter(l1 => s2.likes.some(l2 => l2.id === l1.id));
-              if (common.length > 0) {
+          studentsWithLikes.forEach((s1, i) => {
+            studentsWithLikes.slice(i + 1).forEach(s2 => {
+              const score = compatibilityScore(
+                { likedIds: s1.likes.map(l => l.id), genres: s1.profile?.genres || [], favoriteBook: s1.profile?.favoriteBook },
+                s2.likes.map(l => l.id),
+                s2.profile || { genres: [] }
+              );
+              
+              if (score > 10) { // Only count meaningful connections
                 const name1 = STUDENTS.find(st => st.rut.replace(/[^0-9kK]/gi, '').toLowerCase() === s1.id)?.nombre || s1.id;
                 const name2 = STUDENTS.find(st => st.rut.replace(/[^0-9kK]/gi, '').toLowerCase() === s2.id)?.nombre || s2.id;
-                twins.push({ s1: name1, s2: name2, common: common.length, books: common.map(c => c.title) });
+                twins.push({ s1: name1.split(' ')[0] + ' ' + (name1.split(' ')[1] || ''), s2: name2.split(' ')[0] + ' ' + (name2.split(' ')[1] || ''), score, common: s1.likes.filter(l => s2.likes.some(l2 => l2.id === l.id)).length });
               }
-            }
-          }
-          twins.sort((a,b) => b.common - a.common);
-          setStats({ totalMatches: total, activeStudents: studentsWithLikes.length, topTwins: twins.slice(0, 15) });
+            });
+          });
+
+          // Most popular books
+          const bookCounts = {};
+          studentsWithLikes.forEach(s => s.likes.forEach(l => bookCounts[l.title] = (bookCounts[l.title] || 0) + 1));
+          const sortedBooks = Object.entries(bookCounts).sort((a,b) => b[1] - a[1]).slice(0, 5).map(e => ({ title: e[0], count: e[1] }));
+
+          twins.sort((a,b) => b.score - a.score);
+          setStats({ 
+            totalMatches: total, 
+            activeStudents: studentsWithLikes.length, 
+            topTwins: twins.slice(0, 15),
+            popularBooks: sortedBooks
+          });
         }
         setStudents(STUDENTS);
       }
@@ -454,6 +474,7 @@ function AdminView({ onBack }) {
 }
 
 export default AdminView;
+
 
 
 
