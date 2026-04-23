@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { STUDENTS, ITEMS, GENRES } from '../data/mockData';
-import { Search, Plus, Download, Trash2, ChevronLeft, ShieldCheck, Star, Database, Users, BookOpen, User, Edit2, X, RotateCcw, Save, GraduationCap, Loader2 } from 'lucide-react';
+import { Search, Plus, Download, Trash2, ChevronLeft, ShieldCheck, Star, Database, Users, BookOpen, User, Edit2, X, RotateCcw, Save, GraduationCap, Loader2, BarChart3, Activity, Heart } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { db } from '../lib/firebase';
 import { doc, setDoc, collection, getDocs, updateDoc, deleteField, deleteDoc, getDoc } from 'firebase/firestore';
@@ -24,6 +24,7 @@ function AdminView({ onBack }) {
   const [teacherForm, setTeacherForm] = useState({ rut: '', name: '', dept: '' });
 
   const [isLoading, setIsLoading] = useState(true);
+  const [stats, setStats] = useState({ totalMatches: 0, activeStudents: 0, topTwins: [] });
 
   useEffect(() => {
     fetchData();
@@ -427,3 +428,4 @@ function AdminView({ onBack }) {
 }
 
 export default AdminView;
+

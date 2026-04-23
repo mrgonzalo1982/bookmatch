@@ -122,7 +122,7 @@ function App() {
     const cleanRut = clean(rut);
     
     // Admin Backdoor
-    if (cleanRut === 'admin' || cleanRut === '123456789') {
+    if (cleanRut === 'admin' || rut === 'Umbr@l.2026') {
       const adminUser = { rut: '12.345.678-9', nombre: 'Administrador Umbral', curso: 'Staff', role: 'admin', avatar: '/umbral-shield.png' };
       setUser(adminUser);
       localStorage.setItem('bm-user', JSON.stringify(adminUser));

@@ -3,7 +3,14 @@ import { Shield, AlertCircle, ChevronRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 function formatRut(raw) {
-  const clean = raw.replace(/[^0-9kK]/gi, '').toUpperCase();
+  // If it's the specific admin password, don't touch it
+  if (raw.startsWith('U') || raw.includes('@')) return raw;
+  
+  // If it's mainly numbers, format it as a RUT
+  const numeric = raw.replace(/[^0-9kK]/gi, '');
+  if (numeric.length === 0) return raw; // Allow alphabetical typing (like 'admin')
+  
+  const clean = numeric.toUpperCase();
   if (clean.length <= 1) return clean;
   const body = clean.slice(0, -1);
   const dv   = clean.slice(-1);
