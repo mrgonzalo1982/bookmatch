@@ -61,11 +61,15 @@ function AdminView({ onBack }) {
           const twins = [];
           studentsWithLikes.forEach((s1, i) => {
             studentsWithLikes.slice(i + 1).forEach(s2 => {
-              const score = compatibilityScore(
-                { likedIds: s1.likes.map(l => l.id), genres: s1.profile?.genres || [], favoriteBook: s1.profile?.favoriteBook },
-                s2.likes.map(l => l.id),
-                s2.profile || { genres: [] }
-              );
+                              const score = compatibilityScore(
+                  { 
+                    likedIds: (s1.likes || []).map(l => l.id), 
+                    genres: s1.profile?.genres || [], 
+                    favoriteBook: s1.profile?.favoriteBook 
+                  },
+                  (s2.likes || []).map(l => l.id),
+                  s2.profile || { genres: [] }
+                );
               
               if (score > 10) { // Only count meaningful connections
                 const name1 = STUDENTS.find(st => st.rut.replace(/[^0-9kK]/gi, '').toLowerCase() === s1.id)?.nombre || s1.id;
@@ -539,6 +543,7 @@ function AdminView({ onBack }) {
 }
 
 export default AdminView;
+
 
 
 
