@@ -307,10 +307,10 @@ function AdminView({ onBack }) {
 
       <div className="flex px-4 pt-4 bg-white border-b border-gray-200 gap-1 overflow-x-auto no-scrollbar">
         {[
+          { id: 'stats', label: 'ESTADISTICAS', icon: BarChart3 },
           { id: 'books', label: 'LIBROS', icon: BookOpen },
           { id: 'teachers', label: 'PROFESORES', icon: User },
-          { id: 'students', label: 'ALUMNOS', icon: GraduationCap },
-          { id: 'stats', label: 'ESTADISTICAS', icon: BarChart3 }
+          { id: 'students', label: 'ALUMNOS', icon: GraduationCap }
         ].map(tab => (
           <button
             key={tab.id}
@@ -540,6 +540,7 @@ function AdminView({ onBack }) {
 }
 
 export default AdminView;
+
 
 
 
