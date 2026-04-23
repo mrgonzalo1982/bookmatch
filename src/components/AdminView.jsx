@@ -85,7 +85,7 @@ function AdminView({ onBack }) {
           const sortedBooks = Object.entries(bookCounts).sort((a,b) => b[1] - a[1]).slice(0, 5).map(e => ({ title: e[0], count: e[1] }));
 
           twins.sort((a,b) => b.score - a.score);
-          setStats({ 
+          setStats({ rawCount: studentDocs.length, 
             totalMatches: total, 
             activeStudents: studentsWithLikes.length, 
             topTwins: twins.slice(0, 15),
@@ -425,7 +425,12 @@ function AdminView({ onBack }) {
 
                         {activeTab === 'stats' && (
               <div className="space-y-6">
-                <div className="grid grid-cols-2 gap-4">
+                <div className="
+                                <div className="bg-gray-100 p-4 rounded-2xl border border-gray-200 mb-4">
+                  <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest">Debug Info</p>
+                  <p className="text-xs font-bold text-gray-700">Audit: {stats.rawCount || 0} docs en DB | {stats.activeStudents || 0} con likes</p>
+                </div>
+                grid grid-cols-2 gap-4">
                   <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm">
                     <Activity size={20} className="text-red-500 mb-2" />
                     <p className="text-2xl font-black text-gray-900">{stats.totalMatches}</p>
@@ -506,12 +511,22 @@ function AdminView({ onBack }) {
               )}
               <form onSubmit={handleSaveBook} className="space-y-4">
                 <div><label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-2 mb-1 block">Título</label><input required value={bookForm.title} onChange={e=>setBookForm({...bookForm, title: e.target.value})} className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl font-bold text-sm outline-none focus:border-[#A80A0A]" /></div>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="
+                                <div className="bg-gray-100 p-4 rounded-2xl border border-gray-200 mb-4">
+                  <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest">Debug Info</p>
+                  <p className="text-xs font-bold text-gray-700">Audit: {stats.rawCount || 0} docs en DB | {stats.activeStudents || 0} con likes</p>
+                </div>
+                grid grid-cols-2 gap-4">
                   <div><label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-2 mb-1 block">Autor</label><input required value={bookForm.author} onChange={e=>setBookForm({...bookForm, author: e.target.value})} className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl font-bold text-sm outline-none focus:border-[#A80A0A]" /></div>
                   <div><label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-2 mb-1 block">Género</label><select required value={bookForm.genre} onChange={e=>setBookForm({...bookForm, genre: e.target.value})} className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl font-bold text-sm outline-none focus:border-[#A80A0A]">{GENRES.map(g => <option key={g} value={g}>{g}</option>)}</select></div>
                 </div>
                 <div><label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-2 mb-1 block">Descripción</label><textarea required value={bookForm.description} onChange={e=>setBookForm({...bookForm, description: e.target.value})} rows={3} className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium outline-none focus:border-[#A80A0A]" /></div>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="
+                                <div className="bg-gray-100 p-4 rounded-2xl border border-gray-200 mb-4">
+                  <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest">Debug Info</p>
+                  <p className="text-xs font-bold text-gray-700">Audit: {stats.rawCount || 0} docs en DB | {stats.activeStudents || 0} con likes</p>
+                </div>
+                grid grid-cols-2 gap-4">
                    <div><label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-2 mb-1 block">Nivel Mín</label><input type="number" value={bookForm.minNivel} onChange={e=>setBookForm({...bookForm, minNivel: Number(e.target.value)})} className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl font-bold text-sm" /></div>
                    <div><label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-2 mb-1 block">Nivel Máx</label><input type="number" value={bookForm.maxNivel} onChange={e=>setBookForm({...bookForm, maxNivel: Number(e.target.value)})} className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl font-bold text-sm" /></div>
                 </div>
@@ -543,6 +558,7 @@ function AdminView({ onBack }) {
 }
 
 export default AdminView;
+
 
 
 
